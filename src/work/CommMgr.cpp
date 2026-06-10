@@ -1,4 +1,4 @@
-#include "CommMgr.h"
+﻿#include "CommMgr.h"
 
 #include <QMutexLocker>
 #include <utility>

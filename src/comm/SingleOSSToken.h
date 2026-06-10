@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "ipc/HttpRepParser.h"
 #include "CSingleton.h"
@@ -16,7 +16,7 @@ public:
 
 
 	/** 
-	*  @brief       ÉèÖÃOSSÁ¬½Ó 
+	*  @brief       ï¿½ï¿½ï¿½ï¿½OSSï¿½ï¿½ï¿½ï¿½ 
 	*  @param[in]    
 	*  @param[out]   
 	*  @return                    
@@ -24,7 +24,7 @@ public:
 	void InitConnect();
 
 	///**
-	//*  @brief       »ñÈ¡OSS TokenÊý¾Ý
+	//*  @brief       ï¿½ï¿½È¡OSS Tokenï¿½ï¿½ï¿½ï¿½
 	//*  @param[in]
 	//*  @param[out]
 	//*  @return
@@ -32,7 +32,7 @@ public:
 	//void GetOSSToken();
 
 	/**
-	*  @brief       ÉèÖÃOSS²ÎÊý
+	*  @brief       ï¿½ï¿½ï¿½ï¿½OSSï¿½ï¿½ï¿½ï¿½
 	*  @param[in]
 	*  @param[out]
 	*  @return
@@ -40,32 +40,32 @@ public:
 	void SetOSSParam(OSSTokenParam& ossParam);
 
 	/**
-	*  @brief       ÉÏ´«ÎÄ¼þ£¨¶àÎÄ¼þ
-	*  @param[in]	fileList	ÉÏ´«ÎÄ¼þ±¾µØµØÖ·Êý×é
-	*  @param[out]	retInfo		³É¹¦/´íÎóÐÅÏ¢
-	*  @param[out]	vURL		·µ»ØURLÁÐ±í
-	*  @return		bool		ÊÇ·ñ²Ù×÷³É¹¦
+	*  @brief       ï¿½Ï´ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½
+	*  @param[in]	fileList	ï¿½Ï´ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½Øµï¿½Ö·ï¿½ï¿½ï¿½ï¿½
+	*  @param[out]	retInfo		ï¿½É¹ï¿½/ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
+	*  @param[out]	vURL		ï¿½ï¿½ï¿½ï¿½URLï¿½Ð±ï¿½
+	*  @return		bool		ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½É¹ï¿½
 	*/
 	bool UploadMulti(std::vector<std::string>& fileList, std::string& retInfo, std::vector<std::string>& vURL);
 
 	/**
-	*  @brief       ÏÂÔØÎÄ¼þ£¨¶àÎÄ¼þ
-	*  @param[in]	objVec		ÏÂÔØÎÄ¼þURLÊý×é
-	*  @param[out]	retInfo		³É¹¦/´íÎóÐÅÏ¢
-	*  @return		bool		ÊÇ·ñ²Ù×÷³É¹¦
+	*  @brief       ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½
+	*  @param[in]	objVec		ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½URLï¿½ï¿½ï¿½ï¿½
+	*  @param[out]	retInfo		ï¿½É¹ï¿½/ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
+	*  @return		bool		ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½É¹ï¿½
 	*/
 	bool DownloadMulti(std::vector<std::string>& objVec, std::string& retInfo, const std::string& downDstPath);
 
 	/**
-	*  @brief       ·µ»ØOSSÖÐ´æ´¢µÄËùÓÐÊý¾Ý
+	*  @brief       ï¿½ï¿½ï¿½ï¿½OSSï¿½Ð´æ´¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	*  @param[in]
 	*  @param[out]
-	*  @return		std::list<std::string> bucketNameÖÐËùÓÐ´æ´¢Êý¾Ý
+	*  @return		std::list<std::string> bucketNameï¿½ï¿½ï¿½ï¿½ï¿½Ð´æ´¢ï¿½ï¿½ï¿½ï¿½
 	*/
 	std::list<std::string> GetAllFileList();
 
 	/**
-	*  @brief       »ñÈ¡OSS¿Í»§¶Ë
+	*  @brief       ï¿½ï¿½È¡OSSï¿½Í»ï¿½ï¿½ï¿½
 	*  @param[in]
 	*  @param[out]
 	*  @return		std::shared_ptr<OssClient>
@@ -73,7 +73,7 @@ public:
 	inline std::shared_ptr<OssClient> GetClienData() const { return m_pClient; }
 
 	/**
-	*  @brief       »ñÈ¡OSS¿Í»§¶ËÅäÖÃÎÄ¼þ
+	*  @brief       ï¿½ï¿½È¡OSSï¿½Í»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½
 	*  @param[in]
 	*  @param[out]
 	*  @return		ClientConfiguration
@@ -82,7 +82,7 @@ public:
 	   
 //private:
 	/**
-	*  @brief       ÅÐ¶Ï¿Í»§¶ËÊÇ·ñ³õÊ¼»¯ÉèÖÃ
+	*  @brief       ï¿½Ð¶Ï¿Í»ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	*  @param[in]
 	*  @param[out]
 	*  @return
@@ -90,26 +90,26 @@ public:
 	bool JudgeClientIsEmpty();
 
 	/**
-	*  @brief       ÉÏ´«ÎÄ¼þ£¨µ¥ÎÄ¼þ
-	*  @param[in]	objPath		ÉÏ´«ÎÄ¼þµØÖ·
-	*  @param[out]	url			ÉÏ´«ÎÄ¼þ¶ÔÓ¦µÄOSS URLÊý¾Ý
+	*  @brief       ï¿½Ï´ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½
+	*  @param[in]	objPath		ï¿½Ï´ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½Ö·
+	*  @param[out]	url			ï¿½Ï´ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½OSS URLï¿½ï¿½ï¿½ï¿½
 	*  @return
 	*/
 	bool UploadSingleFile(std::string objPath, std::string& url);
 
 	/**
-	*  @brief       ÏÂÔØÎÄ¼þ£¨µ¥ÎÄ¼þ
-	*  @param[in]	objPath		ÏÂÔØURLµØÖ·
-	*  @param[out]	retInfo		³É¹¦/Ê§°ÜÐÅÏ¢
-	*  @param[out]	dstDownPath	todo:´«Èë±¾µØ±£´æÎÄ¼þ¼ÐµØÖ·
+	*  @brief       ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½
+	*  @param[in]	objPath		ï¿½ï¿½ï¿½ï¿½URLï¿½ï¿½Ö·
+	*  @param[out]	retInfo		ï¿½É¹ï¿½/Ê§ï¿½ï¿½ï¿½ï¿½Ï¢
+	*  @param[out]	dstDownPath	todo:ï¿½ï¿½ï¿½ë±¾ï¿½Ø±ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½Ðµï¿½Ö·
 	*  @return
 	*/
 	bool DownloadSingleFile(std::string objURL, std::string& retInfo, std::string dstDownPath = "D:\\OSSToken_Test\\Down\\");
 
 
 private:
-	OSSTokenParam m_ossParam;						// oss²ÎÊý
-	ClientConfiguration m_conf;						// oss¿Í»§¶ËÅäÖÃÐÅÏ¢
-	std::shared_ptr<OssClient> m_pClient;			// oss¿Í»§¶Ë
+	OSSTokenParam m_ossParam;						// ossï¿½ï¿½ï¿½ï¿½
+	ClientConfiguration m_conf;						// ossï¿½Í»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
+	std::shared_ptr<OssClient> m_pClient;			// ossï¿½Í»ï¿½ï¿½ï¿½
 };
 

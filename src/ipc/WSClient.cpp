@@ -1,4 +1,4 @@
-#include "WSClient.h"
+﻿#include "WSClient.h"
 
 
 WSClient::WSClient()

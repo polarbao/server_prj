@@ -1,4 +1,4 @@
-#include "hard2Ser_2_0.h"
+ï»¿#include "hard2Ser_2_0.h"
 #include <QtWidgets/QApplication>
 #include "CLogManager.h"
 
@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
 
 	//log
 	CLogManager::getInstance()->startLog("./");
-	LOG_DEBUG(u8"Ó²¼þ¶Ë·þÎñÈí¼þÆô¶¯");
+	LOG_DEBUG(u8"Ó²ï¿½ï¿½ï¿½Ë·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 
 
     hard2Ser_2_0 w;

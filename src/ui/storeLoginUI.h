@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include <QWidget>
 #include <QPushButton>
@@ -27,13 +27,13 @@ public:
 
 	void PrintLogInfo(const QString& msg);
 
-	//Í¬²½WS³¤Á¬½Ó×´Ì¬
+	//Í¬ï¿½ï¿½WSï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬
 
-	// 1015_add_ÐÂÔöÍøÂç×´Ì¬´¦Àíº¯Êý
-	//Í¬²½WS³¤Á¬½Ó×´Ì¬
-	void ConnStatucChange(bool bConn);		//·ÏÆú½Ó¿Ú£ºver_1027
+	// 1015_add_ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	//Í¬ï¿½ï¿½WSï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬
+	void ConnStatucChange(bool bConn);		//ï¿½ï¿½ï¿½ï¿½ï¿½Ó¿Ú£ï¿½ver_1027
 	void NetworkStatusChanged(ConnectionType connType, NetworkStatus status, const QString& message = "");
-	// À©Õ¹½Ó¿Ú£¬¹©ºóÐø½øÐÐÖØÁ¬°´Å¥²Ù×÷Ê¹ÓÃ
+	// ï¿½ï¿½Õ¹ï¿½Ó¿Ú£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¥ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½
 	void ReconnectAttempt(ConnectionType connType, int attemptCount, int maxAttempts);
 	void ReconnectFailed(ConnectionType connType, const QString& reason);
 
@@ -48,7 +48,7 @@ private:
 
 
 public slots:
-	// °´Å¥×é´¥·¢²Ù×÷
+	// ï¿½ï¿½Å¥ï¿½é´¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	void OnBtnClicked(int btnIdx);
 
 
@@ -59,7 +59,7 @@ signals:
 	void SigLoginBindDev();
 	void SigSimulateDataOper(bool bCheckedClick);
 
-	//===²âÊÔ²Ù×÷
+	//===ï¿½ï¿½ï¿½Ô²ï¿½ï¿½ï¿½
 	void SigTestOper();
 	void SigTestOper2();
 

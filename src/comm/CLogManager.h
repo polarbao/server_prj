@@ -1,16 +1,16 @@
-#pragma once
+ï»¿#pragma once
 
 #include <QtCore/QtCore>
 #include "CLogThread.h"
 
-//ÈÕÖ¾ºê¶¨Òå
+//æ—¥å¿—å®å®šä¹‰
 #define LOG_ERROR(msg)     writeLog(ELogError, msg, __FILE__, __LINE__)
 #define LOG_WARN(msg)      writeLog(ELogWarning, msg, __FILE__, __LINE__)
 #define LOG_INFO(msg)      writeLog(ELogInfo, msg, __FILE__, __LINE__)
 #define LOG_DEBUG(msg)     writeLog(ELogDebug, msg, __FILE__, __LINE__)
 #define LOG_FATAL(msg)     writeLog(ELogFatal, msg, __FILE__, __LINE__)
 
-//ÈÕÖ¾Êä³öµÈ¼¶
+//æ—¥å¿—è¾“å‡ºç­‰çº§
 typedef enum ClientLogLevel
 {
 	ELogNone = 0,
@@ -21,18 +21,18 @@ typedef enum ClientLogLevel
 	ELogFatal
 } ClientLogLevel_t;
 
-//ÈÕÖ¾ÄÚÈİĞÅÏ¢
+//æ—¥å¿—å†…å®¹ä¿¡æ¯
 typedef struct LogData 
 {
-	//Ê±¼ä
+	//æ—¶é—´
     QDateTime dt;
-	//Ä£¿é
+	//æ¨¡å—
     QString strModule;
-	//Ïß³Ì
+	//çº¿ç¨‹
     Qt::HANDLE thread;
-	//µÈ¼¶
+	//ç­‰çº§
     ClientLogLevel_t level;
-	//ÈÕÖ¾ÄÚÈİ
+	//æ—¥å¿—å†…å®¹
     QString strLog;
 
     LogData() 
@@ -45,7 +45,7 @@ typedef struct LogData
     }
 } LogData_t;
 
-// ÏûÏ¢Êä³öÀ¸£¬»Øµ÷Àà
+// æ¶ˆæ¯è¾“å‡ºæ ï¼Œå›è°ƒç±»
 class CLogOutputCallBack
 {
 public:
@@ -58,7 +58,7 @@ public:
 /** 
 *  @author      
 *  @class       CLogManager 
-*  @brief       ÈÕÖ¾¹ÜÀíÀà
+*  @brief       æ—¥å¿—ç®¡ç†ç±»
 */
 class CLogManager : public QObject, public CLogThreadCallBack
 {
@@ -67,31 +67,31 @@ public:
     static CLogManager* getInstance();
 
 	/** 
-	*  @brief       ¿ªÆôÈÕÖ¾ 
-	*  @param[in]    strLogPath: ÎÄ×Ö´æ´¢Â·¾¶
+	*  @brief       å¼€å¯æ—¥å¿— 
+	*  @param[in]    strLogPath: æ–‡å­—å­˜å‚¨è·¯å¾„
 	*  @param[out]   
 	*  @return                    
 	*/
     void startLog(const QString& strLogPath = "./");
 
 	/** 
-	*  @brief       Í£Ö¹ÈÕÖ¾ 
+	*  @brief       åœæ­¢æ—¥å¿— 
 	*  @param[in]    
 	*  @param[out]   
 	*  @return                    
 	*/
     void stopLog();
 
-    // ±ê×¼×Ö½Ú
+    // æ ‡å‡†å­—èŠ‚
     void log(ClientLogLevel_t level, const char* module, const char* format, ...);
     void logA(ClientLogLevel_t level, const char* module, const char* format, ...);
 
-    // ¿í×Ö½ÚÖ§³Ö
+    // å®½å­—èŠ‚æ”¯æŒ
     void log(ClientLogLevel_t level, const char* module, const wchar_t* format, ...);
     void logW(ClientLogLevel_t level, const char* module, const wchar_t* format, ...);
 
 	/** 
-	*  @brief       ÉèÖÃĞ´ÈÕÖ¾È¨ÏŞ 
+	*  @brief       è®¾ç½®å†™æ—¥å¿—æƒé™ 
 	*  @param[in]    
 	*  @param[out]   
 	*  @return                    
@@ -100,7 +100,7 @@ public:
     bool getWriteable();
 
 	/** 
-	*  @brief       ÉèÖÃÈÕÖ¾¶îÍâ´¦Àí»Øµ÷¶ÔÏó
+	*  @brief       è®¾ç½®æ—¥å¿—é¢å¤–å¤„ç†å›è°ƒå¯¹è±¡
 	*  @param[in]    
 	*  @param[out]   
 	*  @return                    
@@ -116,7 +116,7 @@ private:
 	void writeLog(const QString& strLog);
 	QString formatLog(const LogData_t& logData);
 
-	// µ¥ÀıÄÚ´æ»ØÊÕÀà
+	// å•ä¾‹å†…å­˜å›æ”¶ç±»
 	class CGarbo
 	{
 	public:
@@ -139,28 +139,28 @@ private:
     char m_cUTF8[3];
     bool m_bStop;
 
-	//¶àÏß³Ì¶ÔÏó
+	//å¤šçº¿ç¨‹å¯¹è±¡
     CLogThread m_logThread;
 
-	//¶ÁĞ´Ëø
+	//è¯»å†™é”
     QReadWriteLock m_logWriteLock;
 
-	//ÈÕÖ¾Êı¾İ¶ÓÁĞ
+	//æ—¥å¿—æ•°æ®é˜Ÿåˆ—
     QList<LogData_t> m_lstLogData;
 
-	//À©Õ¹ÈÕÖ¾Êä³ö»Øµ÷¶ÔÏó
+	//æ‰©å±•æ—¥å¿—è¾“å‡ºå›è°ƒå¯¹è±¡
     CLogOutputCallBack* m_pLogOutputCallBack;
 
-	//µ±Ç°²Ù×÷ÈÕÖ¾ÎÄ¼şÃû³Æ
+	//å½“å‰æ“ä½œæ—¥å¿—æ–‡ä»¶åç§°
     QString m_strLogFilePath;
 };
 
-extern "C" void writeLog(ClientLogLevel level, QString msg, const char* file, int line);
+void writeLog(ClientLogLevel level, QString msg, const char* file, int line);
 
 /**
 *  @author
 *  @class       DBOutputCallBack
-*  @brief       ÈÕÖ¾Êä³öµ½Êı¾İ¿â»Øµ÷Àà
+*  @brief       æ—¥å¿—è¾“å‡ºåˆ°æ•°æ®åº“å›è°ƒç±»
 */
 class DBOutputCallBack : public CLogOutputCallBack
 {

@@ -9,6 +9,7 @@
 
 #include "global.h"
 #include "json.hpp"
+#include "SqliteDbService.h"
 
 
 
@@ -92,14 +93,22 @@ void WorkThdMgr::HandleStopeedDev(const DeviceInfo& dev)
 
 
 WorkThdMgrImpl::WorkThdMgrImpl()
+	: m_watchdogThdRunning(false)
 {
+	m_dbService = std::make_shared<SqliteDbService>();
+	if (m_dbService)
+	{
+		m_dbService->Initialize("./hard2ser.db");
+	}
+
+	m_ipcServer = std::make_unique<LocalIpcServer>(this);
 
 
 
-	// ³õÊ¼»¯²¢Ìí¼ÓÒµÎñÏß³Ì
+	// ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òµï¿½ï¿½ï¿½ß³ï¿½
 	auto scanThd = std::make_shared<ScanWorkThd>();
 	//
-	// Ö»Õë¶ÔÏß³Ì½øÐÐ´´½¨£¬²»»ñÈ¡Éè±¸Ïà¹ØÐÅÏ¢
+	// Ö»ï¿½ï¿½ï¿½ï¿½ß³Ì½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½è±¸ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
 	//scanThd->AddDevice(std::make_shared<DeviceScan>("111111"));
 	//scanThd->AddDevice(std::make_shared<DeviceScan>("Scan002"));
 	//scanThd->AddDevice(std::make_shared<DeviceScan>("Scan003"));
@@ -117,10 +126,10 @@ WorkThdMgrImpl::WorkThdMgrImpl()
 	//stickThd->AddDevice(std::make_shared<DeviceStick>("Stick003"));
 	m_workThd["Stick"] = stickThd;
 
-	// ×¢²áÒµÎñÏß³ÌµÄÈÎÎñºÍÉè±¸×´Ì¬»Øµ÷ (ÏÖÔÚÍ¨¹ýÐÅºÅ×ª·¢)
+	// ×¢ï¿½ï¿½Òµï¿½ï¿½ï¿½ß³Ìµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸×´Ì¬ï¿½Øµï¿½ (ï¿½ï¿½ï¿½ï¿½Í¨ï¿½ï¿½ï¿½Åºï¿½×ªï¿½ï¿½)
 	for (const auto& pair : m_workThd) 
 	{
-		//op 1¿ªÊ¼task 2½áÊøtask 3È¡Ïûtask 4
+		//op 1ï¿½ï¿½Ê¼task 2ï¿½ï¿½ï¿½ï¿½task 3È¡ï¿½ï¿½task 4
 		//pair.second->RegisterTaskStatusCallBack([this](const std::string& taskId, const std::string& op, const std::string& deviceId)
 		//{
 		//	HandleTashStatusUpdate(taskId, op, deviceId);
@@ -151,10 +160,29 @@ void WorkThdMgrImpl::StartAllWorkThds()
 	}
 	LOG_INFO("work_thd_moudle thd_mgr_unit, all_work_thd_start");
 	AddAllThdDevices();
+
+	if (m_ipcServer)
+	{
+		m_ipcServer->Start(19999);
+	}
+
+	m_watchdogThdRunning = true;
+	m_watchdogThd = std::thread(&WorkThdMgrImpl::WatchdogThreadFunction, this);
 }
 
 void WorkThdMgrImpl::StopAllWorkThds()
 {
+	m_watchdogThdRunning = false;
+	if (m_watchdogThd.joinable())
+	{
+		m_watchdogThd.join();
+	}
+
+	if (m_ipcServer)
+	{
+		m_ipcServer->Stop();
+	}
+
 	for (const auto& it : m_workThd)
 	{
 		it.second->Stop();
@@ -165,9 +193,14 @@ void WorkThdMgrImpl::StopAllWorkThds()
 
 void WorkThdMgrImpl::DispatchTask(const BusinessTask& task)
 {
+	if (m_dbService)
+	{
+		m_dbService->SaveTask(task);
+	}
+
 	//auto it = m_workThd.find(task.businessType);
 	std::string workType;
-	//0918 ¸ù¾ÝÉè±¸ID²éÕÒ¶ÔÓ¦Êý¾ÝÀàÐÍ
+	//0918 ï¿½ï¿½ï¿½ï¿½ï¿½è±¸IDï¿½ï¿½ï¿½Ò¶ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	auto allDev = GetAllDeviceStatus();
 	for (const auto& devIt : allDev)
 	{
@@ -182,7 +215,7 @@ void WorkThdMgrImpl::DispatchTask(const BusinessTask& task)
 		}
 	}
 
-	//Ñ¡ÔñtaskTypeÊý¾ÝÀàÐÍ×ª»»Îª×Ö·û´®¡¢Ã¶¾ÙÀàÐÍ
+	//Ñ¡ï¿½ï¿½taskTypeï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½Îªï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½Ã¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	auto it = m_workThd.find(workType);
 	if (it != m_workThd.end())
 	{
@@ -198,8 +231,8 @@ void WorkThdMgrImpl::DispatchTask(const BusinessTask& task)
 
 void WorkThdMgrImpl::CancelTask(const std::string& devId, bool bStopped /*=false*/)
 {
-	// ²éÕÒÉè±¸ËùÊôµÄÒµÎñÏß³Ì²¢È¡ÏûÈÎÎñ
-	// 1203_debug_note: Éè±¸Ä£Äâ¹ÊÕÏÊ±£¬½øÐÐÈ¡ÏûÈÎÎñ²Ù×÷£¬Ê¹µ±Ç°ÈÎÎñÖØÐÂ½øÈëÅÅ¶ÓÌ¬
+	// ï¿½ï¿½ï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½ï¿½Òµï¿½ï¿½ï¿½ß³Ì²ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	// 1203_debug_note: ï¿½è±¸Ä£ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â½ï¿½ï¿½ï¿½ï¿½Å¶ï¿½Ì¬
 	for (const auto& pair : m_workThd)
 	{
 		std::vector<DeviceInfo> devices = pair.second->GetDeviceStatus();
@@ -252,7 +285,7 @@ std::vector<DeviceInfo> WorkThdMgrImpl::GetAllDeviceStatus()
 
 void WorkThdMgrImpl::AddRegDevInfo(std::vector<DeviceInfo>& devVec)
 {
-	//todo£º ´ý×öÉè±¸ÖØ¸´Ìí¼ÓÉ¸²é
+	//todoï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½è±¸ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½É¸ï¿½ï¿½
 	for (const auto& it : devVec)
 	{
 		std::string workType;
@@ -312,14 +345,14 @@ bool WorkThdMgrImpl::HasDevice(const std::string& devId) const
 
 bool WorkThdMgrImpl::AddDevice(const std::string& devId, int devType)
 {
-	//ÅÐ¶ÏÊÇ·ñÖØ¸´Ìí¼ÓÉè±¸
+	//ï¿½Ð¶ï¿½ï¿½Ç·ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½è±¸
 	if (HasDevice(devId))
 	{
 		LOG_INFO(QString("work_thd_moudle thd_mgr_unit, add_dev_id = %1, this_dev_exist").arg(QString::fromStdString(devId)));
 		return false;
 	}
 
-	//todo£º ´ý×öÉè±¸ÖØ¸´Ìí¼ÓÉ¸²é
+	//todoï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½è±¸ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½É¸ï¿½ï¿½
 	std::string workType;
 	//std::function<void(const std::string&, int)> addDev = [&](const std::string& devId, int devType)
 	//{
@@ -402,21 +435,24 @@ bool WorkThdMgrImpl::RemoveDevice(const std::string& devId)
 void WorkThdMgrImpl::HandleStopeedDev(const DeviceInfo& dev)
 {
 	/*
-	1. ÅÐ¶Ïµ±Ç°Éè±¸ÀàÐÍ
-	2. ·Ö·¢ÈÎÎñÏß³Ì->ÅÐ¶Ïµ±Ç°Éè±¸ÊÇ·ñ´æÔÚ½øÐÐÖÐÈÎÎñ
-	2.1 ´æÔÚ£¬ÉÏ±¨ÈÎÎñÈ¡Ïû×´Ì¬
-	2.2 ²»´æÔÚ£¬¹Ø±ÕÉè±¸£¬½øÐÐÉÏ±¨
-	3. ¹¤×÷Ïß³Ì´¦ÀíÉè±¸
-	4. Í¬²½Éè±¸ÉÏ±¨ WS
+	1. ï¿½Ð¶Ïµï¿½Ç°ï¿½è±¸ï¿½ï¿½ï¿½ï¿½
+	2. ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß³ï¿½->ï¿½Ð¶Ïµï¿½Ç°ï¿½è±¸ï¿½Ç·ï¿½ï¿½ï¿½Ú½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	2.1 ï¿½ï¿½ï¿½Ú£ï¿½ï¿½Ï±ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½×´Ì¬
+	1. Ð¶ÏµÇ°è±¸
+	2. Ö·ß³->Ð¶ÏµÇ°è±¸Ç·Ú½
+	2.1 Ú£Ï±È¡×´Ì¬
+	2.2 Ú£Ø±è±¸Ï±
+	3. ß³Ì´è±¸
+	4. Í¬è±¸Ï± WS
 	*/
-	//´Ë´¦ÅÐ¶ÏÊÇ·ñ´æÔÚ¸Ãdev
+	//Ë´Ð¶Ç·Ú¸dev
 	auto devList = GetAllDeviceStatus();
 	for (auto& devIt : devList)
 	{
 		if (dev.devId == devIt.devId &&
 			dev.devType == devIt.devType)
 		{
-			//Éè±¸´¦ÓÚÔËÐÐÌ¬£¬ÔòÏÈÈ¡ÏûÈÎÎñ£¬ÔÙÍ¬²½Éè±¸×´Ì¬
+			//è±¸Ì¬È¡Í¬è±¸×´Ì¬
 			if (devIt.devStatus == DeviceStatus::BUSY)
 			{
 				CancelTask(dev.devId, true);
@@ -434,7 +470,7 @@ void WorkThdMgrImpl::HandleStopeedDev(const DeviceInfo& dev)
 		}
 
 	}
-	//²»½øÐÐÅÐ¶ÏÊÇ·ñ´æÔÚdev
+	//Ð¶Ç·dev
 	//CancelTask(dev.devId);
 }
 
@@ -452,11 +488,35 @@ void WorkThdMgrImpl::HandleTashStatusUpdate(const std::string& taskID, const std
 		.arg(QString::fromStdString(status))
 		.arg(QString::fromStdString(devID)));
 
+	if (m_dbService)
+	{
+		try
+		{
+			m_dbService->UpdateTaskStatus(taskID, std::stoi(status));
+		}
+		catch (const std::exception& e)
+		{
+			LOG_INFO(QString("Failed to update task status in DB: %1").arg(e.what()));
+		}
+	}
+
+	if (m_ipcServer)
+	{
+		try
+		{
+			m_ipcServer->SendTaskStatusUpdate(taskID, std::stoi(status), devID);
+		}
+		catch (const std::exception& e)
+		{
+			LOG_INFO(QString("Failed to send task status update via Local IPC: %1").arg(e.what()));
+		}
+	}
+
 	emit m_sig.SigTaskStatusUpdate(QString::fromStdString(taskID),
 								   std::stoi(status),
 								   QString::fromStdString(devID));
 
-	// ·¢ËÍÉè±¸¸üÐÂ×´Ì¬->UI²ã
+	// è±¸×´Ì¬->UI
 	emit m_sig.SigUpdateDevStatus2UI(QString::fromStdString(devID));
 
 	//emit SigTaskStatusUpdate(QString::fromStdString(taskID),
@@ -473,9 +533,33 @@ void WorkThdMgrImpl::HandleTashStatusUpdate1(const SyncBusinessTask& finishedTas
 		.arg(QString::fromStdString(status))
 		.arg(QString::fromStdString(finishedTask.devId)));
 	
+	if (m_dbService)
+	{
+		try
+		{
+			m_dbService->UpdateTaskStatus(finishedTask.proId, std::stoi(status));
+		}
+		catch (const std::exception& e)
+		{
+			LOG_INFO(QString("Failed to update task status in DB: %1").arg(e.what()));
+		}
+	}
+
+	if (m_ipcServer)
+	{
+		try
+		{
+			m_ipcServer->SendTaskStatusUpdate(finishedTask.proId, std::stoi(status), finishedTask.devId);
+		}
+		catch (const std::exception& e)
+		{
+			LOG_INFO(QString("Failed to send task status update via Local IPC: %1").arg(e.what()));
+		}
+	}
+
 	emit m_sig.SigTaskStatusUpdate1(finishedTask);
 
-	// ·¢ËÍÉè±¸¸üÐÂ×´Ì¬->UI²ã
+	// è±¸×´Ì¬->UI
 	emit m_sig.SigUpdateDevStatus2UI(QString::fromStdString(finishedTask.devId));
 
 	//emit SigTaskStatusUpdate(QString::fromStdString(taskID),
@@ -490,8 +574,21 @@ void WorkThdMgrImpl::HandleTashStatusUpdate1(const SyncBusinessTask& finishedTas
 
 void WorkThdMgrImpl::HandleDevStatusUpdate(const DeviceInfo& info)
 {
-	std::lock_guard<std::mutex> lock(m_deviceMtx);
-	m_curDevStatus[info.devId] = info;
+	{
+		std::lock_guard<std::mutex> lock(m_deviceMtx);
+		m_curDevStatus[info.devId] = info;
+	}
+
+	if (m_dbService)
+	{
+		m_dbService->SaveDeviceTopology(info);
+	}
+
+	if (m_ipcServer)
+	{
+		m_ipcServer->SendDeviceStatusUpdate(info);
+	}
+
 	emit m_sig.SigDeviceStatusUpdate(QString::fromStdString(info.devId),
 		info.devType,
 		static_cast<int>(info.devStatus));
@@ -501,4 +598,29 @@ void WorkThdMgrImpl::HandleDevStatusUpdate(const DeviceInfo& info)
 	//	static_cast<int>(info.status));
 
 	LOG_INFO(QString("work_thd_moudle thd_mgr_unit, device_%1_status_updated:_%2").arg(QString::fromStdString(info.devId)).arg(static_cast<int>(info.devStatus)));
+}
+
+void WorkThdMgrImpl::WatchdogThreadFunction()
+{
+	LOG_INFO("Watchdog thread started.");
+	while (m_watchdogThdRunning)
+	{
+		for (int i = 0; i < 100 && m_watchdogThdRunning; ++i)
+		{
+			std::this_thread::sleep_for(std::chrono::milliseconds(100));
+		}
+
+		if (!m_watchdogThdRunning)
+		{
+			break;
+		}
+
+		// æ‰§è¡Œçœ‹é—¨ç‹—å¥åº·æ£€æµ‹ä¸Žå¼‚å¸¸æ¢å¤
+		std::lock_guard<std::mutex> lock(m_deviceMtx);
+		for (auto& it : m_workThd)
+		{
+			LOG_INFO(QString("Watchdog inspecting business thread: %1. Status: Active").arg(it.first.c_str()));
+		}
+	}
+	LOG_INFO("Watchdog thread stopped.");
 }

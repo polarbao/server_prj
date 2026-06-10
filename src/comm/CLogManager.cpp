@@ -1,4 +1,4 @@
-#include "CLogManager.h"
+ï»¿#include "CLogManager.h"
 
 #define LOG_FILE_MAX_SIZE 10*1024*1024
 #define LOG_FILE_NAME_0 "/log0.txt"
@@ -201,7 +201,7 @@ void CLogManager::writeLog(const QString& strLog)
     qint64 iSize = 0;
 
 	iSize = m_logFile0.size();
-	if (iSize >= LOG_FILE_MAX_SIZE)      // log0.txtÒÑ´ïµ½×î´ó³¤¶È, ÇÐ»»µ½log1.txt
+	if (iSize >= LOG_FILE_MAX_SIZE)      // log0.txtï¿½Ñ´ïµ½ï¿½ï¿½ó³¤¶ï¿½, ï¿½Ð»ï¿½ï¿½ï¿½log1.txt
 	{
 		m_logFile0.close();
 		QString strNewFileName = m_strLogFilePath + "/" + QDateTime::currentDateTime().toString("log_yyyyMMddhhmmss") + ".txt";
@@ -222,7 +222,7 @@ void CLogManager::writeLog(const QString& strLog)
 		pFile = &m_logFile0;
 	}
 
-    // ²»´æÔÚ×Ô¶¯´´½¨
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½
     if (!pFile->exists())
     {
         if (!pFile->open(QIODevice::Append | QIODevice::Text))
@@ -231,7 +231,7 @@ void CLogManager::writeLog(const QString& strLog)
         }
     }
 
-    // ÉèÖÃÎÄ¼þ¸ñÊ½Îª´øBOM utf8¸ñÊ½
+    // ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½Ê½Îªï¿½ï¿½BOM utf8ï¿½ï¿½Ê½
     if(iSize == 0)
     {
         pFile->write(m_cUTF8, 3);
@@ -268,12 +268,12 @@ void CLogManager::logRun(CLogThread* pLogThread)
                 m_lstLogData.removeFirst();
                 m_logWriteLock.unlock();
 
-                if (m_bWriteable)   // Ð´ÈÕÖ¾
+                if (m_bWriteable)   // Ð´ï¿½ï¿½Ö¾
                 {
                     writeLog(formatLog(logData));
                 }
 
-                if (m_pLogOutputCallBack != NULL)   // ÏûÏ¢Êä³öÀ¸Êä³öÈÕÖ¾
+                if (m_pLogOutputCallBack != NULL)   // ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾
                 {
                     m_pLogOutputCallBack->outputLog(logData);
                 }
@@ -285,7 +285,7 @@ void CLogManager::logRun(CLogThread* pLogThread)
             }
         }
 
-        if(m_bStop)         // È«²¿¶ÁÈ¡»º´æµÄÊý¾Ý£¬È»ºóÍË³ö
+        if(m_bStop)         // È«ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½È»ï¿½ï¿½ï¿½Ë³ï¿½
         {
             m_logWriteLock.lockForRead();
             while(m_lstLogData.size() > 0)
@@ -298,7 +298,7 @@ void CLogManager::logRun(CLogThread* pLogThread)
                     writeLog(formatLog(logData));
                 }
 
-                //if (m_pLogOutputCallBack != NULL)   // ÏûÏ¢Êä³öÀ¸Êä³öÈÕÖ¾
+                //if (m_pLogOutputCallBack != NULL)   // ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾
                 //{
                 //    m_pLogOutputCallBack->outputLog(logData);
                 //}

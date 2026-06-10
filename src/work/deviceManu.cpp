@@ -1,4 +1,4 @@
-#include "deviceManu.h"
+ï»¿#include "deviceManu.h"
 #include "global.h"
 
 #include "CommFun.h"
@@ -32,8 +32,8 @@ DeviceManuImpl::DeviceManuImpl(const std::string& id)
 bool DeviceManuImpl::PerformTask(const BusinessTask& task)
 {
 	LOG_INFO(QString("manu_device_id_is_%1, work_for_manu_event").arg(QString::fromStdString(m_devID)).arg(QString::fromStdString(task.op)));
-	// Ä£Äâ´òÓ¡ÈÎÎñµÄÌØ¶¨Âß¼­
-	// ÅÐ¶ÏÈÎÎñ´¦ÀíÀàÐÍ£¬1. Õý³£Ö´ÐÐ£» 2. È¡ÏûÈÏÎª
+	// Ä£ï¿½ï¿½ï¿½Ó¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø¶ï¿½ï¿½ß¼ï¿½
+	// ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í£ï¿½1. ï¿½ï¿½ï¿½ï¿½Ö´ï¿½Ð£ï¿½ 2. È¡ï¿½ï¿½ï¿½ï¿½Îª
 	bool ret = false;
 	if (task.op != "2" && m_devStatus == DeviceStatus::BUSY)
 	{
@@ -42,10 +42,10 @@ bool DeviceManuImpl::PerformTask(const BusinessTask& task)
 	else if (task.op == "1" && m_devStatus == DeviceStatus::IDLE)
 	{
 		m_handleData.workType = SimulateWorkType::WORK_MANU;
-		//ÉèÖÃÉè±¸×´Ì¬ÎªÃ¦ÂµÌ¬
+		//ï¿½ï¿½ï¿½ï¿½ï¿½è±¸×´Ì¬ÎªÃ¦ÂµÌ¬
 		SetStatus(DeviceStatus::BUSY);
 		ret = PerformSimulateTask(task);
-		//ÏÂ·¢ÈÎÎñ¿ªÊ¼Ö¸Áî
+		//ï¿½Â·ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼Ö¸ï¿½ï¿½
 	}
 	return ret;
 }
@@ -61,7 +61,7 @@ bool DeviceManuImpl::PerformSimulateTask(const BusinessTask& task)
 
 	try
 	{
-		// ÖØÖÃÈ¡Ïû±êÖ¾²¢¼ÇÂ¼µ±Ç°ÈÎÎñID
+		// ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ID
 		{
 			std::lock_guard<std::mutex> lock(m_cancelMtx);
 			m_taskCancelled = false;
@@ -69,8 +69,8 @@ bool DeviceManuImpl::PerformSimulateTask(const BusinessTask& task)
 			m_curRunTask = task;
 		}
 
-		// Ä£ÄâÈÎÎñÖ´ÐÐ£¬Êµ¼ÊÖÐ¿ÉÄÜÉæ¼°¸´ÔÓIO²Ù×÷
-		// »ñÈ¡ÖÐ¶ÏÊý¾Ý´¦Àí
+		// Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½Ð£ï¿½Êµï¿½ï¿½ï¿½Ð¿ï¿½ï¿½ï¿½ï¿½æ¼°ï¿½ï¿½ï¿½ï¿½IOï¿½ï¿½ï¿½ï¿½
+		// ï¿½ï¿½È¡ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½Ý´ï¿½ï¿½ï¿½
 		auto curTimerStr = QString::fromStdString(CommFun::GetInstance().GetCurrentTimeStr()) + "_" + QString::fromStdString(task.proId);
 		auto downFolderPath = QCoreApplication::applicationDirPath() + QDir::separator() + QString("simulate_scan_data") + QDir::separator() + \
 			QString("down_file") + QDir::separator() + curTimerStr;
@@ -80,7 +80,7 @@ bool DeviceManuImpl::PerformSimulateTask(const BusinessTask& task)
 		//--------------------------
 		//--------------------------
 		//--------------------------
-		// Ê¹ÓÃ¿ÉÖÐ¶ÏµÄË¯ÃßÀ´Ä£Äâ¹¤×÷£¬Êµ¼ÊÓ¦ÓÃÖÐÓ¦¸ÃÊÇÕæÊµµÄÉè±¸²Ù×÷
+		// Ê¹ï¿½Ã¿ï¿½ï¿½Ð¶Ïµï¿½Ë¯ï¿½ï¿½ï¿½ï¿½Ä£ï¿½â¹¤ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½
 		auto start_time = std::chrono::steady_clock::now();
 		auto target_duration = std::chrono::seconds(30);
 		while (std::chrono::steady_clock::now() - start_time < target_duration)
@@ -89,17 +89,17 @@ bool DeviceManuImpl::PerformSimulateTask(const BusinessTask& task)
 			{
 
 			}
-			// ¼ì²éÈ¡ÏûÈÎÎñÐÅºÅ
+			// ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åºï¿½
 			if (m_taskCancelled.load())
 			{
 				LOG_INFO(QString("manu_work_thd_device_%1_task_%2_was_cancelled")
 					.arg(QString::fromStdString(m_devID))
 					.arg(QString::fromStdString(task.proId)));
 
-				//·Ç¹ÊÕÏ×´Ì¬ÏÂÈ¡ÏûÈÎÎñ£¬ÉèÖÃ×´Ì¬ÉèÖÃÎª¿ÕÏÐ
+				//ï¿½Ç¹ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½
 				if (m_devStatus != DeviceStatus::ERR)
 				{
-					//Í¬²½Éè±¸×´Ì¬
+					//Í¬ï¿½ï¿½ï¿½è±¸×´Ì¬
 					SetStatus(DeviceStatus::IDLE);
 				}
 				{
@@ -107,10 +107,10 @@ bool DeviceManuImpl::PerformSimulateTask(const BusinessTask& task)
 					m_currentTaskId.clear();
 					m_curRunTask.Clear();
 				}
-				return false; // ÈÎÎñ±»È¡Ïû
+				return false; // ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½
 			}
-			//Í¬²½È¡ÏûµÄÉè±¸×´Ì¬
-			// Ê¹ÓÃÌõ¼þ±äÁ¿ÊµÏÖ¿ÉÖÐ¶ÏµÄµÈ´ý
+			//Í¬ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½è±¸×´Ì¬
+			// Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Êµï¿½Ö¿ï¿½ï¿½Ð¶ÏµÄµÈ´ï¿½
 			std::unique_lock<std::mutex> lock(m_cancelMtx);
 			m_cancelCV.wait_for(lock, std::chrono::milliseconds(100), [this]
 			{
@@ -130,19 +130,19 @@ bool DeviceManuImpl::PerformSimulateTask(const BusinessTask& task)
 				return false;
 			}
 		}
-		// ÊµÏÖOSSÉÏ´«²Ù×÷
-		LOG_INFO(QString(u8"ÖÆ×÷ÒµÎñÏß³ÌÄ£ÄâÉè±¸ºÄÊ±²Ù×÷¶¨Ê±Æ÷µ½ÆÚ£¬Ä£ÄâÍê³ÉÏÂÔØ²Ù×÷"));
+		// Êµï¿½ï¿½OSSï¿½Ï´ï¿½ï¿½ï¿½ï¿½ï¿½
+		LOG_INFO(QString(u8"ï¿½ï¿½ï¿½ï¿½Òµï¿½ï¿½ï¿½ß³ï¿½Ä£ï¿½ï¿½ï¿½è±¸ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Ú£ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø²ï¿½ï¿½ï¿½"));
 		std::string tmpURL = "http://macbrush-shop-image.oss-cn-shanghai.aliyuncs.com/simulate_scan_data/20250811145822_101.ply";
 		std::string downURL = 0 == task.data.size() ? tmpURL : task.data;
 		if (task.data.size() == 0)
 		{
-			LOG_INFO(QString(u8"ÏÂ·¢ÒµÎñÊý¾ÝÎª¿Õ×Ö·û´®£¬ÆôÓÃ±¾µØ±¸·ÝÏÂÔØÄ¿Â¼£º %1").arg(QString::fromStdString(tmpURL)));
+			LOG_INFO(QString(u8"ï¿½Â·ï¿½Òµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã±ï¿½ï¿½Ø±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿Â¼ï¿½ï¿½ %1").arg(QString::fromStdString(tmpURL)));
 		}
 		auto ret = SingleOSSToken::GetInstance().DownloadSingleFile(downURL, retInfo, downFolderPath.toStdString());
 		//--------------------------
 		//--------------------------
 		//--------------------------
-		// ÈÎÎñÍê³É
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		SetStatus(DeviceStatus::IDLE);
 		{
 			std::lock_guard<std::mutex> lock(m_cancelMtx);

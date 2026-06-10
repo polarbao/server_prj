@@ -1,10 +1,10 @@
-#pragma once
+ï»¿#pragma once
 #include "WebSocketClient.h"
 
 /** 
 *  @author      
 *  @class       SWSClient 
-*  @brief       httpÐ­Òé¿Í»§¶Ë
+*  @brief       httpÐ­ï¿½ï¿½Í»ï¿½ï¿½ï¿½
 */
 
 using namespace hv;
@@ -21,14 +21,14 @@ public:
 
 
 private:
-	////ÊÇ·ñÊ¹ÓÃhttps
+	////ï¿½Ç·ï¿½Ê¹ï¿½ï¿½https
 	//bool m_enableHttps = true;
 	//int m_timeoutSecond = 3;
-	////·þÎñ¶Ëip
+	////ï¿½ï¿½ï¿½ï¿½ï¿½ip
 	//std::string m_destIp;
-	////·þÎñ¶Ë¶Ë¿Ú
+	////ï¿½ï¿½ï¿½ï¿½Ë¶Ë¿ï¿½
 	//unsigned short m_destPort;
-	////µÇÂ¼ºó»ñÈ¡µÄtoken
+	////ï¿½ï¿½Â¼ï¿½ï¿½ï¿½È¡ï¿½ï¿½token
 	//std::string m_token;
 
 };

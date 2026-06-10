@@ -1,4 +1,4 @@
-#include "hard2Ser_2_0.h"
+ï»¿#include "hard2Ser_2_0.h"
 #include "CLogManager.h"
 
 #include <string>
@@ -70,7 +70,7 @@ hard2Ser_2_0::~hard2Ser_2_0()
 	m_workMgr->StopAllWorkThds();
 	m_connMgr->DisconnectFromSer();
 
-	// Í£Ö¹¶¨Ê±Æ÷
+	// Í£Ö¹ï¿½ï¿½Ê±ï¿½ï¿½
 	if (m_devRegTimer && m_devRegTimer->isActive())
 	{
 		OnSendDevReg();
@@ -88,7 +88,7 @@ void hard2Ser_2_0::Init()
 
 	m_devRegTimer = new QTimer(this);
 	connect(m_devRegTimer, &QTimer::timeout, this, &hard2Ser_2_0::OnSendDevReg);
-	//È·±£ÊÇÖØ¸´¶¨Ê±Æ÷
+	//È·ï¿½ï¿½ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
 	m_devRegTimer->setSingleShot(false);
 
 }
@@ -243,7 +243,7 @@ void hard2Ser_2_0::SendAllDeviceReg()
 					PrintLogInfo("No valid devices to register");
 				}
 
-				//Ã¿10Ãë·¢ËÍÒ»´ÎÉè±¸×¢²áÐÅÏ¢
+				//Ã¿10ï¿½ë·¢ï¿½ï¿½Ò»ï¿½ï¿½ï¿½è±¸×¢ï¿½ï¿½ï¿½ï¿½Ï¢
 				if (!m_devRegTimer->isActive())
 				{
 					m_devRegTimer->start(10000);
@@ -261,13 +261,13 @@ void hard2Ser_2_0::SendAllDeviceReg()
 	}
 	else
 	{
-		PrintLogInfo(QString::fromLocal8Bit("Î´Á¬½Ó·þÎñÆ÷£¬ÎÞ·¨½øÐÐÉè±¸×¢²á"));
+		PrintLogInfo(QString::fromLocal8Bit("Î´ï¿½ï¿½ï¿½Ó·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸×¢ï¿½ï¿½"));
 	}
 }
 
 void hard2Ser_2_0::OnDisConnSerOper()
 {
-	PrintLogInfo(QString::fromLocal8Bit("³¢ÊÔ¶Ï¿ª·þÎñÆ÷Á¬½Ó"));
+	PrintLogInfo(QString::fromLocal8Bit("ï¿½ï¿½ï¿½Ô¶Ï¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"));
 	m_connMgr->DisconnectFromSer(true);
 }
 
@@ -278,20 +278,20 @@ void hard2Ser_2_0::OnUpdateNetConnStatus(ConnectionType netType, NetworkStatus s
 		.arg(QString::number(int(status)))
 		.arg(message));
 	
-	// 1028_ÍøÂçÁ¬½Ó¶Ï¿ª£¬ÔòÍ£Ö¹Í¬²½Éè±¸×´Ì¬
+	// 1028_ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¶Ï¿ï¿½ï¿½ï¿½ï¿½ï¿½Í£Ö¹Í¬ï¿½ï¿½ï¿½è±¸×´Ì¬
 	if (ConnectionType::WEBSOCKET == netType && NetworkStatus::DISCONNECTED == status)
 	{
 		m_devRegTimer->stop();
 	}
 
-	// Á¬½Ó³É¹¦ºó·¢ËÍÉè±¸×¢²áÐÅÏ¢
+	// ï¿½ï¿½ï¿½Ó³É¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸×¢ï¿½ï¿½ï¿½ï¿½Ï¢
 	if (NetworkStatus::CONNECTED == status)
 	{
 		//SendAllDeviceReg();
-		//PrintLogInfo(QString::fromLocal8Bit("³¢ÊÔ·þÎñÆ÷Á¬½Ó"));
+		//PrintLogInfo(QString::fromLocal8Bit("ï¿½ï¿½ï¿½Ô·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"));
 		//m_connMgr->Connect2Ser(msg.wsUrl, msg.httpUrlBase);
 	}
-	//Í¬²½Êý¾ÝÖÁµÇÂ¼UIÄ£¿é
+	//Í¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¼UIÄ£ï¿½ï¿½
 	// ver_1024
 	//m_loginUI.ConnStatucChange(NetworkStatus::CONNECTED == status);
 	// ver_1027
@@ -299,22 +299,22 @@ void hard2Ser_2_0::OnUpdateNetConnStatus(ConnectionType netType, NetworkStatus s
 
 
 
-	// ÖØÁ¬³É¹¦ºó£¬»ñÈ¡Éè±¸×´Ì¬£¬É¸Ñ¡µ±Ç°Éè±¸ÈÎÎñÐÅÏ¢
+	// ï¿½ï¿½ï¿½ï¿½ï¿½É¹ï¿½ï¿½ó£¬»ï¿½È¡ï¿½è±¸×´Ì¬ï¿½ï¿½É¸Ñ¡ï¿½ï¿½Ç°ï¿½è±¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
 	if (ConnectionType::HTTP == netType && 
 		NetworkStatus::CONNECTED == status && 
-		message.contains(u8"HTTPÖØÁ¬³É¹¦") && 
+		message.contains(u8"HTTPï¿½ï¿½ï¿½ï¿½ï¿½É¹ï¿½") && 
 		g_netReconnectStatus)
 	{
-		// HTTPµÇÂ½²Ù×÷->»ñÈ¡Éè±¸ÐÅÏ¢->»ñÈ¡ÈÎÎñ×´Ì¬
+		// HTTPï¿½ï¿½Â½ï¿½ï¿½ï¿½ï¿½->ï¿½ï¿½È¡ï¿½è±¸ï¿½ï¿½Ï¢->ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½×´Ì¬
 		//auto sendMsg = m_connMgr->CreateHttpMessage(MessageType::CLIENT_HTTP_CONN, "http://shop.moonbii.net", {});
 		//m_connMgr->SendHTTPMsg(sendMsg);
-		//µ÷ÓÃongoing½Ó¿Ú£¬»ñÈ¡·þÎñÆ÷Éè±¸×´Ì¬ÐÅÏ¢
+		//ï¿½ï¿½ï¿½ï¿½ongoingï¿½Ó¿Ú£ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸×´Ì¬ï¿½ï¿½Ï¢
 		OnUIGetRegDevSync();
 	}
 	
 }
 
-//½ÓÊÕÈÎÎñ´¦Àí
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 void hard2Ser_2_0::OnHandleRecvMsg(const QString& msgTypeStr, const WSMsgBase& msgData)
 {
 	PrintLogInfo(QString("Received message Type: %1, Payload: %2").arg(msgTypeStr).arg(QString::fromStdString(msgData.payload.dump())));
@@ -322,9 +322,9 @@ void hard2Ser_2_0::OnHandleRecvMsg(const QString& msgTypeStr, const WSMsgBase& m
 	//qstring -> messageType
 	//qstring -> payload
 	MessageType msgType = static_cast<MessageType>(msgTypeStr.toInt());
-	//Õë¶ÔpayloadÊý¾Ý½øÐÐ´¦Àí
+	//ï¿½ï¿½ï¿½payloadï¿½ï¿½ï¿½Ý½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½
 	std::string payloadStdStr = msgData.payload.dump();
-	//·þÎñÆ÷·Ö·¢ÈÎÎñ
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½
 	if (MessageType::SER_DISPATCH_TASK == msgType || msgData.type == MessageType::SER_DISPATCH_TASK)
 	{
 		try
@@ -334,7 +334,7 @@ void hard2Ser_2_0::OnHandleRecvMsg(const QString& msgTypeStr, const WSMsgBase& m
 			BusinessTask task = BusinessTask::fromJson(msgData.payload.dump());
 			PrintLogInfo(QString("Server pushed task: %1 for business %2, device %3").arg(QString::fromStdString(task.proId)).arg(QString::fromStdString(task.op)).arg(QString::fromStdString(task.devId)));
 
-			// ÑéÖ¤ÊÇ·ñ¿ÉÒÔ·Ö·¢£¨¼ì²éÒµÎñÏß³ÌÊÇ·ñ´æÔÚ¶ÔÓ¦Éè±¸£©
+			// ï¿½ï¿½Ö¤ï¿½Ç·ï¿½ï¿½ï¿½Ô·Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òµï¿½ï¿½ï¿½ß³ï¿½ï¿½Ç·ï¿½ï¿½ï¿½Ú¶ï¿½Ó¦ï¿½è±¸ï¿½ï¿½
 			std::vector<DeviceInfo> allDevs = m_workMgr->GetAllDeviceStatus();
 			bool bFindDev = false;
 			for (const auto& dev : allDevs)
@@ -353,7 +353,7 @@ void hard2Ser_2_0::OnHandleRecvMsg(const QString& msgTypeStr, const WSMsgBase& m
 				}
 				else if (task.op == "1")
 				{
-					//·Ö·¢ÒµÎñµ½thd
+					//ï¿½Ö·ï¿½Òµï¿½ï¿½thd
 					m_workMgr->DispatchTask(task);
 				}
 			}
@@ -380,13 +380,13 @@ void hard2Ser_2_0::OnHandleHeartBeatAck()
 	// dismiss ack num
 }
 
-//Í¬²½_½ø³ÌÈÎÎñ
+//Í¬ï¿½ï¿½_ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 void hard2Ser_2_0::OnHandleTaskStatusUpdate(const QString& taskId, int op, const QString& devId)
 {
 	PrintLogInfo(QString("Task %1 on Device %2 op: %3").arg(taskId).arg(devId).arg(op));
 
-	// µ±ÈÎÎñÍê³ÉÊ±£¬Ïò·þÎñÆ÷Í¬²½ÈÎÎñ×´Ì¬ºÍÉè±¸×´Ì¬
-	// °üº¬ÈÎÎñÍê³É¡¢ÈÎÎñÈ¡Ïû
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½è±¸×´Ì¬
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¡ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½
 	//if (static_cast<TaskStatus>(op) == TaskStatus::COMPLETED || static_cast<TaskStatus>(op) == TaskStatus::CANCELLED)
 	{
 		WSMsgBase msg;
@@ -400,7 +400,7 @@ void hard2Ser_2_0::OnHandleTaskStatusUpdate(const QString& taskId, int op, const
 		msg.payload = syncTask.toJson();
 
 
-		// 1028_add_¶ÏÍøÆÚ¼äÈô´æÔÚÍê³ÉµÄ·þÎñ½ø³Ì£¬ÔòÐè
+		// 1028_add_ï¿½ï¿½ï¿½ï¿½ï¿½Ú¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÉµÄ·ï¿½ï¿½ï¿½ï¿½ï¿½Ì£ï¿½ï¿½ï¿½ï¿½ï¿½
 		bool bNewTask = true;
 		for (const auto it : m_unnetFinishTaskQue)
 		{
@@ -414,7 +414,7 @@ void hard2Ser_2_0::OnHandleTaskStatusUpdate(const QString& taskId, int op, const
 		{
 			m_unnetFinishTaskQue.push_back(syncTask);
 		}
-		//»ñÈ¡×îÐÂÉè±¸×´Ì¬
+		//ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½è±¸×´Ì¬
 		//std::vector<DeviceInfo> curDevStatus = m_workMgr->GetAllDeviceStatus();
 		//for (const auto& devIt : curDevStatus)
 		//{
@@ -436,8 +436,8 @@ void hard2Ser_2_0::OnHandleTaskStatusUpdate1(const SyncBusinessTask& taskData)
 		.arg(taskData.devId.c_str())
 		.arg(taskData.op.c_str()));
 
-	// µ±ÈÎÎñÍê³ÉÊ±£¬Ïò·þÎñÆ÷Í¬²½ÈÎÎñ×´Ì¬ºÍÉè±¸×´Ì¬
-	// °üº¬ÈÎÎñÍê³É¡¢ÈÎÎñÈ¡Ïû
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½è±¸×´Ì¬
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¡ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½
 	//if (static_cast<TaskStatus>(op) == TaskStatus::COMPLETED || static_cast<TaskStatus>(op) == TaskStatus::CANCELLED)
 	{
 		WSMsgBase msg;
@@ -454,7 +454,7 @@ void hard2Ser_2_0::OnHandleTaskStatusUpdate1(const SyncBusinessTask& taskData)
 			LOG_INFO(QString(u8"lrz_show_sync_task_info sync_task_size < 100").arg(tmp.size()).arg(tmp.c_str()));
 		}
 	
-		// 1028_add_¶ÏÍøÆÚ¼äÈô´æÔÚÍê³ÉµÄ·þÎñ½ø³Ì£¬ÔòÐè
+		// 1028_add_ï¿½ï¿½ï¿½ï¿½ï¿½Ú¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÉµÄ·ï¿½ï¿½ï¿½ï¿½ï¿½Ì£ï¿½ï¿½ï¿½ï¿½ï¿½
 		bool bNewTask = true;
 		for (const auto it : m_unnetFinishTaskQue)
 		{
@@ -468,7 +468,7 @@ void hard2Ser_2_0::OnHandleTaskStatusUpdate1(const SyncBusinessTask& taskData)
 		{
 			m_unnetFinishTaskQue.push_back(syncTask);
 		}
-		//»ñÈ¡×îÐÂÉè±¸×´Ì¬
+		//ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½è±¸×´Ì¬
 		//std::vector<DeviceInfo> curDevStatus = m_workMgr->GetAllDeviceStatus();
 		//for (const auto& devIt : curDevStatus)
 		//{
@@ -488,7 +488,7 @@ void hard2Ser_2_0::OnHandleTaskStatusUpdate1(const SyncBusinessTask& taskData)
 
 void hard2Ser_2_0::OnHandleDevStatusUpdate(const QString& devId, int devType, int status)
 {
-	//todo: Õë¶ÔÉè±¸×´Ì¬½øÐÐÍ¬²½´¦Àí£¬Í¬²½ÖÁUI£¬µ×²ã£¬µÈ´ýºóÐøÍ¬²½·¢ËÍ
+	//todo: ï¿½ï¿½ï¿½ï¿½è±¸×´Ì¬ï¿½ï¿½ï¿½ï¿½Í¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¬ï¿½ï¿½ï¿½ï¿½UIï¿½ï¿½ï¿½×²ã£¬ï¿½È´ï¿½ï¿½ï¿½ï¿½ï¿½Í¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 
 	DeviceInfo devInfo;
@@ -502,8 +502,8 @@ void hard2Ser_2_0::OnHandleDevStatusUpdate(const QString& devId, int devType, in
 	OnUpdateDevStatusUI(devInfo);
 
 	auto a = m_workMgr->GetAllDeviceStatus();
-	////dev¸üÐÂ×´Ì¬Ê±£¬Ïñser·¢ËÍ×´Ì¬ÐÅÏ¢
-	//// todo ³¤Á´Ö±½ÓÍ¬²½×´Ì¬
+	////devï¿½ï¿½ï¿½ï¿½×´Ì¬Ê±ï¿½ï¿½ï¿½ï¿½serï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½Ï¢
+	//// todo ï¿½ï¿½ï¿½ï¿½Ö±ï¿½ï¿½Í¬ï¿½ï¿½×´Ì¬
 	//if (m_connMgr->IsConnected())
 	//{
 	//	WSMsgBase msg;
@@ -569,7 +569,7 @@ void hard2Ser_2_0::OnSendDevReg()
 					catch (const std::exception& e)
 					{
 						PrintLogInfo(QString("Error serializing device %1: %2").arg(QString::fromStdString(devInfo.devId)).arg(e.what()));						
-						continue; // Ìø¹ýÓÐÎÊÌâµÄÉè±¸£¬¼ÌÐø´¦ÀíÆäËûÉè±¸
+						continue; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸
 					}
 				}
 				if (!jPayload.empty())
@@ -602,7 +602,7 @@ void hard2Ser_2_0::OnSendDevReg()
 
 void hard2Ser_2_0::OnDevBind(const DevBindResp& data)
 {
-	//Éè±¸×¢²á
+	//ï¿½è±¸×¢ï¿½ï¿½
 	auto a = data;
 	//for (auto& it : a.devData.devVec)
 	//{
@@ -618,7 +618,7 @@ void hard2Ser_2_0::OnDevBind(const DevBindResp& data)
 
 void hard2Ser_2_0::OnConnSerOper(const LoginMsg& msg)
 {
-	PrintLogInfo(QString::fromLocal8Bit("³¢ÊÔ·þÎñÆ÷Á¬½Ó"));
+	PrintLogInfo(QString::fromLocal8Bit("ï¿½ï¿½ï¿½Ô·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"));
 	m_connMgr->Connect2Ser(msg.wsUrl, msg.httpUrlBase);
 }
 
@@ -635,12 +635,12 @@ void hard2Ser_2_0::OnHandleGetOSSToken()
 	m_connMgr->SendHTTPMsg(sendMsg);
 }
 
-//Note: Éè±¸ÉÏ±¨¹ÊÕÏ´¦Àí
+//Note: ï¿½è±¸ï¿½Ï±ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ï¿½ï¿½
 void hard2Ser_2_0::OnUIDevStoppedUpdate(bool bStopped, const DeviceInfo& dev)
 {
 	auto updateDev = dev;
 	m_workMgr->HandleStopeedDev(dev);
-	//UI²ã¸Ä±äÉè±¸×´Ì¬
+	//UIï¿½ï¿½Ä±ï¿½ï¿½è±¸×´Ì¬
 	//switch (dev.devType)
 	//{
 	//	//scan
@@ -666,7 +666,7 @@ void hard2Ser_2_0::OnUIDevStoppedUpdate(bool bStopped, const DeviceInfo& dev)
 	//	break;
 	//
 	//}
-	//Í¬²½Éè±¸ÐÅÏ¢ÖÁ·þÎñÆ÷
+	//Í¬ï¿½ï¿½ï¿½è±¸ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	OnSendDevReg();
 }
 
@@ -680,12 +680,12 @@ void hard2Ser_2_0::OnUIGetRegDevSync()
 	auto sendMsg = m_connMgr->CreateHttpMessage(MessageType::CLIENT_GET_REG_RUN_DEV_INFO, "http://shop.moonbii.net", allDev);
 	m_connMgr->SendHTTPMsg(sendMsg);
 	
-	//ÉèÖÃËùÓÐÉè±¸×´Ì¬Îª¿ÕÏÐ×´Ì¬
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸×´Ì¬Îªï¿½ï¿½ï¿½ï¿½×´Ì¬
 
 
 }
 
-//Î´Ê¹ÓÃFun
+//Î´Ê¹ï¿½ï¿½Fun
 void hard2Ser_2_0::OnUIGetDevTaskSync()
 {
 	auto allDev = m_workMgr->GetAllDeviceStatus();
@@ -699,24 +699,24 @@ void hard2Ser_2_0::OnRegDevTaskHandle(const DevSereMapResp& data)
 	auto mapData = data.devSerMap;
 	auto allDev = m_workMgr->GetAllDeviceStatus();
 
-	//Êý¾Ý´¦Àí
-	//´¦ÓÚÃ¦Âµ×´Ì¬Éè±¸½øÐÐÉèÖÃ
+	//ï¿½ï¿½ï¿½Ý´ï¿½ï¿½ï¿½
+	//ï¿½ï¿½ï¿½ï¿½Ã¦Âµ×´Ì¬ï¿½è±¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	for (const auto& taskIt : data.devSerMap)
 	{
-		//Êý¾ÝÍ¬²½ÖÁ·þÎñÆ÷
+		//ï¿½ï¿½ï¿½ï¿½Í¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		for (auto& proIt : taskIt.second.service.proVec)
 		{
 	
-			// status=3Ê±£¬±íÊ¾Éè±¸Îª´¦ÓÚÃ¦Âµ×´Ì¬ 
-			// Í¬²½ÅÐ¶ÏÊÇ·ñÎªµÚÒ»´ÎÆô¶¯£¬»ò¶ÏÍøÖØÁ¬×´Ì¬
-			// ´ËÊ±ÅÐ¶ÏÊÇ·ñÎª·þÎñ2½øÐÐµÄ×´Ì¬Îª3,ÊÇÔò¼ÌÐø£¬·ñÔòÈ¡Ïû
+			// status=3Ê±ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½è±¸Îªï¿½ï¿½ï¿½ï¿½Ã¦Âµ×´Ì¬ 
+			// Í¬ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½Ç·ï¿½Îªï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬
+			// ï¿½ï¿½Ê±ï¿½Ð¶ï¿½ï¿½Ç·ï¿½Îªï¿½ï¿½ï¿½ï¿½2ï¿½ï¿½ï¿½Ðµï¿½×´Ì¬Îª3,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½
 			if (proIt.status == 3)
 			{
 				if (g_netReconnectStatus)
 				{
-					// ¶ÏÍøÖØÁ¬»·¾³ÏÂ
-					// ÐÂÔöÈÎÎñÓëµ±Ç°Ã¦Âµ×´Ì¬ÈÎÎñ½øÐÐ±È¶Ô£¬ÅÐ¶ÏÈÎÎñÊÇ·ñ´¦ÓÚÖ´ÐÐÖÐ 			
-					// todo_1027_ÅÐ¶Ïµ±Ç°ongong»ñÈ¡ÈÎÎñÊÇ·ñÎªÐÂÔöÈÎÎñ
+					// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+					// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ëµ±Ç°Ã¦Âµ×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð±È¶Ô£ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½Ö´ï¿½ï¿½ï¿½ï¿½ 			
+					// todo_1027_ï¿½Ð¶Ïµï¿½Ç°ongongï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 					bool bNoAddTask = false;
 					for (auto it : m_unnetFinishTaskQue)
 					{
@@ -728,7 +728,7 @@ void hard2Ser_2_0::OnRegDevTaskHandle(const DevSereMapResp& data)
 					}
 					if (!bNoAddTask)
 					{
-						//µ±Ç°ÈÎÎñÎªÐÂÔöÈÎÎñ
+						//ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 						BusinessTask addTask;
 						addTask.ordersId = taskIt.second.service.orderId;
 						addTask.proId = proIt.serProId;
@@ -737,14 +737,14 @@ void hard2Ser_2_0::OnRegDevTaskHandle(const DevSereMapResp& data)
 						m_workMgr->DispatchTask(addTask);
 						break;
 					}
-					// todo_1027_µ±Ç°ongong»ñÈ¡ÈÎÎñÎªÔ­ÓÐÈÎÎñ£¨²»¶ÔÊý¾Ý½øÐÐ´¦Àí
+					// todo_1027_ï¿½ï¿½Ç°ongongï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ÎªÔ­ï¿½ï¿½ï¿½ï¿½ï¿½ñ£¨²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½
 
 
 				}
 				else
 				{					
-					// ·Ç¶ÏÍøÖØÁ¬»·¾³ÏÂ
-	   				//µ±Ç°ÈÎÎñÎªÐÂÔöÈÎÎñ
+					// ï¿½Ç¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	   				//ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 					BusinessTask addTask;
 					addTask.ordersId = taskIt.second.service.orderId;
 					addTask.proId = proIt.serProId;
@@ -756,8 +756,8 @@ void hard2Ser_2_0::OnRegDevTaskHandle(const DevSereMapResp& data)
 			}
 		}
 	}
-	// ¶Ô´¦ÓÚ·ÇÃ¦Âµ×´Ì¬Éè±¸£¬ÉèÖÃÎª¿ÕÏÐ×´Ì¬
-	// Ïàµ±ÓÚÈ«²¿Îª¿ÕÏÐ×´Ì¬ÏÂ£¬ÉèÖÃÉè±¸×´Ì¬
+	// ï¿½Ô´ï¿½ï¿½Ú·ï¿½Ã¦Âµ×´Ì¬ï¿½è±¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½×´Ì¬
+	// ï¿½àµ±ï¿½ï¿½È«ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½Â£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸×´Ì¬
 	if (!data.devSerMap.size())
 	{
 		m_workUI.SyncRegDevStatus(allDev);
@@ -765,17 +765,17 @@ void hard2Ser_2_0::OnRegDevTaskHandle(const DevSereMapResp& data)
 		m_stickWorkUI.SyncRegDevStatus(allDev);
 	}
 
-	//½áÊøÖØÁ¬ÍøÂçÏà¹ØÉèÖÃ
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	if (g_netReconnectStatus)
 	{
 		g_netReconnectStatus = g_netReconnectStatus ? !g_netReconnectStatus : g_netReconnectStatus;
-		// ¶ÏÍøÖØÁ¬Çé¿öÏÂ
-		// 1028¡ª¡ªÖØÖÃÉè±¸×´Ì¬¶¨Ê±Æ÷
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		// 1028ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸×´Ì¬ï¿½ï¿½Ê±ï¿½ï¿½
 		m_devRegTimer->start(10000);
 	}
-	// ¸üÐÂÉè±¸×´Ì¬
+	// ï¿½ï¿½ï¿½ï¿½ï¿½è±¸×´Ì¬
 	SendAllDeviceReg();
-	// Çå¿Õ»º´æÈÎÎñ¶ÓÁÐÊý¾Ý
+	// ï¿½ï¿½Õ»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	m_unnetFinishTaskQue.clear();
 }
 
@@ -813,7 +813,7 @@ void hard2Ser_2_0::OnWorkDevStatusUpdate(const QString& devId)
 
 void hard2Ser_2_0::OnHandleUITestOper()
 {
-	////Ä¬ÈÏÈÎÎñÏÂ·¢²Ù×÷Ö¸Áî
+	////Ä¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½
 	////m_workUI
 	//BusinessTask task;
 	//task.devId = "100001";
@@ -824,7 +824,7 @@ void hard2Ser_2_0::OnHandleUITestOper()
 	//===============================================================
 	//===============================================================
 
-	//oss_token»ñÈ¡
+	//oss_tokenï¿½ï¿½È¡
 	auto sendMsg = m_connMgr->CreateHttpMessage(MessageType::CLIENT_OSS_TOKEN, "http://shop.moonbii.net", {});
 	m_connMgr->SendHTTPMsg(sendMsg);
 
@@ -833,7 +833,7 @@ void hard2Ser_2_0::OnHandleUITestOper()
 void hard2Ser_2_0::OnHandleUITestOper2()
 {
 
-	LOG_INFO(QString(u8"ÖÆ×÷ÒµÎñÏß³ÌÄ£ÄâÉè±¸ºÄÊ±²Ù×÷¶¨Ê±Æ÷µ½ÆÚ£¬Ä£ÄâÍê³ÉÏÂÔØ²Ù×÷"));
+	LOG_INFO(QString(u8"ï¿½ï¿½ï¿½ï¿½Òµï¿½ï¿½ï¿½ß³ï¿½Ä£ï¿½ï¿½ï¿½è±¸ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Ú£ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø²ï¿½ï¿½ï¿½"));
 	std::string tmpURL = "http://macbrush-shop-image.oss-cn-shanghai.aliyuncs.com/simulate_scan_data/20250811145822_101.ply";
 	std::string retInfo = "";
 	auto curTimerStr = QString::fromStdString(CommFun::GetInstance().GetCurrentTimeStr()) + "_25112711333600026482_2";
@@ -842,12 +842,12 @@ void hard2Ser_2_0::OnHandleUITestOper2()
 	auto ret = SingleOSSToken::GetInstance().DownloadSingleFile(tmpURL, retInfo, downFolderPath.toStdString());
 
 
-	//// oss_ÉÏ´«ÈÎÎñ
+	//// oss_ï¿½Ï´ï¿½ï¿½ï¿½ï¿½ï¿½
 	//auto dataPath = QCoreApplication::applicationDirPath() + QDir::separator() + QString("simulate_scan_data") + QDir::separator() + QString("src_data");
 	//std::vector<std::string> vFilePath;
 	//std::vector<std::string> vURLData;
 	//std::string retInfo;
-	//// »ñÈ¡Ô´ÎÄ¼þ¼ÐÖÐËùÓÐÌõÄ¿£¨ÎÄ¼þºÍ×ÓÎÄ¼þ¼Ð£©
+	//// ï¿½ï¿½È¡Ô´ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½Ð£ï¿½
 	//CommFun::GetInstance().GetFolderFile(dataPath, vFilePath);
 	//std::vector<FingerScanData> tmpVec;
 	//SingleOSSToken::GetInstance().UploadMulti(vFilePath, retInfo, vURLData);
@@ -865,11 +865,11 @@ void hard2Ser_2_0::OnHandleUITestOper2()
 	//tmpTask.op = "3";
 	//tmpTask.scanData = tmpVec;
 	//OnHandleTaskStatusUpdate1(tmpTask);
-	//// oss_²ð·Öurl
-	//// oss_Êý¾Ý¶ÔÓ¦¹ØÏµ_json
+	//// oss_ï¿½ï¿½ï¿½url
+	//// oss_ï¿½ï¿½ï¿½Ý¶ï¿½Ó¦ï¿½ï¿½Ïµ_json
 }
 
-//½ÓÊÕÈÎÎñ´¦Àí
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 void hard2Ser_2_0::TestTaskRun()
 {
 

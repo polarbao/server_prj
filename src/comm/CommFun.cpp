@@ -1,144 +1,111 @@
-
-#include <sstream>
-
-#include "CommFun.h"
+ï»¿#include "CommFun.h"
 #include "CLogManager.h"
+#include <filesystem>
+#include <chrono>
+#include <iomanip>
+#include <sstream>
+#include <algorithm>
+#include <iostream>
 
+namespace fs = std::filesystem;
 
-bool CommFun::FileCopy(const QString& sourceFilePath, const QString& targetFilePath)
+bool CommFun::FileCopy(const std::string& sourceFilePath, const std::string& targetFilePath)
 {
-
-	// Èç¹ûÄ¿±êÎÄ¼þÒÑ´æÔÚ£¬ÏÈÉ¾³ý
-	if (QFile::exists(targetFilePath)) 
+	try
 	{
-		if (!QFile::remove(targetFilePath)) 
+		fs::path srcPath(sourceFilePath);
+		fs::path dstPath(targetFilePath);
+
+		if (fs::exists(dstPath))
 		{
-			printLog("ÎÞ·¨É¾³ýÒÑ´æÔÚµÄÄ¿±êÎÄ¼þ:" + targetFilePath);
-			return false;
+			fs::remove(dstPath);
 		}
-	}
 
-	// ¸´ÖÆÎÄ¼þ
-	if (!QFile::copy(sourceFilePath, targetFilePath)) 
+		fs::copy_file(srcPath, dstPath, fs::copy_options::overwrite_existing);
+		return true;
+	}
+	catch (const fs::filesystem_error& e)
 	{
-		printLog("ÎÄ¼þ¸´ÖÆÊ§°Ü:"+ sourceFilePath + "->" + targetFilePath);
+		printLog("FileCopy failed: " + std::string(e.what()));
 		return false;
 	}
-	return true;
 }
 
-bool CommFun::FolderCopy(const QString& sourceDirPath, const QString& targetDirPath)
+bool CommFun::FolderCopy(const std::string& sourceDirPath, const std::string& targetDirPath)
 {
-	/*
-	1. ÅÐ¶Ïµ±Ç°ÎÄ¼þ¼ÐÊÇ·ñ´æÔÚ
-	2. ¸´ÖÆsrcÎÄ¼þ¼ÐÊý¾ÝÖÁdstÎÄ¼þ¼ÐÖÐ
-	*/
-	QDir sourceDir(sourceDirPath);
-	QDir targetDir(targetDirPath);
-
-	// ¼ì²éÔ´ÎÄ¼þ¼ÐÊÇ·ñ´æÔÚ
-	if (!sourceDir.exists()) 
+	try
 	{
-		qDebug() << "Ô´ÎÄ¼þ¼Ð²»´æÔÚ:" << sourceDirPath;
-		return false;
-	}
+		fs::path srcDir(sourceDirPath);
+		fs::path dstDir(targetDirPath);
 
-	// Èç¹ûÄ¿±êÎÄ¼þ¼Ð²»´æÔÚ£¬Ôò´´½¨
-	if (!targetDir.exists()) {
-		if (!targetDir.mkpath(".")) 
-		{  // ´´½¨¶à¼¶Ä¿Â¼
-			qDebug() << "ÎÞ·¨´´½¨Ä¿±êÎÄ¼þ¼Ð:" << targetDirPath;
+		if (!fs::exists(srcDir))
+		{
+			printLog("Source directory does not exist: " + sourceDirPath);
 			return false;
 		}
-		qDebug() << "ÒÑ´´½¨Ä¿±êÎÄ¼þ¼Ð:" << targetDirPath;
+
+		fs::copy(srcDir, dstDir, fs::copy_options::recursive | fs::copy_options::overwrite_existing);
+		return true;
 	}
-
-	// »ñÈ¡Ô´ÎÄ¼þ¼ÐÖÐËùÓÐÌõÄ¿£¨ÎÄ¼þºÍ×ÓÎÄ¼þ¼Ð£©
-	QFileInfoList entries = sourceDir.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
-
-	foreach(const QFileInfo& entry, entries)
+	catch (const fs::filesystem_error& e)
 	{
-		QString sourcePath = entry.filePath();
-		QString targetPath = targetDir.filePath(entry.fileName());
+		printLog("FolderCopy failed: " + std::string(e.what()));
+		return false;
+	}
+}
 
-		if (entry.isDir())
+void CommFun::GetFolderFile(const std::string& folderPath, std::vector<std::string>& vFile)
+{
+	try
+	{
+		fs::path dirPath(folderPath);
+		if (!fs::exists(dirPath))
 		{
-			// µÝ¹é¸´ÖÆ×ÓÎÄ¼þ¼Ð
-			if (!FolderCopy(sourcePath, targetPath))
-			{
-				return false;
-			}
+			return;
 		}
-		else
+
+		for (const auto& entry : fs::recursive_directory_iterator(dirPath))
 		{
-			// ¸´ÖÆÎÄ¼þ
-			if (!FileCopy(sourcePath, targetPath))
+			if (entry.is_regular_file())
 			{
-				return false;
+				vFile.push_back(entry.path().string());
 			}
 		}
 	}
-	return true;
-}
-
-void CommFun::GetFolderFile(const QString& folderPath, std::vector<std::string>& vFile)
-{
-	QDir dir(folderPath);
-	if (!dir.exists())
+	catch (const fs::filesystem_error& e)
 	{
-		//printLog(QString::fromLocal8Bit("ÎÄ¼þ¼Ð²»´æÔÚ:%1").arg(folderPath));
-		return;
-	}
-
-	// »ñÈ¡ÎÄ¼þ¼ÐÖÐËùÓÐÌõÄ¿£¨ÎÄ¼þºÍ×ÓÎÄ¼þ¼Ð£©£¬ÅÅ³ý.ºÍ..
-	QFileInfoList entries = dir.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
-
-	foreach(const QFileInfo& entry, entries)
-	{
-		if (entry.isDir())
-		{
-			// µÝ¹é´¦Àí×ÓÎÄ¼þ¼Ð
-			GetFolderFile(entry.filePath(), vFile);
-			//CommFun::GetInstance().GetFolderFile(entry.filePath().toStdString(), vFile);
-		}
-		else
-		{
-			// Qt×Ô¶¯´¦ÀíÂ·¾¶×ªÒå£¬×ª»»Îªstd::stringºó´æÈëÊý×é
-			std::string filePath = entry.filePath().toStdString();
-			vFile.push_back(filePath);
-		}
+		printLog("GetFolderFile failed: " + std::string(e.what()));
 	}
 }
-
 
 std::string CommFun::GetCurrentTimeStr()
 {
-	//  Éú³ÉÔ­Ê¼Ê±¼ä×Ö·û´®£¨¸ñÊ½£ºYYYY-MM-DD HH:MM:SS£©
 	auto now = std::chrono::system_clock::now();
 	std::time_t nowTimeT = std::chrono::system_clock::to_time_t(now);
 	std::tm localTime;
-	localtime_s(&localTime, &nowTimeT); // WindowsÏß³Ì°²È«
+	
+#if defined(_WIN32)
+	localtime_s(&localTime, &nowTimeT);
+#else
+	localtime_r(&nowTimeT, &localTime);
+#endif
 
 	std::stringstream ss;
 	ss << std::put_time(&localTime, "%Y-%m-%d %H:%M:%S");
 	std::string timeStr = ss.str();
 
-	//  Ê¹ÓÃlambda±í´ïÊ½Ìæ»»ËùÓÐ·ÇÊý×Ö×Ö·ûÎª_
 	std::string sanitized;
-	sanitized.reserve(timeStr.size()); // Ô¤·ÖÅä¿Õ¼ä£¬Ìá¸ßÐ§ÂÊ
+	sanitized.reserve(timeStr.size());
 
-	// ±éÀúÃ¿¸ö×Ö·û£¬Í¨¹ýlambdaÅÐ¶Ï£ºÊý×ÖÔò±£Áô£¬·ñÔòÌæ»»Îª_
 	std::transform(timeStr.begin(), timeStr.end(), std::back_inserter(sanitized), [](char c)
 	{
-		// isdigitÒªÇó²ÎÊýÎªunsigned char£¨±ÜÃâ¸ºÊý£©£¬×ª»»ºóÅÐ¶ÏÊÇ·ñÎªÊý×Ö
 		return (isdigit(static_cast<unsigned char>(c))) ? c : '_';
 	});
 	return sanitized;
 }
 
-void CommFun::printLog(const QString& message)
+void CommFun::printLog(const std::string& message)
 {
-	LOG_INFO(message);
-	std::cout << message.toLocal8Bit().toStdString().c_str() << std::endl;
+	LOG_INFO(QString::fromStdString(message));
+	std::cout << message << std::endl;
 }
-

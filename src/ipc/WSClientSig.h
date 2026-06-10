@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include <QObject>
 #include <QString>
@@ -15,24 +15,24 @@ public:
 	explicit WSClientSig(QObject* par = nullptr);
 
 signals:
-	//SigNetworkStatusChanged º¯ÊýÍ³Ò»´¦Àí
+	//SigNetworkStatusChanged ï¿½ï¿½ï¿½ï¿½Í³Ò»ï¿½ï¿½ï¿½ï¿½
 	void SigConnectStatusChanged(bool connected);
 	void SigMsgRecevied(const QString& typeStr, const WSMsgBase&  msgData);
 	void SigHeartBeatAckReceived();
 
 	//HTTP_Data_Trans
 	void SigBindRegDev(const DevBindResp& data);
-	//¹¤¿ØÆô¶¯½×¶Î£¬Í¬²½¸÷Éè±¸ÈÎÎñ×´Ì¬
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×¶Î£ï¿½Í¬ï¿½ï¿½ï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½×´Ì¬
 	void SigRegDevTaskSync(const DevSereMapResp& data);
 	void SigTestWS(std::string data);
 	// const std::map<std::string, std::string>& data
 
-	// 1015_add_ÍøÂçÖØÁ¬
+	// 1015_add_ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	void SigNetworkStatusChanged(ConnectionType connType, NetworkStatus status, const QString& message = "");
 	void SigReconnectAttempt(ConnectionType connType, int attemptCount, int maxAttempts);
 	void SigReconnectFailed(ConnectionType connType, const QString& reason);
 
-	// 1027_Í¬²½¸üÐÂ¶ÏÍøÇé¿öÏÂ»º´æÍê³É½ø³ÌµÄÊý¾Ý
+	// 1027_Í¬ï¿½ï¿½ï¿½ï¿½ï¿½Â¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â»ï¿½ï¿½ï¿½ï¿½ï¿½É½ï¿½ï¿½Ìµï¿½ï¿½ï¿½ï¿½ï¿½
 	void SigSyncCacheFinishTask(const UnifiedMessage& data);
 };
 

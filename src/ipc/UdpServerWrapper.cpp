@@ -1,4 +1,4 @@
-#include "UdpServerWrapper.h"
+ï»¿#include "UdpServerWrapper.h"
 #include "hv/hlog.h"
 #include "CLogManager.h"
 
@@ -138,19 +138,19 @@ bool UdpServerWrapperImpl::Start(const std::string& ip, int port)
 		m_bindIp = ip;
 		m_bindPort = port;
 
-		// ÉèÖÃ·þÎñÆ÷ÅäÖÃ
+		// ï¿½ï¿½ï¿½Ã·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		if (m_enableBroadcast) 
 		{
 			// claude_qa
 			//m_server->setBroadcast(true);
 		}
 
-		// ÉèÖÃ»Øµ÷º¯Êý
+		// ï¿½ï¿½ï¿½Ã»Øµï¿½ï¿½ï¿½ï¿½ï¿½
 		m_server->onMessage = [this](const hv::SocketChannelPtr& channel, hv::Buffer* buf) {
 			OnMessage(channel, buf);
 		};
 
-		// Æô¶¯·þÎñÆ÷
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		int ret = m_server->createsocket(port, ip.c_str());
 		if (ret != 0) {
 			HandleError(ret, "Failed to create UDP socket");
@@ -182,13 +182,13 @@ void UdpServerWrapperImpl::Stop()
 	}
 
 	try {
-		// ÇåÀíËùÓÐ¿Í»§¶Ë¼ÇÂ¼
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¿Í»ï¿½ï¿½Ë¼ï¿½Â¼
 		{
 			std::lock_guard<std::mutex> lock(m_clientsMutex);
 			m_clients.clear();
 		}
 
-		// Í£Ö¹·þÎñÆ÷
+		// Í£Ö¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		m_server->stop();
 		m_isRunning = false;
 
@@ -219,14 +219,14 @@ bool UdpServerWrapperImpl::SendData(const std::string& clientIp, int clientPort,
 
 	//try 
 	//{
-	//	// ´´½¨Ä¿±êµØÖ·
+	//	// ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½Ö·
 	//	sockaddr_in addr;
 	//	memset(&addr, 0, sizeof(addr));
 	//	addr.sin_family = AF_INET;
 	//	addr.sin_port = htons(clientPort);
 	//	inet_pton(AF_INET, clientIp.c_str(), &addr.sin_addr);
 
-	//	// ·¢ËÍÊý¾Ý
+	//	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	//	// claude_qa
 	//	//int ret = m_server->sendto(data.c_str(), data.size(), (struct sockaddr*)&addr, sizeof(addr));
 	//	int ret = 0;
@@ -350,33 +350,33 @@ void UdpServerWrapperImpl::OnMessage(const hv::SocketChannelPtr& channel, hv::Bu
 
 	//try 
 	//{
-	//	// »ñÈ¡¿Í»§¶ËÐÅÏ¢
+	//	// ï¿½ï¿½È¡ï¿½Í»ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
 	//	std::string clientIp = channel->peeraddr();
 	//	// claude_qa
 	//	//int clientPort = channel->peerport();
 	//	//std::string clientKey = GetAddressKey(clientIp, clientPort);
 
-	//	// ¸üÐÂ¿Í»§¶Ë»îÔ¾Ê±¼ä
+	//	// ï¿½ï¿½ï¿½Â¿Í»ï¿½ï¿½Ë»ï¿½Ô¾Ê±ï¿½ï¿½
 	//	UpdateClientActiveTime(clientKey);
 
-	//	// ´´½¨ÏûÏ¢¶ÔÏó
+	//	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½
 	//	std::string data(static_cast<const char*>(buf->data()), buf->size());
 	//	UdpMessage message(clientIp, clientPort, data);
 
 	//	//LOG_INFO(QString("UDP message received from %1:%2, Size=%3 bytes").arg(clientIp.c_str()).arg(clientPort).arg(data.size()));
 
-	//	// ¼ì²éÊÇ·ñÊÇÐÂ¿Í»§¶Ë
+	//	// ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½Â¿Í»ï¿½ï¿½ï¿½
 	//	{
 	//		std::lock_guard<std::mutex> lock(m_clientsMutex);
 	//		if (m_clients.find(clientKey) == m_clients.end()) {
-	//			// ÐÂ¿Í»§¶Ë
+	//			// ï¿½Â¿Í»ï¿½ï¿½ï¿½
 	//			UdpClient newClient = CreateClientInfo(channel);
 	//			m_clients[clientKey] = newClient;
 
 	//			LOG_INFO(QString("New UDP client discovered: %1, Total=%2")
 	//				.arg(clientKey.c_str()).arg(m_clients.size()));
 
-	//			// ´¥·¢ÐÂ¿Í»§¶Ë»Øµ÷
+	//			// ï¿½ï¿½ï¿½ï¿½ï¿½Â¿Í»ï¿½ï¿½Ë»Øµï¿½
 	//			if (m_onNewClientCallback) 
 	//			{
 	//				m_onNewClientCallback(newClient);
@@ -384,7 +384,7 @@ void UdpServerWrapperImpl::OnMessage(const hv::SocketChannelPtr& channel, hv::Bu
 	//		}
 	//	}
 
-	//	// ´¥·¢ÏûÏ¢»Øµ÷
+	//	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½Øµï¿½
 	//	if (m_onMessageCallback) 
 	//	{
 	//		m_onMessageCallback(message);

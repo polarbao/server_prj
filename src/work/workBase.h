@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "WSClient.h"
 
 #include <QObject>

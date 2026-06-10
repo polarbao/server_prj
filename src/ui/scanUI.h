@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include <QWidget>
 
@@ -32,9 +32,9 @@ public:
 
 	void SendAllDeviceReg();
 
-	//×¢²áÊ±£¬Í¬²½¹úÓÐÉè±¸×´Ì¬
+	//×¢ï¿½ï¿½Ê±ï¿½ï¿½Í¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸×´Ì¬
 	void SyncRegDevStatus(const std::vector<DeviceInfo>& data);
-	//¹¤×÷Ê±£¬µ¥Éè±¸×´Ì¬·¢ËÍ±ä»¯
+	//ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½è±¸×´Ì¬ï¿½ï¿½ï¿½Í±ä»¯
 	void SyncWorkDevStatus(const DeviceInfo& data);
 
 

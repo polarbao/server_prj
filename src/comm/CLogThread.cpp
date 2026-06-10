@@ -1,4 +1,4 @@
-#include "CLogThread.h"
+﻿#include "CLogThread.h"
 
 
 CLogThread::CLogThread(QObject * parent, CLogThreadCallBack* pCallBack)

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include <QtWidgets/QWidget>
 #include <QPushButton>
@@ -42,7 +42,7 @@ signals:
 public slots:
 
 
-	// ÍøÂçÁ¬½Ó×´Ì¬¸Ä±ä²Ûº¯Êý
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½Ä±ï¿½Ûºï¿½ï¿½ï¿½
 	void OnUpdateNetConnStatus(ConnectionType netType, NetworkStatus status, const QString& message = "");
 	void OnHandleRecvMsg(const QString& msgTypeStr, const WSMsgBase& payloadStr);
 	void OnHandleHeartBeatAck();
@@ -58,18 +58,18 @@ public slots:
 
 
 
-	//Note: UI²ã Ä£ÄâÉè±¸ÉÏ±¨¹ÊÕÏ´¦Àí
+	//Note: UIï¿½ï¿½ Ä£ï¿½ï¿½ï¿½è±¸ï¿½Ï±ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ï¿½ï¿½
 	void OnUIDevStoppedUpdate(bool bStopped, const DeviceInfo& dev);
-	//Note: UI²ã£¬´Ó·þÎñ¶Ë»ñÈ¡µ±Ç°×¢²áÉè±¸£¨Íê³ÉhttpµÇÂ½ºó½øÐÐ»ñÈ¡×¢²áÉè±¸
+	//Note: UIï¿½ã£¬ï¿½Ó·ï¿½ï¿½ï¿½Ë»ï¿½È¡ï¿½ï¿½Ç°×¢ï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½ï¿½httpï¿½ï¿½Â½ï¿½ï¿½ï¿½ï¿½Ð»ï¿½È¡×¢ï¿½ï¿½ï¿½è±¸
 	void OnUIGetRegDevSync();
-	//Note: UI²ã£¬´Ó·þÎñ¶Ë»ñÈ¡µ±Ç°Ö´ÐÐÈÎÎñÉè±¸×´Ì¬£¬¹¤¿ØÈí¼þÆô¶¯ºó£¬ËùÓÐÉè±¸Ó¦ÎªÎ´Æô¶¯×´Ì¬£¬
-	//²éÑ¯×´Ì¬ÈôÎªÔËÐÐÌ¬£¬Ôò½«¶ÔÓ¦Éè±¸¶ª»ØÈÎÎñ¶ÓÁÐÖÐ(opRes = 4£©
+	//Note: UIï¿½ã£¬ï¿½Ó·ï¿½ï¿½ï¿½Ë»ï¿½È¡ï¿½ï¿½Ç°Ö´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸Ó¦ÎªÎ´ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½
+	//ï¿½ï¿½Ñ¯×´Ì¬ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½Ì¬ï¿½ï¿½ï¿½ò½«¶ï¿½Ó¦ï¿½è±¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(opRes = 4ï¿½ï¿½
 	void OnUIGetDevTaskSync();
 	void OnRegDevTaskHandle(const DevSereMapResp& data);
-	//Note: ÒµÎñÏß³Ì·¢ËÍÉè±¸×´Ì¬ÖÁUI²ã
+	//Note: Òµï¿½ï¿½ï¿½ß³Ì·ï¿½ï¿½ï¿½ï¿½è±¸×´Ì¬ï¿½ï¿½UIï¿½ï¿½
 	void OnWorkDevStatusUpdate(const QString& devId);
 
-	//Note: UI²ã µÇÂ½ÐÅÏ¢Ä£¿éÄ£Äâ²âÊÔ²Ù×÷
+	//Note: UIï¿½ï¿½ ï¿½ï¿½Â½ï¿½ï¿½Ï¢Ä£ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½Ô²ï¿½ï¿½ï¿½
 	void OnHandleUITestOper();
 	void OnHandleUITestOper2();
 //-------------------------------------------------------

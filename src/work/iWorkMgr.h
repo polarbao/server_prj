@@ -1,8 +1,8 @@
-#pragma once
+ï»¿#pragma once
 
 /** 
 *  @author      
-*  @class       Éè±¸½Ó¿ÚÀà 
+*  @class       ï¿½è±¸ï¿½Ó¿ï¿½ï¿½ï¿½ 
 *  @brief       brief 
 */
 
@@ -23,18 +23,18 @@ public:
 	virtual void StartAllWorkThds() = 0;
 	virtual void StopAllWorkThds() = 0;
 	virtual void DispatchTask(const BusinessTask& task) = 0;
-	virtual void CancelTask(const std::string& device_id, bool bStopped = false) = 0; // È¡ÏûÖ¸¶¨Éè±¸µÄµ±Ç°ÈÎÎñ
-	virtual void CancelAllTasks() = 0;							// È¡ÏûËùÓÐÉè±¸µÄµ±Ç°ÈÎÎñ
+	virtual void CancelTask(const std::string& device_id, bool bStopped = false) = 0; // È¡ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½è±¸ï¿½Äµï¿½Ç°ï¿½ï¿½ï¿½ï¿½
+	virtual void CancelAllTasks() = 0;							// È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸ï¿½Äµï¿½Ç°ï¿½ï¿½ï¿½ï¿½
 	virtual std::vector<DeviceInfo> GetAllDeviceStatus() = 0;
-	virtual void AddRegDevInfo(std::vector<DeviceInfo>& devVec) = 0;	//´Ó·þÎñÆ÷»ñÈ¡Éè±¸ÐÅÏ¢
+	virtual void AddRegDevInfo(std::vector<DeviceInfo>& devVec) = 0;	//ï¿½Ó·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½è±¸ï¿½ï¿½Ï¢
 
 	virtual bool HasDevice(const std::string& devId) const = 0;
 	virtual bool AddDevice(const std::string& devId, int devType) = 0;
 	virtual bool RemoveDevice(const std::string& devId) = 0;
-	virtual void HandleStopeedDev(const DeviceInfo& dev) = 0;	//´¦Àí¹ÊÕÏÉè±¸
+	virtual void HandleStopeedDev(const DeviceInfo& dev) = 0;	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸
 
 
-	//workÐÅºÅÀà
+	//workï¿½Åºï¿½ï¿½ï¿½
 	virtual WorkThdSig* GetSignals() = 0;
 
 signals:

@@ -1,4 +1,4 @@
-#include "SingleOSSToken.h"
+ï»¿#include "SingleOSSToken.h"
 #include "MessageDefine.h"
 #include "CLogManager.h"
 
@@ -73,35 +73,35 @@ bool SingleOSSToken::UploadSingleFile(std::string objPath, std::string& url)
 	}
 	auto  convertPath= [&](const std::string& original) ->std::string
 	{
-		// ÕýÔò±í´ïÊ½£ºÆ¥Åäµ¹ÊýµÚ¶þ¸ö·´Ð±¸ÜºóµÄËùÓÐÄÚÈÝ
-		// (.*\\){2} Æ¥ÅäÇ°ÃæÖÁÉÙÁ½¸ö·´Ð±¸ÜµÄ²¿·Ö
-		// ([^\\]+)\\([^\\]+)$ ²¶»ñµ¹ÊýÁ½¼¶Â·¾¶
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê½ï¿½ï¿½Æ¥ï¿½äµ¹ï¿½ï¿½ï¿½Ú¶ï¿½ï¿½ï¿½ï¿½ï¿½Ð±ï¿½Üºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		// (.*\\){2} Æ¥ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð±ï¿½ÜµÄ²ï¿½ï¿½ï¿½
+		// ([^\\]+)\\([^\\]+)$ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½
 		std::regex pattern(R"(.*?/([^/]+)/([^/]+)$)");
 		std::string replacement = "$1/$2";
 		return std::regex_replace(original, pattern, replacement);
 	};
 	auto objName = convertPath(objPath);
 
-	//Upload²»Í¬·½Ê½
+	//Uploadï¿½ï¿½Í¬ï¿½ï¿½Ê½
 	std::shared_ptr<std::iostream> content = std::make_shared<std::fstream>(objPath, std::ios::in | std::ios::binary);
 	PutObjectRequest request(m_ossParam.ossBucket, objName, content);
 	auto outcome = m_pClient->PutObject(request);	
 	auto urlData = m_pClient->GeneratePresignedUrl(m_ossParam.ossBucket, objName);
-	//Noet: ½ØÈ¡Ç©Ãû²ÎÊý
+	//Noet: ï¿½ï¿½È¡Ç©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	auto GetUrlView = [](const std::string& url) -> std::string
 	{
 		size_t pos = url.find('?');
 		return (pos != std::string::npos) ? std::string(std::string_view(url).substr(0, pos)): url;
 	};
-	// ·µ»ØÈ«²¿µÄURLÊý¾Ý
+	// ï¿½ï¿½ï¿½ï¿½È«ï¿½ï¿½ï¿½ï¿½URLï¿½ï¿½ï¿½ï¿½
 	//url = UrlDecode(GetUrlView(urlData.result()));
 
-	// ·µ»Ø½ØÈ¡ºó£¬±£Áôµ¹Êý2¸ö/µÄÊý¾Ý
+	// ï¿½ï¿½ï¿½Ø½ï¿½È¡ï¿½ó£¬±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½2ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	auto tmpURL = UrlDecode(GetUrlView(urlData.result()));
 	url = convertPath(tmpURL);
 	if (!outcome.isSuccess()) 
 	{
-		//Êä³öÈÕ³£ÈÕÖ¾ÖÁ£¬Log ÏÔÊ¾¿ò
+		//ï¿½ï¿½ï¿½ï¿½Õ³ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½Log ï¿½ï¿½Ê¾ï¿½ï¿½
 		LOG_DEBUG(QString("oss_module upload_single_file_failed, cur_file_name = %1, cur_file_path = %2")
 			.arg(objName.data()).arg(objPath.data()));
 		LOG_DEBUG(QString("oss_module upload_single_file_failed, err_code = %1, err_msg = %2, err_reqId = %3")
@@ -144,33 +144,33 @@ bool SingleOSSToken::DownloadSingleFile(std::string objURL, std::string& retInfo
 	auto endpoint = match[2].str();
 	auto object = match[3].str();
 
-	// TODO£ºÊÇ·ñ¶ÔURLÊý¾Ý½øÐÐ½âÂë²Ù×÷£¨´¦ÀíObjectÃû³ÆÖÐµÄÌØÊâ×Ö·û£©
-	// TODO£º²ð·ÖserID, ´´½¨ÎÄ¼þÖÐ´æ´¢
-	// ²éÕÒ '/' µÄÎ»ÖÃ, ²ð·ÖÂ·¾¶Êý¾Ý
+	// TODOï¿½ï¿½ï¿½Ç·ï¿½ï¿½URLï¿½ï¿½ï¿½Ý½ï¿½ï¿½Ð½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Objectï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½
+	// TODOï¿½ï¿½ï¿½ï¿½ï¿½serID, ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½Ð´æ´¢
+	// ï¿½ï¿½ï¿½ï¿½ '/' ï¿½ï¿½Î»ï¿½ï¿½, ï¿½ï¿½ï¿½Â·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	size_t slashPos = object.find('/');
-	// ²ð·Ö»ñÈ¡µÚÒ»²¿·Ö£¨ÎÄ¼þ¼ÐÃû³Æ£©
+	// ï¿½ï¿½Ö»ï¿½È¡ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Ö£ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ£ï¿½
 	std::string folderName = dstDownPath + object.substr(0, slashPos) +"\\";
 	std::string fileName = object.substr(slashPos+1);
-	std::cout << "ÌáÈ¡µÄÎÄ¼þ¼ÐÃû³Æ: " << folderName << std::endl;
+	std::cout << "ï¿½ï¿½È¡ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: " << folderName << std::endl;
 	LOG_INFO(QString("oss_module download_single_file_fun, create_folder_name = %1").arg(folderName.data()));
 
-	// ¼ì²éÎÄ¼þ¼ÐÊÇ·ñÒÑ´æÔÚ
+	// ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½Ñ´ï¿½ï¿½ï¿½
 	if (std::filesystem::exists(folderName))
 	{
-		std::cout << "ÎÄ¼þ¼ÐÒÑ´æÔÚ: " << folderName << std::endl;
+		std::cout << "ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½ï¿½ï¿½: " << folderName << std::endl;
 		LOG_INFO("oss_module download_single_file_fun, folder_exist");
 	}
 	else
 	{
-		// ´´½¨ÎÄ¼þ¼Ð
+		// ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
 		if (std::filesystem::create_directory(folderName))
 		{
-			std::cout << "ÎÄ¼þ¼Ð´´½¨³É¹¦: " << folderName << std::endl;
+			std::cout << "ï¿½Ä¼ï¿½ï¿½Ð´ï¿½ï¿½ï¿½ï¿½É¹ï¿½: " << folderName << std::endl;
 			LOG_INFO("oss_module download_single_file_fun, create_folder_success");
 		}
 		else
 		{
-			std::cerr << "ÎÄ¼þ¼Ð´´½¨Ê§°Ü: " << folderName << std::endl;
+			std::cerr << "ï¿½Ä¼ï¿½ï¿½Ð´ï¿½ï¿½ï¿½Ê§ï¿½ï¿½: " << folderName << std::endl;
 			LOG_ERROR("oss_module download_single_file_fun, create_folder_failed");
 			return ret;
 		}
@@ -182,7 +182,7 @@ bool SingleOSSToken::DownloadSingleFile(std::string objURL, std::string& retInfo
 
 	if (!outcome.isSuccess())
 	{
-		//Êä³öÈÕ³£ÈÕÖ¾ÖÁ£¬Log ÏÔÊ¾¿ò
+		//ï¿½ï¿½ï¿½ï¿½Õ³ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½Log ï¿½ï¿½Ê¾ï¿½ï¿½
 		LOG_ERROR(QString("oss_module DownloadSingleFile_fun, download_single_file_failed, cur_file_name = %1, down_path = %2")
 			.arg(object.data()).arg(downPath.data()));
 		LOG_ERROR(QString("oss_module DownloadSingleFile_fun, download_single_file_failed, err_code = %1, err_msg = %2, err_reqId = %3")

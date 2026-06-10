@@ -1,4 +1,4 @@
-#include "deviceBase.h"
+ï»¿#include "deviceBase.h"
 #include <iostream>
 #include <chrono>
 #include <thread>
@@ -93,7 +93,7 @@ SimulateData IODeviceBase::GetHandleWorkData()
 //----------------------------IODeviceBaseImpl----------------------------------------------
 
 
-//dev_type -->  global½øÐÐÉèÖÃ
+//dev_type -->  globalï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 IODeviceBaseImpl::IODeviceBaseImpl(const std::string& id, int dev_type)
 	: m_devID(id)
 	, m_devType(dev_type)
@@ -127,7 +127,7 @@ void IODeviceBaseImpl::SetStatus(DeviceStatus status)
 		//LOG_INFO("Device %s status changed from %d to %d", device_id_.c_str(), static_cast<int>(old_status), static_cast<int>(status_));
 		//update_log
 		//LOG_INFO();
-		// Èç¹û´Ó´íÎó×´Ì¬»Ö¸´µ½¿ÕÏÐ×´Ì¬£¬¼ÇÂ¼»Ö¸´ÈÕÖ¾
+		// ï¿½ï¿½ï¿½ï¿½Ó´ï¿½ï¿½ï¿½×´Ì¬ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½Â¼ï¿½Ö¸ï¿½ï¿½ï¿½Ö¾
 		if (oldStatus == DeviceStatus::ERR && status == DeviceStatus::IDLE)
 		{
 			//LOG_INFO();
@@ -150,7 +150,7 @@ void IODeviceBaseImpl::SetProId(const std::string& proId)
 	//m_devID
 }
 
-//Ö´ÐÐÈÎÎñ
+//Ö´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 bool IODeviceBaseImpl::PerformTask(const BusinessTask& task)
 {
 	//LOG_INFO("Device %s (Type %d) performing task %s: %s", m_devID.c_str(), m_devType, task.proId.c_str(), task.op.c_str());
@@ -162,7 +162,7 @@ bool IODeviceBaseImpl::PerformTask(const BusinessTask& task)
 
 	try 
 	{
-		// ÖØÖÃÈ¡Ïû±êÖ¾²¢¼ÇÂ¼µ±Ç°ÈÎÎñID
+		// ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ID
 		{
 			std::lock_guard<std::mutex> lock(m_cancelMtx);
 			m_taskCancelled = false;
@@ -170,23 +170,23 @@ bool IODeviceBaseImpl::PerformTask(const BusinessTask& task)
 			m_curRunTask = task;
 		}
 
-		// Ä£ÄâÈÎÎñÖ´ÐÐ£¬Êµ¼ÊÖÐ¿ÉÄÜÉæ¼°¸´ÔÓIO²Ù×÷
-		// »ñÈ¡ÖÐ¶ÏÊý¾Ý´¦Àí
+		// Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½Ð£ï¿½Êµï¿½ï¿½ï¿½Ð¿ï¿½ï¿½ï¿½ï¿½æ¼°ï¿½ï¿½ï¿½ï¿½IOï¿½ï¿½ï¿½ï¿½
+		// ï¿½ï¿½È¡ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½Ý´ï¿½ï¿½ï¿½
 		SetStatus(DeviceStatus::BUSY);
-		// Ê¹ÓÃ¿ÉÖÐ¶ÏµÄË¯ÃßÀ´Ä£Äâ¹¤×÷£¬Êµ¼ÊÓ¦ÓÃÖÐÓ¦¸ÃÊÇÕæÊµµÄÉè±¸²Ù×÷
+		// Ê¹ï¿½Ã¿ï¿½ï¿½Ð¶Ïµï¿½Ë¯ï¿½ï¿½ï¿½ï¿½Ä£ï¿½â¹¤ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½
 		auto start_time = std::chrono::steady_clock::now();
 		auto target_duration = std::chrono::seconds(30);
 
 		while (std::chrono::steady_clock::now() - start_time < target_duration) 
 		{
 
-			// ¼ì²éÈ¡ÏûÈÎÎñÐÅºÅ
+			// ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åºï¿½
 			if (m_taskCancelled.load()) 
 			{
 				LOG_INFO(QString("Device %1 task %2 was cancelled.")
 						.arg(QString::fromStdString(m_devID))
 						.arg(QString::fromStdString(task.proId)));
-				//·Ç¹ÊÕÏ×´Ì¬ÏÂÈ¡ÏûÈÎÎñ£¬ÉèÖÃ×´Ì¬ÉèÖÃÎª¿ÕÏÐ
+				//ï¿½Ç¹ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½
 
 				if (m_devStatus != DeviceStatus::ERR)
 				{
@@ -197,10 +197,10 @@ bool IODeviceBaseImpl::PerformTask(const BusinessTask& task)
 					m_currentTaskId.clear();
 					m_curRunTask.Clear();
 				}
-				return false; // ÈÎÎñ±»È¡Ïû
+				return false; // ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½
 			}
 
-			// Ê¹ÓÃÌõ¼þ±äÁ¿ÊµÏÖ¿ÉÖÐ¶ÏµÄµÈ´ý
+			// Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Êµï¿½Ö¿ï¿½ï¿½Ð¶ÏµÄµÈ´ï¿½
 			std::unique_lock<std::mutex> lock(m_cancelMtx);
 			m_cancelCV.wait_for(lock, std::chrono::milliseconds(100), [this] 
 			{
@@ -222,8 +222,8 @@ bool IODeviceBaseImpl::PerformTask(const BusinessTask& task)
 			}
 
 		}
-		// ÈÎÎñÍê³É
-		// Í¨¹ýtcpÐÅºÅ£¬»ñÈ¡µ±Ç°Éè±¸×´Ì¬Îª¿ÕÏÐ×´Ì¬£¬½«Éè±¸×´Ì¬½øÐÐÐÞ¸Ä
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		// Í¨ï¿½ï¿½tcpï¿½ÅºÅ£ï¿½ï¿½ï¿½È¡ï¿½ï¿½Ç°ï¿½è±¸×´Ì¬Îªï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½è±¸×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½
 		SetStatus(DeviceStatus::IDLE);
 		{
 			std::lock_guard<std::mutex> lock(m_cancelMtx);
@@ -275,7 +275,7 @@ void IODeviceBaseImpl::CancelCurrentTask(bool bStopped)
 		LOG_INFO(QString("Cancelling task %1 on device %2").arg(QString::fromStdString(m_currentTaskId).QString::fromStdString(m_devID)));
 		m_taskCancelled = true;
 		m_devStatus = bStopped ? DeviceStatus::ERR : m_devStatus;
-		m_cancelCV.notify_all(); // »½ÐÑµÈ´ýÖÐµÄÈÎÎñÖ´ÐÐ
+		m_cancelCV.notify_all(); // ï¿½ï¿½ï¿½ÑµÈ´ï¿½ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ï¿½
 	}
 	else 
 	{
@@ -290,8 +290,8 @@ bool IODeviceBaseImpl::IsTaskCancelled() const
 
 }
 
-//ÔÝÍ£ÈÎÎñ
-//Í£Ö¹ÈÎÎñ
+//ï¿½ï¿½Í£ï¿½ï¿½ï¿½ï¿½
+//Í£Ö¹ï¿½ï¿½ï¿½ï¿½
 
 
 void IODeviceBaseImpl::RegStatusUpdateCallback(std::function<void(const DeviceInfo &)> callback)

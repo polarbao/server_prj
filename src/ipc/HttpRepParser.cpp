@@ -1,4 +1,4 @@
-
+ï»¿
 #include "HttpRepParser.h"
 #include "global.h"
 
@@ -76,14 +76,14 @@ void DevBindparam::FromJson(const nlohmann::json& jsonArr)
 		}
 	}
 
-	////// ÑéÖ¤±ØÒª×Ö¶Î´æÔÚ
+	////// ï¿½ï¿½Ö¤ï¿½ï¿½Òªï¿½Ö¶Î´ï¿½ï¿½ï¿½
 	////if (!j.contains("deviceId") || !j.contains("deviceType") || !j.contains("status")) 
 	////{
-	////	//throwÅ×³öµÄÊ¹ÓÃ
+	////	//throwï¿½×³ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½
 	////	throw std::invalid_argument("Missing required fields in DeviceInfo JSON");
 	////}
 
-	////// ÑéÖ¤×Ö¶ÎÀàÐÍºÍÄÚÈÝ
+	////// ï¿½ï¿½Ö¤ï¿½Ö¶ï¿½ï¿½ï¿½ï¿½Íºï¿½ï¿½ï¿½ï¿½ï¿½
 	////if (!j["deviceId"].is_string() || j["deviceId"].get<std::string>().empty()) 
 	////{
 	////	throw std::invalid_argument("Invalid deviceId field");
@@ -101,7 +101,7 @@ void DevBindparam::FromJson(const nlohmann::json& jsonArr)
 	//int status_int = j["status"].get<int>();
 	//info.devStatus = static_cast<DeviceStatus>(status_int);
 
-	////// ÑéÖ¤×´Ì¬Öµ·¶Î§
+	////// ï¿½ï¿½Ö¤×´Ì¬Öµï¿½ï¿½Î§
 	////if (status_int < 1 || status_int > 5)
 	////{
 	////	throw std::invalid_argument("Invalid status value");
@@ -242,7 +242,7 @@ SerProParam::SerProParam()
 
 void SerProParam::FromJson(const nlohmann::json& json)
 {
-	//TODO: ÅÐ¶Ïµ±Ç°Êý¾ÝÊÇ·ñÎªÒ»¸öarr
+	//TODO: ï¿½Ð¶Ïµï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ÎªÒ»ï¿½ï¿½arr
 	auto jsonArr = nlohmann::json::array();
 	for (const auto& item : json)
 	{
@@ -259,7 +259,7 @@ void SerProParam::FromJson(const nlohmann::json& json)
 
 std::string SerProParam::CreateJsonReq()
 {
-	// ÉÏ´«ÎÄ¼þ
+	// ï¿½Ï´ï¿½ï¿½Ä¼ï¿½
 	QJsonObject json;
 	json["service_id"] = QString::fromStdString(sppSerId);
 	if (sppType == 1)
@@ -274,7 +274,7 @@ std::string SerProParam::CreateJsonReq()
 		}
 		json["model_list"] = modelArray;
 	}
-	// ×´Ì¬¸Ä±ä
+	// ×´Ì¬ï¿½Ä±ï¿½
 	else if (sppType == 2)
 	{
 		json["progress"] = sppProgressNum;
@@ -293,7 +293,7 @@ ErrInfo::ErrInfo()
 
 void ErrInfo::ParseFormatMsg(const std::string& msg)
 {
-	//"err_code=Êý×Ö, err_msg=ÎÄ±¾" ¸ñÊ½
+	//"err_code=ï¿½ï¿½ï¿½ï¿½, err_msg=ï¿½Ä±ï¿½" ï¿½ï¿½Ê½
 	std::regex pattern(R"(err_code=(\d+),\s*err_msg=([^,]+))");
 	std::smatch match;
 
@@ -305,7 +305,7 @@ void ErrInfo::ParseFormatMsg(const std::string& msg)
 	}
 	else
 	{
-		// Î´Æ¥Åäµ½ÌØ¶¨¸ñÊ½£¬Ê¹ÓÃÔ­Ê¼ÏûÏ¢
+		// Î´Æ¥ï¿½äµ½ï¿½Ø¶ï¿½ï¿½ï¿½Ê½ï¿½ï¿½Ê¹ï¿½ï¿½Ô­Ê¼ï¿½ï¿½Ï¢
 		err_msg = msg;
 		bValid = false;
 	}
@@ -355,7 +355,7 @@ std::unique_ptr<BaseSerResp> BaseSerResp::CreateResponse(const std::string& json
 
 	nlohmann::json json = nlohmann::json::parse(jsonData);
 
-	// ¸ù¾ÝJSONÄÚÈÝÅÐ¶Ï´´½¨ÄÄÖÖÀàÐÍµÄÏìÓ¦¶ÔÏó
+	// ï¿½ï¿½ï¿½ï¿½JSONï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ï´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Íµï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½
 	// http_conn_login
 	if (json.contains("staff_info"))
 	{
@@ -369,7 +369,7 @@ std::unique_ptr<BaseSerResp> BaseSerResp::CreateResponse(const std::string& json
 		response->FromJosn(json);
 		return response;
 	}
-	//ÅÐ¶ÏÊÇ·ñÎªoss_token
+	//ï¿½Ð¶ï¿½ï¿½Ç·ï¿½Îªoss_token
 	else if (json.contains("token"))
 	{
 		auto response = std::make_unique<OssTokenResp>();
@@ -406,7 +406,7 @@ std::unique_ptr<BaseSerResp> BaseSerResp::CreateResponse(const std::string& json
 		response->FromJosn(json);
 		return response;
 	}
-	// Ä¬ÈÏ·µ»Ø»ùÀà
+	// Ä¬ï¿½Ï·ï¿½ï¿½Ø»ï¿½ï¿½ï¿½
 	return std::make_unique<BaseSerResp>();
 
 	//if (json_str.empty())
@@ -417,7 +417,7 @@ std::unique_ptr<BaseSerResp> BaseSerResp::CreateResponse(const std::string& json
 	//nlohmann::json j = nlohmann::json::parse(json_str);
 	//WSMsgBase msg;
 
-	////// ÑéÖ¤±ØÒª×Ö¶Î´æÔÚ
+	////// ï¿½ï¿½Ö¤ï¿½ï¿½Òªï¿½Ö¶Î´ï¿½ï¿½ï¿½
 	////if (!j.contains("msgId") || !j.contains("msgType") || !j.contains("ts") || !j.contains("type")) {
 	////	throw std::invalid_argument("Missing required fields in WSMsgBase JSON");
 	////}
@@ -430,7 +430,7 @@ std::unique_ptr<BaseSerResp> BaseSerResp::CreateResponse(const std::string& json
 	////msg.type = static_cast<MessageType>(typeInt);
 	//msg.msgId = j["msg_id"].get<std::string>();
 	//msg.ts = j["ts"].get<long long>();
-	////TODO: ÐÂÔöÅÐ¶Ï
+	////TODO: ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½
 
 	//msg.payload = j.value("payload", nlohmann::json{});
 	//return msg;
@@ -452,19 +452,19 @@ std::string BaseSerResp::GetString(const nlohmann::json& json, const std::string
 		if (json[key].is_string()) 
 		{
 			std::string result = json[key].get<std::string>();
-			// libhv JSON¿âÄ¬ÈÏ´¦ÀíUTF-8±àÂëµÄ×Ö·û´®
-			// ÖÐÎÄ×Ö·ûÓ¦¸ÃÄÜ¹»ÕýÈ·½âÎöºÍ´æ´¢
+			// libhv JSONï¿½ï¿½Ä¬ï¿½Ï´ï¿½ï¿½ï¿½UTF-8ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½
+			// ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½Ó¦ï¿½ï¿½ï¿½Ü¹ï¿½ï¿½ï¿½È·ï¿½ï¿½ï¿½ï¿½ï¿½Í´æ´¢
 			return result;
 		}
 		else 
 		{
-			// Èç¹û²»ÊÇ×Ö·û´®ÀàÐÍ£¬³¢ÊÔ×ª»»Îª×Ö·û´®
+			// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í£ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½Îªï¿½Ö·ï¿½ï¿½ï¿½
 			return json[key].dump();
 		}
 	}
 	catch (const std::exception& e) 
 	{
-		// ½âÎöÊ§°Ü·µ»ØÄ¬ÈÏÖµ
+		// ï¿½ï¿½ï¿½ï¿½Ê§ï¿½Ü·ï¿½ï¿½ï¿½Ä¬ï¿½ï¿½Öµ
 		return val;
 	}
 }
@@ -580,14 +580,14 @@ void SkuParam::FromJson(const nlohmann::json& json)
 	status = json.contains("status") ? json["status"].get<int>() : 0;
 	count = json.contains("count") ? json["count"].get<int>() : 0;
 	price = json.contains("price") ? json["price"].get<int>() : 0;
-	//todo: °²È«»ñÈ¡¶ÔÓ¦×Ö¶Î
+	//todo: ï¿½ï¿½È«ï¿½ï¿½È¡ï¿½ï¿½Ó¦ï¿½Ö¶ï¿½
 	//name = BaseSerResp::SafeGetString(json, "name", "");
 	//img = BaseSerResp::SafeGetString(json, "image", "");
 	name = json.contains("name") ? json["name"].get<std::string>() : "";
 	img = json.contains("image") ? json["image"].get<std::string>() : "";
 	costTime = json.contains("cost_time") ? json["cost_time"].get<int>() : 0;
 
-	// ½âÎöparam_idsÊý×é
+	// ï¿½ï¿½ï¿½ï¿½param_idsï¿½ï¿½ï¿½ï¿½
 	if (json.contains("param_ids") && json["param_ids"].is_array()) 
 	{
 		paramId.clear();
@@ -599,7 +599,7 @@ void SkuParam::FromJson(const nlohmann::json& json)
 		}
 	}
 
-	//// ½âÎöcount_listÊý×é
+	//// ï¿½ï¿½ï¿½ï¿½count_listï¿½ï¿½ï¿½ï¿½
 	//if (json.contains("count_list") && json["count_list"].is_array()) 
 	//{
 	//	countList.clear();
@@ -612,7 +612,7 @@ void SkuParam::FromJson(const nlohmann::json& json)
 	//			item.countName = count_item.contains("image") ? json["image"].get<std::string>() : "";
 	//			item.order = count_item.contains("order") ? count_item["order"].get<int>() : 0;
 
-	//			// ½âÎöparam_listÊý×é
+	//			// ï¿½ï¿½ï¿½ï¿½param_listï¿½ï¿½ï¿½ï¿½
 	//			if (count_item.contains("param_list") && count_item["param_list"].is_array()) 
 	//			{
 	//				for (const auto& param_item : count_item["param_list"]) 
@@ -726,7 +726,7 @@ void SerInfo::FromJson(const nlohmann::json& json)
 	proType = json.contains("process_type") ? json["process_type"].get<int>() : 0;
 	remarks = BaseSerResp::GetString(json, "remarks", "");
 
-	// ½âÎöprocessesÊý×é
+	// ï¿½ï¿½ï¿½ï¿½processesï¿½ï¿½ï¿½ï¿½
 	if (json.contains("processes") && json["processes"].is_array()) 
 	{
 		proVec.clear();
@@ -777,7 +777,7 @@ void UserDetailInfo::FromJson(const nlohmann::json& json)
 	status = json.contains("status") ? json["status"].get<int>() : 0;
 	level = json.contains("level") ? json["level"].get<int>() : 0;
 
-	// ½âÎötagsÊý×é
+	// ï¿½ï¿½ï¿½ï¿½tagsï¿½ï¿½ï¿½ï¿½
 	if (json.contains("tags") && json["tags"].is_array()) {
 		tags.clear();
 		for (const auto& tag : json["tags"]) 
@@ -821,19 +821,19 @@ void DevSerItem::FromJson(const nlohmann::json& json)
 	createTime = json.contains("create_time") ? json["create_time"].get<int64_t>() : 0;
 
 
-	// ½âÎöservice¶ÔÏó
+	// ï¿½ï¿½ï¿½ï¿½serviceï¿½ï¿½ï¿½ï¿½
 	if (json.contains("service") && json["service"].is_object()) 
 	{
 		service.FromJson(json["service"]);
 	}
 
-	//// ½âÎösku¶ÔÏó
+	//// ï¿½ï¿½ï¿½ï¿½skuï¿½ï¿½ï¿½ï¿½
 	//if (json.contains("sku") && json["sku"].is_object())
 	//{
 	//	sku.FromJson(json["sku"]);
 	//}
 
-	//// ½âÎöuser¶ÔÏó
+	//// ï¿½ï¿½ï¿½ï¿½userï¿½ï¿½ï¿½ï¿½
 	//if (json.contains("user") && json["user"].is_object()) 
 	//{
 	//	user.FromJson(json["user"]);
@@ -847,7 +847,7 @@ void DevSereMapResp::FromJosn(const nlohmann::json& json)
 
 	refresh_time = json.contains("refresh_time") ? json["refresh_time"].get<int64_t>() : 0;
 
-	// ½âÎödevice_service_map¶ÔÏó
+	// ï¿½ï¿½ï¿½ï¿½device_service_mapï¿½ï¿½ï¿½ï¿½
 	if (json.contains("device_service_map") && json["device_service_map"].is_object()) 
 	{
 		devSerMap.clear();

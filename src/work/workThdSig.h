@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include <QObject>
 #include <QString>
@@ -23,10 +23,10 @@ signals:
 
 	void SigDevRegFinished();
 
-	//Í¬²½Éè±¸¹ÊÕÏÐÅÏ¢ÖÁUI²ã
+	//Í¬ï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½UIï¿½ï¿½
 	void SigSyncDevStopped(const DeviceInfo& devId);
 
-	//»ñÈ¡/¸üÐÂOSSÊý¾Ý
+	//ï¿½ï¿½È¡/ï¿½ï¿½ï¿½ï¿½OSSï¿½ï¿½ï¿½ï¿½
 	void SigGetOSSToken();
 };
 

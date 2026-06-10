@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include <atomic>
 #include <iostream>
@@ -54,7 +54,7 @@ namespace EUI
 		EIOT_HttpChange,
 		EIOT_TestStates1,
 		EIOT_TestStates2,
-		EIOT_SimulateData,	//Ä£ÄâÊý¾Ý·½Ê½
+		EIOT_SimulateData,	//Ä£ï¿½ï¿½ï¿½ï¿½ï¿½Ý·ï¿½Ê½
 		EIOT_End
 	}EIOT;
 	Q_DECLARE_METATYPE(EIOT)
@@ -64,11 +64,11 @@ namespace EUI
 	typedef enum MoveUIBtnType
 	{
 		EMUIBT_Begin = EDOT_End + 1,
-		//°´Å¥·ÖÀà
+		//ï¿½ï¿½Å¥ï¿½ï¿½ï¿½ï¿½
 		EMUIBT_XAxis,
 		EMUIBT_YAxis,
 		EMUIBT_ZAxis,
-		//¾ßÌåbtnÀàÐÍ
+		//ï¿½ï¿½ï¿½ï¿½btnï¿½ï¿½ï¿½ï¿½
 		EMUIBT_XAxisForward,
 		EMUIBT_XAxisBackward,
 

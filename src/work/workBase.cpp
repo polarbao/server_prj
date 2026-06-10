@@ -1,4 +1,4 @@
-#include "workBase.h"
+ï»¿#include "workBase.h"
 
 #include <QTimer>
 #include <QJsonObject>
@@ -130,7 +130,7 @@ WorkThdBaseImpl::~WorkThdBaseImpl()
 {
 	Stop();
 
-	// È·±£ËùÓÐÈÎÎñÏß³Ì¶¼ÒÑÍê³É
+	// È·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß³Ì¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	std::lock_guard<std::mutex> lock(m_runningTasksMtx);
 	for (auto& pair : m_runningTasks) 
 	{
@@ -194,7 +194,7 @@ bool WorkThdBaseImpl::RemoveDevice(const std::string&devId)
 	auto it = m_devicesMap.find(devId);
 	if (it != m_devicesMap.end())
 	{
-		//Note£ºÅÐ¶Ïµ±Ç°Éè±¸ÊÇ·ñÔËÐÐ£¬È¡Ïûµ±Ç°ÈÎÎñ
+		//Noteï¿½ï¿½ï¿½Ð¶Ïµï¿½Ç°ï¿½è±¸ï¿½Ç·ï¿½ï¿½ï¿½ï¿½Ð£ï¿½È¡ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½
 		it->second->CancelCurrentTask(false);
 		m_devicesMap.erase(it);
 		LOG_INFO(QString("work_thd_moudle thd_base_unit, remoce_cur_dev, dev_id = %1").arg(QString::fromStdString(devId)));
@@ -288,13 +288,13 @@ void WorkThdBaseImpl::ExecuteTaskAsync(const BusinessTask& taskParam)
 	auto task = taskParam;
 	std::lock_guard<std::mutex> lock(m_runningTasksMtx);
 
-	// ´´½¨ÈÎÎñÖ´ÐÐÐÅÏ¢
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ï¿½ï¿½ï¿½Ï¢
 	auto task_info = std::make_shared<RunningTaskInfo>(task);
 
-	// ´´½¨²¢Æô¶¯ÈÎÎñÖ´ÐÐÏß³Ì
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ï¿½ï¿½ß³ï¿½
 	task_info->task_thread = std::make_shared<std::thread>(&WorkThdBaseImpl::PerformTaskInThread, this, task);
 
-	// Ìí¼Óµ½ÕýÔÚÔËÐÐµÄÈÎÎñÁÐ±í
+	// ï¿½ï¿½Óµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð±ï¿½
 	m_runningTasks[task.proId] = task_info;
 
 	LOG_INFO(QString("Started async task %1 for device %2 in %3 thread")
@@ -311,10 +311,10 @@ void WorkThdBaseImpl::PerformTaskInThread(const BusinessTask& task)
 		.arg(QString::fromStdString(task.devId)));
 
 	/*
-		//opÎª1Ê±£¬ÈÎÎñÕý³£½áÊø£¬opResÉÏ±¨Îª3
-		//opÎª1Ê±£¬Éè±¸¹ÊÕÏ£¬opResÉÏ±¨Îª4
+		//opÎª1Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½opResï¿½Ï±ï¿½Îª3
+		//opÎª1Ê±ï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½Ï£ï¿½opResï¿½Ï±ï¿½Îª4
 
-		//opÎª2Ê±£¬È¡ÏûÈÎÎñ£¬opResÉÏ±¨Îª5
+		//opÎª2Ê±ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½opResï¿½Ï±ï¿½Îª5
 	*/
 	if (m_taskStatusCallBack1) 
 	{
@@ -333,19 +333,19 @@ void WorkThdBaseImpl::PerformTaskInThread(const BusinessTask& task)
 		bool taskSuccess = false;
 		if (!g_simulateReturnData)
 		{
-			taskSuccess = it->second->PerformTask(task); // Ö´ÐÐÈÎÎñ
+			taskSuccess = it->second->PerformTask(task); // Ö´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		} 
 		else
 		{
-			taskSuccess = it->second->PerformSimulateTask(task); // Ö´ÐÐÈÎÎñ
+			taskSuccess = it->second->PerformSimulateTask(task); // Ö´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 		}
 		if (m_taskStatusCallBack1) 
 		{
 
 			TaskStatus finalStatus = taskSuccess ? TaskStatus::COMPLETED : TaskStatus::CANCELLED;
-			//Éè±¸Íê³É×´Ì¬¸Ä±ä->¿ÕÏÐÌ¬
-			//0926: È¡ÏûÈÎÎñÊ±£¬ÅÐ¶ÏÉè±¸ÊÇ·ñÎª¹ÊÕÏ×´Ì¬£¬ÊÇÔò½øÐÐÉè±¸×´Ì¬Í¬²½£»·ñÔòÉèÖÃÉè±¸¿ÕÏÐ×´Ì¬
+			//ï¿½è±¸ï¿½ï¿½ï¿½×´Ì¬ï¿½Ä±ï¿½->ï¿½ï¿½ï¿½ï¿½Ì¬
+			//0926: È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½è±¸ï¿½Ç·ï¿½Îªï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸×´Ì¬Í¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½×´Ì¬
 			if (it->second->GetStatus() != DeviceStatus::ERR)
 			{
 				it->second->SetStatus(DeviceStatus::IDLE);
@@ -358,16 +358,16 @@ void WorkThdBaseImpl::PerformTaskInThread(const BusinessTask& task)
 				dev.devStatus = it->second->GetStatus();
 				m_deviceStatusCallBack(dev);
 			}
-			//0911 finalStatus -> op(ÈÎÎñ²Ù×÷ÀàÐÍ 1¿ªÊ¼ 2½áÊø 3È¡ÏûÈÏÎª£¬½ø³ÌÖØÐÂÅÅ¶Ó 4ÖÕÖ¹ÈÎÎñ
-			//Íê³ÉÈÎÎñÖ´ÐÐ
+			//0911 finalStatus -> op(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 1ï¿½ï¿½Ê¼ 2ï¿½ï¿½ï¿½ï¿½ 3È¡ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¶ï¿½ 4ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½ï¿½
+			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ï¿½
 			if (task.op == "2" && it->second->GetIsTaskCancel())
 			{
 				opRes = "5";
 			}
 			else if (task.op == "1")
 			{
-				//opÎª1Ê±£¬ÈÎÎñÕý³£½áÊø£¬opResÉÏ±¨Îª3
-				//opÎª1Ê±£¬Éè±¸¹ÊÕÏ£¬opResÉÏ±¨Îª4
+				//opÎª1Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½opResï¿½Ï±ï¿½Îª3
+				//opÎª1Ê±ï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½Ï£ï¿½opResï¿½Ï±ï¿½Îª4
 				if (it->second->GetIsTaskCancel())
 				{
 					opRes = "4";
@@ -376,9 +376,9 @@ void WorkThdBaseImpl::PerformTaskInThread(const BusinessTask& task)
 				{
 					opRes = "3";
 				}
-				//opRes = it->second->GetIsTaskCancel() £¿"4": "3";
+				//opRes = it->second->GetIsTaskCancel() ï¿½ï¿½"4": "3";
 			}
-			//ÈÎÎñÍê³É£¬·¢ËÍ»Ø¸´±¨ÎÄ
+			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É£ï¿½ï¿½ï¿½ï¿½Í»Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½
 			//m_taskStatusCallBack(task.proId, TaskStatus::COMPLETED, task.devId);
 			SyncBusinessTask tmpTask;
 			tmpTask.proId = task.proId;
@@ -402,7 +402,7 @@ void WorkThdBaseImpl::PerformTaskInThread(const BusinessTask& task)
 		}
 	}
 
-	// ±ê¼ÇÈÎÎñÍê³É
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	std::lock_guard<std::mutex> lock(m_runningTasksMtx);
 	auto task_it = m_runningTasks.find(task.proId);
 	if (task_it != m_runningTasks.end()) 
@@ -419,10 +419,10 @@ void WorkThdBaseImpl::PerformSimulateTaskInThread(const BusinessTask& task)
 		.arg(QString::fromStdString(task.devId)));
 
 	/*
-		//opÎª1Ê±£¬ÈÎÎñÕý³£½áÊø£¬opResÉÏ±¨Îª3
-		//opÎª1Ê±£¬Éè±¸¹ÊÕÏ£¬opResÉÏ±¨Îª4
+		//opÎª1Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½opResï¿½Ï±ï¿½Îª3
+		//opÎª1Ê±ï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½Ï£ï¿½opResï¿½Ï±ï¿½Îª4
 
-		//opÎª2Ê±£¬È¡ÏûÈÎÎñ£¬opResÉÏ±¨Îª5
+		//opÎª2Ê±ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½opResï¿½Ï±ï¿½Îª5
 	*/
 	if (m_taskStatusCallBack1)
 	{
@@ -441,19 +441,19 @@ void WorkThdBaseImpl::PerformSimulateTaskInThread(const BusinessTask& task)
 		bool taskSuccess = false;
 		if (!g_simulateReturnData)
 		{
-			taskSuccess = it->second->PerformTask(task); // Ö´ÐÐÈÎÎñ
+			taskSuccess = it->second->PerformTask(task); // Ö´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		}
 		else
 		{
-			taskSuccess = it->second->PerformSimulateTask(task); // Ö´ÐÐÈÎÎñ
+			taskSuccess = it->second->PerformSimulateTask(task); // Ö´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 		}
 		if (m_taskStatusCallBack1)
 		{
 
 			TaskStatus finalStatus = taskSuccess ? TaskStatus::COMPLETED : TaskStatus::CANCELLED;
-			//Éè±¸Íê³É×´Ì¬¸Ä±ä->¿ÕÏÐÌ¬
-			//0926: È¡ÏûÈÎÎñÊ±£¬ÅÐ¶ÏÉè±¸ÊÇ·ñÎª¹ÊÕÏ×´Ì¬£¬ÊÇÔò½øÐÐÉè±¸×´Ì¬Í¬²½£»·ñÔòÉèÖÃÉè±¸¿ÕÏÐ×´Ì¬
+			//ï¿½è±¸ï¿½ï¿½ï¿½×´Ì¬ï¿½Ä±ï¿½->ï¿½ï¿½ï¿½ï¿½Ì¬
+			//0926: È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½è±¸ï¿½Ç·ï¿½Îªï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸×´Ì¬Í¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½×´Ì¬
 			if (it->second->GetStatus() != DeviceStatus::ERR)
 			{
 				it->second->SetStatus(DeviceStatus::IDLE);
@@ -466,16 +466,16 @@ void WorkThdBaseImpl::PerformSimulateTaskInThread(const BusinessTask& task)
 				dev.devStatus = it->second->GetStatus();
 				m_deviceStatusCallBack(dev);
 			}
-			//0911 finalStatus -> op(ÈÎÎñ²Ù×÷ÀàÐÍ 1¿ªÊ¼ 2½áÊø 3È¡ÏûÈÏÎª£¬½ø³ÌÖØÐÂÅÅ¶Ó 4ÖÕÖ¹ÈÎÎñ
-			//Íê³ÉÈÎÎñÖ´ÐÐ
+			//0911 finalStatus -> op(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 1ï¿½ï¿½Ê¼ 2ï¿½ï¿½ï¿½ï¿½ 3È¡ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¶ï¿½ 4ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½ï¿½
+			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ï¿½
 			if (task.op == "2" && it->second->GetIsTaskCancel())
 			{
 				opRes = "5";
 			}
 			else if (task.op == "1")
 			{
-				//opÎª1Ê±£¬ÈÎÎñÕý³£½áÊø£¬opResÉÏ±¨Îª3
-				//opÎª1Ê±£¬Éè±¸¹ÊÕÏ£¬opResÉÏ±¨Îª4
+				//opÎª1Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½opResï¿½Ï±ï¿½Îª3
+				//opÎª1Ê±ï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½Ï£ï¿½opResï¿½Ï±ï¿½Îª4
 				if (it->second->GetIsTaskCancel())
 				{
 					opRes = "4";
@@ -484,9 +484,9 @@ void WorkThdBaseImpl::PerformSimulateTaskInThread(const BusinessTask& task)
 				{
 					opRes = "3";
 				}
-				//opRes = it->second->GetIsTaskCancel() £¿"4": "3";
+				//opRes = it->second->GetIsTaskCancel() ï¿½ï¿½"4": "3";
 			}
-			//ÈÎÎñÍê³É£¬·¢ËÍ»Ø¸´±¨ÎÄ
+			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É£ï¿½ï¿½ï¿½ï¿½Í»Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½
 			//m_taskStatusCallBack(task.proId, TaskStatus::COMPLETED, task.devId);
 			SyncBusinessTask tmpTask;
 			tmpTask.proId = task.proId;
@@ -510,7 +510,7 @@ void WorkThdBaseImpl::PerformSimulateTaskInThread(const BusinessTask& task)
 		}
 	}
 
-	// ±ê¼ÇÈÎÎñÍê³É
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	std::lock_guard<std::mutex> lock(m_runningTasksMtx);
 	auto task_it = m_runningTasks.find(task.proId);
 	if (task_it != m_runningTasks.end())

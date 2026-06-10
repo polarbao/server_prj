@@ -1,4 +1,4 @@
-#include "TcpServerWrapper.h"
+ï»¿#include "TcpServerWrapper.h"
 #include "MessageDefine.h"
 #include <memory>
 #include <atomic>
@@ -9,21 +9,21 @@
 
 
 /**
- * @brief TCP¿Í»§¶ËÐÅÏ¢½á¹¹Ìå£¨ÄÚ²¿Ê¹ÓÃ£©
+ * @brief TCPï¿½Í»ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½á¹¹ï¿½å£¨ï¿½Ú²ï¿½Ê¹ï¿½Ã£ï¿½
  */
 struct TcpClientInfo
 {
-	int socketId;                       // SocketÁ¬½ÓID
-	std::string clientId;               // ¿Í»§¶ËÎ¨Ò»ID
-	std::string deviceId;               // Éè±¸ID
-	TcpClientType clientType;           // ¿Í»§¶ËÀàÐÍ
-	std::string clientVersion;          // ¿Í»§¶Ë°æ±¾
-	TcpThreadStatus threadStatus;       // µ±Ç°Ïß³Ì×´Ì¬
-	std::string clientName;             // ¿Í»§¶ËÃû³Æ
-	bool isRegistered;                  // ÊÇ·ñÒÑ×¢²á
-	long long lastHeartbeatTime;        // ×îºóÐÄÌøÊ±¼ä
-	long long registerTime;             // ×¢²áÊ±¼ä
-	TcpConnection connection;           // TCPÁ¬½ÓÐÅÏ¢
+	int socketId;                       // Socketï¿½ï¿½ï¿½ï¿½ID
+	std::string clientId;               // ï¿½Í»ï¿½ï¿½ï¿½Î¨Ò»ID
+	std::string deviceId;               // ï¿½è±¸ID
+	TcpClientType clientType;           // ï¿½Í»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	std::string clientVersion;          // ï¿½Í»ï¿½ï¿½Ë°æ±¾
+	TcpThreadStatus threadStatus;       // ï¿½ï¿½Ç°ï¿½ß³ï¿½×´Ì¬
+	std::string clientName;             // ï¿½Í»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	bool isRegistered;                  // ï¿½Ç·ï¿½ï¿½ï¿½×¢ï¿½ï¿½
+	long long lastHeartbeatTime;        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
+	long long registerTime;             // ×¢ï¿½ï¿½Ê±ï¿½ï¿½
+	TcpConnection connection;           // TCPï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
 
 	TcpClientInfo()
 		: socketId(-1)
@@ -41,14 +41,14 @@ struct TcpClientInfo
 //----------------------------TcpClientManagerSignals----------------------------------------------
 
 /**
- * @brief TCP¿Í»§¶Ë¹ÜÀíÆ÷ÐÅºÅÀà
+ * @brief TCPï¿½Í»ï¿½ï¿½Ë¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åºï¿½ï¿½ï¿½
  */
 class TcpClientManagerSignals : public QObject
 {
 	Q_OBJECT
 
 signals:
-	// ¿Í»§¶ËÊÂ¼þÐÅºÅ
+	// ï¿½Í»ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½Åºï¿½
 	void SigClientConnected(const TcpClientInfo& clientInfo);
 	void SigClientDisconnected(const std::string& deviceId);
 	void SigClientRegistered(const TcpClientInfo& clientInfo);
@@ -56,7 +56,7 @@ signals:
 	void SigClientStatusUpdate(const TcpClientDeviceStatus& deviceStatus);
 	void SigClientTaskStatusUpdate(const TcpClientTaskStatus& taskStatus);
 
-	// ¹ÜÀíÆ÷×´Ì¬ÐÅºÅ
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½Åºï¿½
 	void SigManagerError(int errorCode, const std::string& errorMessage);
 };
 
@@ -67,9 +67,9 @@ signals:
 
 
 /**
- * @brief TCP¿Í»§¶Ë¹ÜÀíÆ÷Àà
+ * @brief TCPï¿½Í»ï¿½ï¿½Ë¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
  * @author hard2Ser Team
- * @brief ¹ÜÀíTCP¿Í»§¶ËÁ¬½Ó£¬Î¬»¤Éè±¸IDÓëSocket IDµÄÓ³Éä¹ØÏµ
+ * @brief ï¿½ï¿½ï¿½ï¿½TCPï¿½Í»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó£ï¿½Î¬ï¿½ï¿½ï¿½è±¸IDï¿½ï¿½Socket IDï¿½ï¿½Ó³ï¿½ï¿½ï¿½Ïµ
  */
 class TcpClientManager : public QObject
 {
@@ -79,54 +79,54 @@ public:
 	explicit TcpClientManager(QObject* parent = nullptr);
 	~TcpClientManager();
 
-	// ·þÎñÆ÷¹ÜÀí½Ó¿Ú
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¿ï¿½
 	bool StartServer(const std::string& ip = "0.0.0.0", int port = 9000);
 	void StopServer();
 	bool IsServerRunning() const;
 	int GetServerPort() const;
 
-	// ¿Í»§¶Ë¹ÜÀí½Ó¿Ú
+	// ï¿½Í»ï¿½ï¿½Ë¹ï¿½ï¿½ï¿½Ó¿ï¿½
 	bool SendDataToDevice(const std::string& deviceId, const std::string& data);
 	bool SendTaskDispatch(const std::string& deviceId, const TcpServerTaskDispatch& taskDispatch);
 	bool SendTaskControl(const std::string& deviceId, const TcpServerTaskControl& taskControl);
 	bool BroadcastData(const std::string& data);
 	bool DisconnectClient(const std::string& deviceId);
 
-	// ²éÑ¯½Ó¿Ú
+	// ï¿½ï¿½Ñ¯ï¿½Ó¿ï¿½
 	int GetConnectedClientCount() const;
 	std::vector<TcpClientInfo> GetAllClients() const;
 	TcpClientInfo GetClientByDeviceId(const std::string& deviceId) const;
 	TcpClientInfo GetClientBySocketId(int socketId) const;
 	std::vector<TcpClientInfo> GetClientsByType(TcpClientType clientType) const;
 
-	// ÅäÖÃ¹ÜÀí
+	// ï¿½ï¿½ï¿½Ã¹ï¿½ï¿½ï¿½
 	void SetHeartbeatTimeout(int timeoutSeconds);
 	void SetMaxClients(int maxClients);
 	void EnableAutoCleanup(bool enable, int cleanupInterval = 60);
 
-	// ÐÅºÅ·ÃÎÊÆ÷
+	// ï¿½ÅºÅ·ï¿½ï¿½ï¿½ï¿½ï¿½
 	TcpClientManagerSignals* GetSignals() { return &m_signals; }
 
 private slots:
-	// TCP·þÎñÆ÷ÊÂ¼þ´¦Àí
+	// TCPï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½
 	void OnTcpConnection(const TcpConnection& connection);
 	void OnTcpDisconnection(int socketId);
 	void OnTcpMessage(const TcpMessage& message);
 	void OnTcpError(int errorCode, const std::string& errorMessage);
 
 private:
-	// ÏûÏ¢´¦Àí
+	// ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½
 	void HandleClientRegister(int socketId, const std::string& payload);
 	void HandleClientHeartbeat(int socketId, const std::string& payload);
 	void HandleClientDeviceStatus(int socketId, const std::string& payload);
 	void HandleClientTaskStatus(int socketId, const std::string& payload);
 
-	// ¿Í»§¶Ë¹ÜÀí
+	// ï¿½Í»ï¿½ï¿½Ë¹ï¿½ï¿½ï¿½
 	bool RegisterClient(int socketId, const TcpClientRegisterInfo& registerInfo);
 	void UnregisterClient(int socketId);
 	void UpdateClientHeartbeat(int socketId, const TcpClientHeartbeat& heartbeat);
 
-	// ¸¨Öúº¯Êý
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	std::string GenerateMessageId();
 	long long GetCurrentTimestamp();
 	void CleanupTimeoutClients();
@@ -135,29 +135,29 @@ private:
 	bool IsClientTypeAllowed(TcpClientType clientType) const;
 
 private:
-	// TCP·þÎñÆ÷ÊµÀý
+	// TCPï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½
 	std::unique_ptr<TcpServerWrapper> m_tcpServer;
 
-	// ¿Í»§¶Ë¹ÜÀí
+	// ï¿½Í»ï¿½ï¿½Ë¹ï¿½ï¿½ï¿½
 	mutable std::mutex m_clientsMutex;
 	std::unordered_map<int, TcpClientInfo> m_socketToClient;        // socketId -> TcpClientInfo
 	std::unordered_map<std::string, int> m_deviceToSocket;          // deviceId -> socketId
 	std::unordered_map<std::string, int> m_clientIdToSocket;        // clientId -> socketId
 
-	// ÅäÖÃ²ÎÊý
-	std::atomic<int> m_heartbeatTimeout;    // ÐÄÌø³¬Ê±Ê±¼ä(Ãë)
-	std::atomic<int> m_maxClients;          // ×î´ó¿Í»§¶ËÊý
-	std::atomic<bool> m_autoCleanup;        // ÊÇ·ñÆôÓÃ×Ô¶¯ÇåÀí
-	std::atomic<int> m_cleanupInterval;     // ÇåÀí¼ä¸ô(Ãë)
+	// ï¿½ï¿½ï¿½Ã²ï¿½ï¿½ï¿½
+	std::atomic<int> m_heartbeatTimeout;    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±Ê±ï¿½ï¿½(ï¿½ï¿½)
+	std::atomic<int> m_maxClients;          // ï¿½ï¿½ï¿½Í»ï¿½ï¿½ï¿½ï¿½ï¿½
+	std::atomic<bool> m_autoCleanup;        // ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½
+	std::atomic<int> m_cleanupInterval;     // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½)
 
-	// Í³¼ÆÐÅÏ¢
-	std::atomic<int> m_messageIdCounter;    // ÏûÏ¢ID¼ÆÊýÆ÷
-	std::atomic<long long> m_totalMessages; // ×ÜÏûÏ¢Êý
+	// Í³ï¿½ï¿½ï¿½ï¿½Ï¢
+	std::atomic<int> m_messageIdCounter;    // ï¿½ï¿½Ï¢IDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	std::atomic<long long> m_totalMessages; // ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½
 
-	// ¶¨Ê±Æ÷
+	// ï¿½ï¿½Ê±ï¿½ï¿½
 	QTimer* m_cleanupTimer;
 
-	// ÐÅºÅ¶ÔÏó
+	// ï¿½ÅºÅ¶ï¿½ï¿½ï¿½
 	TcpClientManagerSignals m_signals;
 };
 
@@ -168,8 +168,8 @@ private:
 //----------------------------TcpClientManagerInstance----------------------------------------------
 
 /**
- * @brief TCP¿Í»§¶Ë¹ÜÀíÆ÷ÊµÏÖÀà£¨µ¥ÀýÄ£Ê½£©
- * @brief Ìá¹©È«¾Ö·ÃÎÊµÄTCP¿Í»§¶Ë¹ÜÀí·þÎñ
+ * @brief TCPï¿½Í»ï¿½ï¿½Ë¹ï¿½ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½ï¿½à£¨ï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½
+ * @brief ï¿½á¹©È«ï¿½Ö·ï¿½ï¿½Êµï¿½TCPï¿½Í»ï¿½ï¿½Ë¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
  */
 class TcpClientManagerInstance
 {

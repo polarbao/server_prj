@@ -20,6 +20,8 @@
 #include "workBase.h"
 #include "workThdSig.h"
 #include "comm/MessageDefine.h"
+#include "IDbService.h"
+#include "LocalIpcServer.h"
 
 #include "scanWork.h"
 #include "stickWork.h" 
@@ -130,5 +132,14 @@ private:
 	mutable std::mutex m_deviceMtx;
 	std::map<std::string, DeviceInfo> m_curDevStatus;
 	WorkThdSig m_sig;
+
+	std::shared_ptr<IDbService> m_dbService;
+	std::unique_ptr<LocalIpcServer> m_ipcServer;
+
+	std::thread m_watchdogThd;
+	std::atomic<bool> m_watchdogThdRunning;
+
+private:
+	void WatchdogThreadFunction();
 
 };

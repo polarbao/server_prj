@@ -1,4 +1,4 @@
-#include "manuWork.h"
+ï»¿#include "manuWork.h"
 #include "global.h"
 #include "CommFun.h"
 #include "SingleOSSToken.h"
@@ -20,7 +20,7 @@
 ManuWorkThd::ManuWorkThd()
 	: WorkThdBase("manu")
 {
-	//m_pImpl ÊÇ unique_ptr<IBusinessThread> ÀàÐÍ£¬¿ÉÒÔÖ±½ÓÅÉÉúImpl
+	//m_pImpl ï¿½ï¿½ unique_ptr<IBusinessThread> ï¿½ï¿½ï¿½Í£ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Impl
 	this->m_pImpl = std::make_unique<ManuWorkThdImpl>();
 }
 
@@ -60,7 +60,7 @@ void ManuWorkThdImpl::AddDevice(const std::shared_ptr<DeviceManu>& dev)
 	{
 		OnDeviceStatusUpdate(info);
 	});
-	// ¸üÐÂ×î´ó²¢·¢ÈÎÎñÊý
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ó²¢·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	UpdateMaxConcurrentTasks(); 
 	LOG_INFO(QString("manu_work_thd: Added device %1").arg(dev->GetDeviceID().c_str()));
 
@@ -70,7 +70,7 @@ void ManuWorkThdImpl::Run()
 {
 	while (m_bRunning)
 	{
-		// ÇåÀíÒÑÍê³ÉµÄÈÎÎñ
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Éµï¿½ï¿½ï¿½ï¿½ï¿½
 		CleanupCompletedTasks();
 
 		std::unique_lock<std::mutex> lock(m_taskMtx);
@@ -84,7 +84,7 @@ void ManuWorkThdImpl::Run()
 			break;
 		}
 
-		// ´¦Àí¶ÓÁÐÖÐµÄÈÎÎñ£¬ÇÒ²»³¬¹ý×î´ó²¢·¢Êý£¨TODO£ººóÐø¸ù¾ÝÉè±¸Êý½øÐÐÐÞ¸Ä
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ó²¢·ï¿½ï¿½ï¿½ï¿½ï¿½TODOï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½
 		while (!m_taskQueue.empty() && GetRunningTaskCount() < GetMaxConcurrentTasks())
 		{
 			BusinessTask curTask = m_taskQueue.front();
@@ -95,32 +95,32 @@ void ManuWorkThdImpl::Run()
 			m_taskQueue.pop();
 			lock.unlock();
 
-			// ¼ì²éÉè±¸ÊÇ·ñ´æÔÚÇÒ¿ÉÓÃ
+			// ï¿½ï¿½ï¿½ï¿½è±¸ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½Ò¿ï¿½ï¿½ï¿½
 			auto device_it = m_devicesMap.find(curTask.devId);
 			if (device_it != m_devicesMap.end())
 			{
 				//LOG_INFO(QString("manu_work_thd processing task: %1 for device %2").arg(QString::fromStdString(curTask.proId)).arg(QString::fromStdString(curTask.devId)));
-				// ¼ì²éÉè±¸ÊÇ·ñ¿ÕÏÐ
+				// ï¿½ï¿½ï¿½ï¿½è±¸ï¿½Ç·ï¿½ï¿½ï¿½ï¿½
 				if (device_it->second->GetStatus() == DeviceStatus::IDLE)
 				{
 					//LOG_INFO(QString("manu_work_thd processing task: %1 for device %2").arg(QString::fromStdString(curTask.proId)).arg(QString::fromStdString(curTask.devId)));
-					//×¼±¸¿ªÊ¼Ö´ÐÐÈÎÎñ£¬Í¬²½·¢Éú¿ªÊ¼ÈÎÎñ±¨ÎÄ
+					//×¼ï¿½ï¿½ï¿½ï¿½Ê¼Ö´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 					auto startOp = "1";
 					SyncBusinessTask taskState;
 					taskState.proId = curTask.proId;
 					taskState.op = startOp;
 					taskState.devId = curTask.devId;
 					m_taskStatusCallBack1(taskState);
-					// Òì²½Ö´ÐÐÈÎÎñ
+					// ï¿½ì²½Ö´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 					ExecuteTaskAsync(curTask);
 				}
 				else
 				{
-					// Éè±¸Ã¦Âµ£¬ÖØÐÂ·ÅÈë¶ÓÁÐ
+					// ï¿½è±¸Ã¦Âµï¿½ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 					lock.lock();
 					m_taskQueue.push(curTask);
 					lock.unlock();
-					break; // µÈ´ýÏÂ´ÎÑ­»·
+					break; // ï¿½È´ï¿½ï¿½Â´ï¿½Ñ­ï¿½ï¿½
 				}
 			}
 			else
@@ -135,7 +135,7 @@ void ManuWorkThdImpl::Run()
 		}
 	}
 
-	// Í£Ö¹Ê±µÈ´ýËùÓÐÈÎÎñÍê³É
+	// Í£Ö¹Ê±ï¿½È´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	while (GetRunningTaskCount() > 0)
 	{
 		CleanupCompletedTasks();
@@ -146,19 +146,19 @@ void ManuWorkThdImpl::Run()
 void ManuWorkThdImpl::ExecuteTaskAsync(const BusinessTask& task)
 {
 	std::lock_guard<std::mutex> lock(m_runningTasksMtx);
-	// ´´½¨ÈÎÎñÖ´ÐÐÐÅÏ¢
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ï¿½ï¿½ï¿½Ï¢
 	auto task_info = std::make_shared<RunningTaskInfo>(task);
-	// ´´½¨²¢Æô¶¯ÈÎÎñÖ´ÐÐÏß³Ì
-	// Õë¶ÔÈÎÎñ½øÐÐ´¦Àí£¬ÅÐ¶ÏÊÇÄ£ÄâÊý¾Ý´¦Àí»¹ÊÇÕæÊµÊý¾Ý´¦Àí
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ï¿½ï¿½ß³ï¿½
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½Ý´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½ï¿½Ý´ï¿½ï¿½ï¿½
 	if (!g_simulateReturnData)
-	{	//ÕæÊµÊý¾Ý
+	{	//ï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½
 		task_info->task_thread = std::make_shared<std::thread>(&ManuWorkThdImpl::PerformSimulateTaskInThread, this, task);
 	}
 	else
-	{	//Ä£ÄâÊý¾Ý
+	{	//Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		task_info->task_thread = std::make_shared<std::thread>(&ManuWorkThdImpl::PerformSimulateTaskInThread, this, task);
 	}
-	// Ìí¼Óµ½ÕýÔÚÔËÐÐµÄÈÎÎñÁÐ±í
+	// ï¿½ï¿½Óµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð±ï¿½
 	m_runningTasks[task.proId] = task_info;
 
 	LOG_INFO(QString("Started async task %1 for device %2 in %3 thread")
@@ -171,12 +171,12 @@ void ManuWorkThdImpl::ExecuteTaskAsync(const BusinessTask& task)
 
 void ManuWorkThdImpl::PerformTaskInThread(const BusinessTask& task)
 {
-	LOG_INFO(QString(u8"ÖÆ×÷ÒµÎñÏß³Ì´¦ÀíÈÎÎñ: %1 for device %2")
+	LOG_INFO(QString(u8"ï¿½ï¿½ï¿½ï¿½Òµï¿½ï¿½ï¿½ß³Ì´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: %1 for device %2")
 		.arg(QString::fromStdString(task.proId))
 		.arg(QString::fromStdString(task.devId)));
 	
 	
-	LOG_INFO(QString(u8"ÖÆ×÷ÒµÎñÏß³Ì´¦ÀíÈÎÎñ: %1 for device %2£¬Íê³ÉÈÎÎñ²Ù×÷£¬·µ»Ø·þÎñÆ÷ÐÅÏ¢¡£")
+	LOG_INFO(QString(u8"ï¿½ï¿½ï¿½ï¿½Òµï¿½ï¿½ï¿½ß³Ì´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: %1 for device %2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½")
 		.arg(QString::fromStdString(task.proId))
 		.arg(QString::fromStdString(task.devId)));
 	
@@ -184,10 +184,10 @@ void ManuWorkThdImpl::PerformTaskInThread(const BusinessTask& task)
 
 void ManuWorkThdImpl::PerformSimulateTaskInThread(const BusinessTask& inTask)
 {
-	// ÆäÖÐ°üº¬¿ªÊ¼ÈÎÎñ´¦Àí±¨ÎÄ£¬½«ÈÎÎñÐÅÏ¢·¢ËÍÖÁÏà»úÈí¼þ½øÐÐºóÐø´¦Àí
+	// ï¿½ï¿½ï¿½Ð°ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ðºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	try
 	{
-		LOG_INFO(QString(u8"ÖÆ×÷ÒµÎñÏß³Ì´¦ÀíÈÎÎñ_Ä£ÄâÊý¾Ý: %1 for device %2")
+		LOG_INFO(QString(u8"ï¿½ï¿½ï¿½ï¿½Òµï¿½ï¿½ï¿½ß³Ì´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: %1 for device %2")
 			.arg(QString::fromStdString(inTask.proId))
 			.arg(QString::fromStdString(inTask.devId)));
 										
@@ -197,34 +197,34 @@ void ManuWorkThdImpl::PerformSimulateTaskInThread(const BusinessTask& inTask)
 		auto bCancel = false;
 		if (it != m_devicesMap.end())
 		{
-			// Ä£ÄâÉè±¸Ö´ÐÐÈÎÎñ
+			// Ä£ï¿½ï¿½ï¿½è±¸Ö´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			auto ret = it->second->PerformTask(task);
 			bCancel = it->second->GetIsTaskCancel();
 			if (ret)
 			{
-				LOG_INFO(QString(u8"ÖÆ×÷ÒµÎñÏß³Ì´¦ÀíÈÎÎñÍê³É_Ä£ÄâÊý¾Ý: %1 for device %2")
+				LOG_INFO(QString(u8"ï¿½ï¿½ï¿½ï¿½Òµï¿½ï¿½ï¿½ß³Ì´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: %1 for device %2")
 					.arg(QString::fromStdString(task.proId))
 					.arg(QString::fromStdString(task.devId)));
 			}
 			else if(!ret && it->second->GetIsTaskCancel())
 			{
-				LOG_INFO(QString(u8"ÖÆ×÷ÒµÎñÏß³Ì´¦ÀíÈÎÎñÈ¡Ïû_Ä£ÄâÊý¾Ý£¬·þÎñµ¥È¡Ïû·µ»Øop5: %1 for device %2")
+				LOG_INFO(QString(u8"ï¿½ï¿½ï¿½ï¿½Òµï¿½ï¿½ï¿½ß³Ì´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½_Ä£ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½op5: %1 for device %2")
 					.arg(QString::fromStdString(task.proId))
 					.arg(QString::fromStdString(task.devId)));
-				// ÅÐ¶Ïµ±Ç°Éè±¸ÊÇ·ñÎª¹ÊÕÏ×´Ì¬£¬ÊÇÔò·µ»ØÅÅ¶ÓÌ¬'4', ÈôÎªÈ¡ÏûÈÎÎñÔò·µ»Ø'5'
+				// ï¿½Ð¶Ïµï¿½Ç°ï¿½è±¸ï¿½Ç·ï¿½Îªï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ò·µ»ï¿½ï¿½Å¶ï¿½Ì¬'4', ï¿½ï¿½ÎªÈ¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ò·µ»ï¿½'5'
 				task.op = DeviceStatus::ERR == it->second->GetStatus() ? "4" : "5";
 			}
 		}
 		OnManuTaskFinished(task.devId, task);
 
-		// 1119_ban Ô­ÓÐ²Ù×÷Âß¼­£¬Ö±½Ó¸´ÖÆ±¾µØÊý¾Ý½øÐÐÉÏ´«´¦Àí
-		// µ÷ÓÃ»ùÀàµÄÊµÏÖ´¦Àí±¾µØÉè±¸
+		// 1119_ban Ô­ï¿½Ð²ï¿½ï¿½ï¿½ï¿½ß¼ï¿½ï¿½ï¿½Ö±ï¿½Ó¸ï¿½ï¿½Æ±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ï¿½ï¿½ï¿½ï¿½
+		// ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½Êµï¿½Ö´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸
 		// WorkThdBaseImpl::PerformTaskInThread(task);
 
 	}
 	catch (const std::exception& e)
 	{
-		LOG_INFO(QString(u8"ÖÆ×÷ÈÎÎñÖ´ÐÐÒì³£: %1").arg(e.what()));
+		LOG_INFO(QString(u8"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ï¿½ï¿½ì³£: %1").arg(e.what()));
 	}
 }
 
@@ -232,27 +232,27 @@ void ManuWorkThdImpl::PerformSimulateTaskInThread(const BusinessTask& inTask)
 void ManuWorkThdImpl::HandleSimulateData(const BusinessTask& task)
 {
 	/*
-	1. ¸´ÖÆµ±Ç°ÎÄ¼þ¼Ð
-	2. ½«µ±Ç°ÎÄ¼þ¼ÐÖØÃüÃû
-	3. ÌáÈ¡µ±Ç°ÎÄ¼þ¼ÐÖÐÊý¾Ý
-	4. µ÷ÓÃÎÄ¼þ¼Ð
+	1. ï¿½ï¿½ï¿½Æµï¿½Ç°ï¿½Ä¼ï¿½ï¿½ï¿½
+	2. ï¿½ï¿½ï¿½ï¿½Ç°ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	3. ï¿½ï¿½È¡ï¿½ï¿½Ç°ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	4. ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
 	*/
 	auto curTimerStr = QString::fromStdString(CommFun::GetInstance().GetCurrentTimeStr()) + "_" +  QString::fromStdString(task.proId);
 	auto downFolderPath = QCoreApplication::applicationDirPath() + QDir::separator() + QString("simulate_scan_data") + QDir::separator() + \
 		QString("down_file")+ QDir::separator() + curTimerStr;
 	std::vector<std::string> vURLData;
 	std::string retInfo;
-	// »ñÈ¡Ô´ÎÄ¼þ¼ÐÖÐËùÓÐÌõÄ¿£¨ÎÄ¼þºÍ×ÓÎÄ¼þ¼Ð£©
+	// ï¿½ï¿½È¡Ô´ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½Ð£ï¿½
 	//auto ret = SingleOSSToken::GetInstance().DownloadSingleFile(task.data, retInfo, downFolderPath.toStdString());
 	bool ret = false;
-	// ÉèÖÃÒ»´ÎÐÔ¶¨Ê±Æ÷£ºÑÓ³Ù 20000ms£¨20Ãë£©ºóÖ´ÐÐ²Ù×÷
+	// ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Ô¶ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Ó³ï¿½ 20000msï¿½ï¿½20ï¿½ë£©ï¿½ï¿½Ö´ï¿½Ð²ï¿½ï¿½ï¿½
 	int delayMs = 20000;
 	QTimer::singleShot(delayMs, [ret]() 
 	{
-		LOG_INFO(QString(u8"ÖÆ×÷ÒµÎñÏß³Ì¶¨Ê±Æ÷µ½ÆÚ£¬Íê³ÉÏÂÔØÎÄ¼þ²Ù×÷£¬²Ù×÷½á¹û%1").arg(ret));
+		LOG_INFO(QString(u8"ï¿½ï¿½ï¿½ï¿½Òµï¿½ï¿½ï¿½ß³Ì¶ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Ú£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½%1").arg(ret));
 	});
 	OnManuTaskFinished(task.devId, task);
-	LOG_INFO(QString(u8"ÖÆ×÷ÒµÎñÏß³Ì´¦ÀíÈÎÎñ_Ä£ÄâÊý¾Ý:: %1 for device %2£¬Íê³ÉÈÎÎñ²Ù×÷£¬·µ»Ø·þÎñÆ÷ÐÅÏ¢¡£")
+	LOG_INFO(QString(u8"ï¿½ï¿½ï¿½ï¿½Òµï¿½ï¿½ï¿½ß³Ì´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:: %1 for device %2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½")
 		.arg(QString::fromStdString(task.proId))
 		.arg(QString::fromStdString(task.devId)));
 }
@@ -269,10 +269,10 @@ void ManuWorkThdImpl::OnManuDisconnected(const std::string& deviceId)
 
 void ManuWorkThdImpl::OnManuTaskFinished(const std::string& deviceId, const BusinessTask& task)
 {
-	LOG_INFO(QString(u8"ÖÆ×÷ÈÎÎñÍê³É: Device=%1")
+	LOG_INFO(QString(u8"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: Device=%1")
 		.arg(QString::fromStdString(deviceId)));
 
-	// »ñÈ¡ÕýÔÚÔËÐÐµÄÈÎÎñID
+	// ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½ID
 	std::string taskId;
 	{
 		std::lock_guard<std::mutex> lock(m_manuTasksMutex);
@@ -284,39 +284,39 @@ void ManuWorkThdImpl::OnManuTaskFinished(const std::string& deviceId, const Busi
 		}
 	}
 
-	// »Øµ÷ÈÎÎñÍê³É×´Ì¬
+	// ï¿½Øµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬
 	if (m_taskStatusCallBack1)
 	{
 		SyncBusinessTask taskStatus;
 		taskStatus.proId = task.proId;
-		// ÅÐ¶ÏÊÇ·ñÎªÈ¡ÏûÈÎÎñ£¬Èç¹ûÊÇÔò±£³ÖÔ­À´opÊý¾Ý
+		// ï¿½Ð¶ï¿½ï¿½Ç·ï¿½ÎªÈ¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ò±£³ï¿½Ô­ï¿½ï¿½opï¿½ï¿½ï¿½ï¿½
 		taskStatus.op = task.op == "1" ? "3" : task.op;
 		taskStatus.devId = task.devId;
-		//Õë¶ÔÊý¾Ý½øÐÐÉÏ´«´¦Àí£¬²¢ÇÒ¹¹ÔìÊý¾Ý		
-		m_taskStatusCallBack1(taskStatus); // 3±íÊ¾Íê³É
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½		
+		m_taskStatusCallBack1(taskStatus); // 3ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½
 	}
 	//-------------------------------------------
 
-	//// ¸üÐÂÉè±¸×´Ì¬Îª¿ÕÏÐ
+	//// ï¿½ï¿½ï¿½ï¿½ï¿½è±¸×´Ì¬Îªï¿½ï¿½ï¿½ï¿½
 	//if (m_deviceStatusCallBack)
 	//{
 	//	DeviceInfo deviceInfo;
 	//	deviceInfo.devId = deviceId;
-	//	deviceInfo.devType = 2; // ÖÆ×÷Éè±¸ÀàÐÍ
-	//	deviceInfo.devStatus = DeviceStatus::IDLE; // ¿ÕÏÐ×´Ì¬
+	//	deviceInfo.devType = 2; // ï¿½ï¿½ï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½
+	//	deviceInfo.devStatus = DeviceStatus::IDLE; // ï¿½ï¿½ï¿½ï¿½×´Ì¬
 	//	m_deviceStatusCallBack(deviceInfo);
 
-	//	//1120_¸üÐÂÉè±¸×´Ì¬µ½¹¤¿ØÈí¼þÖÐÉè±¸map
+	//	//1120_ï¿½ï¿½ï¿½ï¿½ï¿½è±¸×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸map
 	//	//UpdateDeviceMapStatus(deviceId, DeviceStatus::IDLE);
 	//}
 }
 
 void ManuWorkThdImpl::OnManuTaskError(const std::string& deviceId, const std::string& errorMsg)
 {
-	LOG_INFO(QString(u8"´òÓ¡»úÈÎÎñ´íÎó: Device=%1, Error=%2")
+	LOG_INFO(QString(u8"ï¿½ï¿½Ó¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: Device=%1, Error=%2")
 		.arg(QString::fromStdString(deviceId)).arg(QString::fromStdString(errorMsg)));
 
-	// »ñÈ¡ÕýÔÚÔËÐÐµÄÈÎÎñID
+	// ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½ID
 	std::string taskId;
 	{
 		std::lock_guard<std::mutex> lock(m_manuTasksMutex);
@@ -335,20 +335,20 @@ void ManuWorkThdImpl::OnManuTaskError(const std::string& deviceId, const std::st
 			taskStatus.proId = taskId;
 			taskStatus.op = "4";
 			taskStatus.devId = deviceId;
-			m_taskStatusCallBack1(taskStatus); // 4±íÊ¾ÖÕÖ¹·þÎñ
+			m_taskStatusCallBack1(taskStatus); // 4ï¿½ï¿½Ê¾ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½ï¿½
 		}
 
-		// ¸üÐÂÉè±¸×´Ì¬Îª´íÎó
+		// ï¿½ï¿½ï¿½ï¿½ï¿½è±¸×´Ì¬Îªï¿½ï¿½ï¿½ï¿½
 		if (m_deviceStatusCallBack)
 		{
 			//DeviceInfo deviceInfo;
 			//deviceInfo.devId = deviceId;
-			//deviceInfo.devType = 2; // ÖÆ×÷Éè±¸ÀàÐÍ
-			//deviceInfo.devStatus = DeviceStatus::ERR; // ´íÎó×´Ì¬
+			//deviceInfo.devType = 2; // ï¿½ï¿½ï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½
+			//deviceInfo.devStatus = DeviceStatus::ERR; // ï¿½ï¿½ï¿½ï¿½×´Ì¬
 			//m_deviceStatusCallBack(deviceInfo);
 
-			// 1120_¸üÐÂÉè±¸×´Ì¬µ½¹¤¿ØÈí¼þÖÐÉè±¸map
-			// ´íÎó×´Ì¬Ê±£¬ÉèÖÃÉè±¸Ê±»áÍ¬²½ÖÁUI
+			// 1120_ï¿½ï¿½ï¿½ï¿½ï¿½è±¸×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸map
+			// ï¿½ï¿½ï¿½ï¿½×´Ì¬Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸Ê±ï¿½ï¿½Í¬ï¿½ï¿½ï¿½ï¿½UI
 			UpdateDeviceMapStatus(deviceId, DeviceStatus::ERR);
 		}
 	}
@@ -356,7 +356,7 @@ void ManuWorkThdImpl::OnManuTaskError(const std::string& deviceId, const std::st
 
 void ManuWorkThdImpl::UpdateDeviceMapStatus(const std::string& deviceId, DeviceStatus status)
 {
-	//Ê¹ÓÃ»ùÀàµÄm_taskMtx±£»¤m_devicesMapµÄ·ÃÎÊ£¬±ÜÃâ²¢·¢·ÃÎÊÎÊÌâ
+	//Ê¹ï¿½Ã»ï¿½ï¿½ï¿½ï¿½m_taskMtxï¿½ï¿½ï¿½ï¿½m_devicesMapï¿½Ä·ï¿½ï¿½Ê£ï¿½ï¿½ï¿½ï¿½â²¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	std::lock_guard<std::mutex> lock(m_taskMtx);
 	auto it = m_devicesMap.find(deviceId);
 	if (it != m_devicesMap.end())

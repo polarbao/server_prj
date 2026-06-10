@@ -1,11 +1,11 @@
-#include "TcpClientMgr.h"
+ï»¿#include "TcpClientMgr.h"
 #include "global.h"
 #include <QTimer>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <algorithm>
 
-// ¾²Ì¬³ÉÔ±¶¨Òå
+// ï¿½ï¿½Ì¬ï¿½ï¿½Ô±ï¿½ï¿½ï¿½ï¿½
 std::unique_ptr<TcpClientManager> TcpClientManagerInstance::s_instance = nullptr;
 std::mutex TcpClientManagerInstance::s_instanceMutex;
 
@@ -31,15 +31,15 @@ std::mutex TcpClientManagerInstance::s_instanceMutex;
 TcpClientManager::TcpClientManager(QObject* parent /*= nullptr*/)
 	: QObject(parent)
 	, m_tcpServer(std::make_unique<TcpServerWrapper>())
-	, m_heartbeatTimeout(30)      // 30ÃëÐÄÌø³¬Ê±
-	, m_maxClients(100)           // ×î´ó100¸ö¿Í»§¶Ë
-	, m_autoCleanup(true)         // ÆôÓÃ×Ô¶¯ÇåÀí
-	, m_cleanupInterval(60)       // 60ÃëÇåÀí¼ä¸ô
+	, m_heartbeatTimeout(30)      // 30ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±
+	, m_maxClients(100)           // ï¿½ï¿½ï¿½100ï¿½ï¿½ï¿½Í»ï¿½ï¿½ï¿½
+	, m_autoCleanup(true)         // ï¿½ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½
+	, m_cleanupInterval(60)       // 60ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	, m_messageIdCounter(0)
 	, m_totalMessages(0)
 	, m_cleanupTimer(new QTimer(this))
 {
-	// ÉèÖÃTCP·þÎñÆ÷»Øµ÷
+	// ï¿½ï¿½ï¿½ï¿½TCPï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½
 	m_tcpServer->SetOnConnectionCallback([this](const TcpConnection& conn) 
 	{
 		OnTcpConnection(conn);
@@ -50,10 +50,10 @@ TcpClientManager::TcpClientManager(QObject* parent /*= nullptr*/)
 		OnTcpDisconnection(socketId);
 	});
 
-	//TcpMessage Êý¾ÝÀàÐÍÖØ¸´
+	//TcpMessage ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø¸ï¿½
 	m_tcpServer->SetOnMessageCallback([this](const OldTcpMessage& tcpMsg)
 	{
-		// ×ª»»ÎªÏîÄ¿ÖÐ¶¨ÒåµÄTcpMessage½á¹¹
+		// ×ªï¿½ï¿½Îªï¿½ï¿½Ä¿ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½TcpMessageï¿½á¹¹
 		TcpMessage message;
 		message.messageId = std::to_string(tcpMsg.connId);
 		message.sourceId = std::to_string(tcpMsg.connId);
@@ -68,20 +68,20 @@ TcpClientManager::TcpClientManager(QObject* parent /*= nullptr*/)
 		OnTcpError(errorCode, errorMsg);
 	});
 
-	// ÉèÖÃ×Ô¶¯ÇåÀí¶¨Ê±Æ÷
+	// ï¿½ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
 	connect(m_cleanupTimer, &QTimer::timeout, this, [this]() 
 {
 		CleanupTimeoutClients();
 	});
 
-	LOG_INFO("TCP¿Í»§¶Ë¹ÜÀíÆ÷³õÊ¼»¯Íê³É");
+	LOG_INFO("TCPï¿½Í»ï¿½ï¿½Ë¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½");
 }
 
 
 TcpClientManager::~TcpClientManager()
 {
 	StopServer();
-	LOG_INFO("TCP¿Í»§¶Ë¹ÜÀíÆ÷ÒÑÏú»Ù");
+	LOG_INFO("TCPï¿½Í»ï¿½ï¿½Ë¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 }
 
 
@@ -99,29 +99,29 @@ bool TcpClientManager::StartServer(const std::string& ip /*= "0.0.0.0"*/, int po
 {
 	if (!m_tcpServer) 
 	{
-		LOG_INFO("TCP·þÎñÆ÷ÊµÀýÎÞÐ§");
+		LOG_INFO("TCPï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½Ð§");
 		return false;
 	}
 
-	// ÅäÖÃ·þÎñÆ÷²ÎÊý
+	// ï¿½ï¿½ï¿½Ã·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	m_tcpServer->SetServerConfig(m_maxClients, true, m_heartbeatTimeout);
 
 	if (m_tcpServer->Start(ip, port)) 
 	{
-		LOG_INFO(QString("TCP¿Í»§¶Ë¹ÜÀí·þÎñÆ÷Æô¶¯³É¹¦: %1:%2").arg(ip.c_str()).arg(port));
+		LOG_INFO(QString("TCPï¿½Í»ï¿½ï¿½Ë¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¹ï¿½: %1:%2").arg(ip.c_str()).arg(port));
 
-		// Æô¶¯×Ô¶¯ÇåÀí¶¨Ê±Æ÷
+		// ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
 		if (m_autoCleanup) 
 		{
 			m_cleanupTimer->start(m_cleanupInterval * 1000);
-			LOG_INFO(QString("×Ô¶¯ÇåÀí¶¨Ê±Æ÷ÒÑÆô¶¯£¬¼ä¸ô: %1Ãë").arg(m_cleanupInterval.load()));
+			LOG_INFO(QString("ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: %1ï¿½ï¿½").arg(m_cleanupInterval.load()));
 		}
 
 		return true;
 	}
 	else 
 	{
-		LOG_INFO(QString("TCP¿Í»§¶Ë¹ÜÀí·þÎñÆ÷Æô¶¯Ê§°Ü: %1:%2").arg(ip.c_str()).arg(port));
+		LOG_INFO(QString("TCPï¿½Í»ï¿½ï¿½Ë¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½: %1:%2").arg(ip.c_str()).arg(port));
 		return false;
 	}
 }
@@ -130,10 +130,10 @@ void TcpClientManager::StopServer()
 {
 	if (m_tcpServer && m_tcpServer->IsRunning()) 
 	{
-		// Í£Ö¹×Ô¶¯ÇåÀí
+		// Í£Ö¹ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½
 		m_cleanupTimer->stop();
 
-		// ÇåÀíËùÓÐ¿Í»§¶Ë
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¿Í»ï¿½ï¿½ï¿½
 		{
 			std::lock_guard<std::mutex> lock(m_clientsMutex);
 			m_socketToClient.clear();
@@ -141,9 +141,9 @@ void TcpClientManager::StopServer()
 			m_clientIdToSocket.clear();
 		}
 
-		// Í£Ö¹·þÎñÆ÷
+		// Í£Ö¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		m_tcpServer->Stop();
-		LOG_INFO("TCP¿Í»§¶Ë¹ÜÀí·þÎñÆ÷ÒÑÍ£Ö¹");
+		LOG_INFO("TCPï¿½Í»ï¿½ï¿½Ë¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í£Ö¹");
 	}
 }
 
@@ -164,7 +164,7 @@ bool TcpClientManager::SendDataToDevice(const std::string& deviceId, const std::
 	auto it = m_deviceToSocket.find(deviceId);
 	if (it == m_deviceToSocket.end()) 
 	{
-		LOG_INFO(QString("Éè±¸IDÎ´ÕÒµ½: %1").arg(deviceId.c_str()));
+		LOG_INFO(QString("ï¿½è±¸IDÎ´ï¿½Òµï¿½: %1").arg(deviceId.c_str()));
 		return false;
 	}
 
@@ -174,12 +174,12 @@ bool TcpClientManager::SendDataToDevice(const std::string& deviceId, const std::
 	if (result) 
 	{
 		m_totalMessages++;
-		LOG_INFO(QString("Êý¾ÝÒÑ·¢ËÍµ½Éè±¸ %1 (Socket: %2), ´óÐ¡: %3 bytes")
+		LOG_INFO(QString("ï¿½ï¿½ï¿½ï¿½ï¿½Ñ·ï¿½ï¿½Íµï¿½ï¿½è±¸ %1 (Socket: %2), ï¿½ï¿½Ð¡: %3 bytes")
 			.arg(deviceId.c_str()).arg(socketId).arg(data.size()));
 	}
 	else 
 	{
-		LOG_INFO(QString("Êý¾Ý·¢ËÍÊ§°Üµ½Éè±¸ %1 (Socket: %2)")
+		LOG_INFO(QString("ï¿½ï¿½ï¿½Ý·ï¿½ï¿½ï¿½Ê§ï¿½Üµï¿½ï¿½è±¸ %1 (Socket: %2)")
 			.arg(deviceId.c_str()).arg(socketId));
 	}
 
@@ -205,7 +205,7 @@ bool TcpClientManager::SendTaskControl(const std::string& deviceId, const TcpSer
 {
 	TcpMessage message;
 
-	// ¸ù¾Ý¿ØÖÆÀàÐÍÑ¡ÔñÏûÏ¢ÀàÐÍ
+	// ï¿½ï¿½ï¿½Ý¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½
 	if (taskControl.controlType == "START") 
 	{
 		message.messageType = MessageType::TCP_SERVER_TASK_START;
@@ -216,7 +216,7 @@ bool TcpClientManager::SendTaskControl(const std::string& deviceId, const TcpSer
 	}
 	else 
 	{
-		LOG_INFO(QString("²»Ö§³ÖµÄÈÎÎñ¿ØÖÆÀàÐÍ: %1").arg(taskControl.controlType.c_str()));
+		LOG_INFO(QString("ï¿½ï¿½Ö§ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: %1").arg(taskControl.controlType.c_str()));
 		return false;
 	}
 
@@ -241,7 +241,7 @@ bool TcpClientManager::BroadcastData(const std::string& data)
 	int count = m_tcpServer->BroadcastData(data);
 	m_totalMessages += count;
 
-	LOG_INFO(QString("¹ã²¥Êý¾Ýµ½ %1 ¸ö¿Í»§¶Ë, ´óÐ¡: %2 bytes")
+	LOG_INFO(QString("ï¿½ã²¥ï¿½ï¿½ï¿½Ýµï¿½ %1 ï¿½ï¿½ï¿½Í»ï¿½ï¿½ï¿½, ï¿½ï¿½Ð¡: %2 bytes")
 		.arg(count).arg(data.size()));
 
 	return count > 0;
@@ -295,7 +295,7 @@ TcpClientInfo TcpClientManager::GetClientByDeviceId(const std::string& deviceId)
 		}
 	}
 
-	return TcpClientInfo(); // ·µ»ØÄ¬ÈÏ¹¹ÔìµÄÎÞÐ§¿Í»§¶ËÐÅÏ¢
+	return TcpClientInfo(); // ï¿½ï¿½ï¿½ï¿½Ä¬ï¿½Ï¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð§ï¿½Í»ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
 }
 
 TcpClientInfo TcpClientManager::GetClientBySocketId(int socketId) const
@@ -308,7 +308,7 @@ TcpClientInfo TcpClientManager::GetClientBySocketId(int socketId) const
 		return it->second;
 	}
 
-	return TcpClientInfo(); // ·µ»ØÄ¬ÈÏ¹¹ÔìµÄÎÞÐ§¿Í»§¶ËÐÅÏ¢
+	return TcpClientInfo(); // ï¿½ï¿½ï¿½ï¿½Ä¬ï¿½Ï¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð§ï¿½Í»ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
 }
 
 std::vector<TcpClientInfo> TcpClientManager::GetClientsByType(TcpClientType clientType) const
@@ -331,14 +331,14 @@ std::vector<TcpClientInfo> TcpClientManager::GetClientsByType(TcpClientType clie
 void TcpClientManager::SetHeartbeatTimeout(int timeoutSeconds)
 {
 	m_heartbeatTimeout = timeoutSeconds;
-	LOG_INFO(QString("ÐÄÌø³¬Ê±Ê±¼äÉèÖÃÎª: %1Ãë").arg(timeoutSeconds));
+	LOG_INFO(QString("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îª: %1ï¿½ï¿½").arg(timeoutSeconds));
 
 }
 
 void TcpClientManager::SetMaxClients(int maxClients)
 {
 	m_maxClients = maxClients;
-	LOG_INFO(QString("×î´ó¿Í»§¶ËÊýÉèÖÃÎª: %1").arg(maxClients));
+	LOG_INFO(QString("ï¿½ï¿½ï¿½Í»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îª: %1").arg(maxClients));
 }
 
 void TcpClientManager::EnableAutoCleanup(bool enable, int cleanupInterval /*= 60*/)
@@ -355,35 +355,35 @@ void TcpClientManager::EnableAutoCleanup(bool enable, int cleanupInterval /*= 60
 		m_cleanupTimer->stop();
 	}
 
-	LOG_INFO(QString("×Ô¶¯ÇåÀí%1, ¼ä¸ô: %2Ãë")
-		.arg(enable ? "ÒÑÆôÓÃ" : "ÒÑ½ûÓÃ").arg(cleanupInterval));
+	LOG_INFO(QString("ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½%1, ï¿½ï¿½ï¿½: %2ï¿½ï¿½")
+		.arg(enable ? "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" : "ï¿½Ñ½ï¿½ï¿½ï¿½").arg(cleanupInterval));
 }
 
 void TcpClientManager::OnTcpConnection(const TcpConnection& connection)
 {
-	LOG_INFO(QString("ÐÂTCPÁ¬½Ó: ID=%1, IP=%2:%3")
+	LOG_INFO(QString("ï¿½ï¿½TCPï¿½ï¿½ï¿½ï¿½: ID=%1, IP=%2:%3")
 		.arg(connection.connId)
 		.arg(connection.clientIp.c_str())
 		.arg(connection.clientPort));
 
 	std::lock_guard<std::mutex> lock(m_clientsMutex);
 
-	// ¼ì²éÊÇ·ñ³¬¹ý×î´ó¿Í»§¶ËÊý
+	// ï¿½ï¿½ï¿½ï¿½Ç·ñ³¬¹ï¿½ï¿½ï¿½ï¿½Í»ï¿½ï¿½ï¿½ï¿½ï¿½
 	if (m_socketToClient.size() >= static_cast<size_t>(m_maxClients)) {
-		LOG_INFO(QString("³¬¹ý×î´ó¿Í»§¶ËÊýÏÞÖÆ(%1)£¬¾Ü¾øÁ¬½Ó ID=%2")
+		LOG_INFO(QString("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(%1)ï¿½ï¿½ï¿½Ü¾ï¿½ï¿½ï¿½ï¿½ï¿½ ID=%2")
 			.arg(m_maxClients.load()).arg(connection.connId));
 
 		m_tcpServer->DisconnectClient(connection.connId);
 		return;
 	}
 
-	// ´´½¨¿Í»§¶ËÐÅÏ¢
+	// ï¿½ï¿½ï¿½ï¿½ï¿½Í»ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
 	TcpClientInfo clientInfo;
 	clientInfo.socketId = connection.connId;
 	clientInfo.connection = connection;
 	clientInfo.lastHeartbeatTime = GetCurrentTimestamp();
 
-	// Ìí¼Óµ½Ó³Éä±í£¨´ËÊ±»¹Î´×¢²á£¬µÈ´ý¿Í»§¶Ë·¢ËÍ×¢²áÏûÏ¢£©
+	// ï¿½ï¿½Óµï¿½Ó³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Î´×¢ï¿½á£¬ï¿½È´ï¿½ï¿½Í»ï¿½ï¿½Ë·ï¿½ï¿½ï¿½×¢ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½
 	m_socketToClient[connection.connId] = clientInfo;
 
 	emit m_signals.SigClientConnected(clientInfo);
@@ -391,7 +391,7 @@ void TcpClientManager::OnTcpConnection(const TcpConnection& connection)
 
 void TcpClientManager::OnTcpDisconnection(int socketId)
 {
-	LOG_INFO(QString("TCPÁ¬½Ó¶Ï¿ª: Socket ID=%1").arg(socketId));
+	LOG_INFO(QString("TCPï¿½ï¿½ï¿½Ó¶Ï¿ï¿½: Socket ID=%1").arg(socketId));
 
 	UnregisterClient(socketId);
 }
@@ -400,11 +400,11 @@ void TcpClientManager::OnTcpMessage(const TcpMessage& message)
 {
 	m_totalMessages++;
 
-	LOG_INFO(QString("ÊÕµ½TCPÏûÏ¢: Socket=%1, ´óÐ¡=%2 bytes")
+	LOG_INFO(QString("ï¿½Õµï¿½TCPï¿½ï¿½Ï¢: Socket=%1, ï¿½ï¿½Ð¡=%2 bytes")
 		.arg(message.sourceId.c_str()).arg(message.payload.size()));
 
 	try {
-		// ½âÎöÏûÏ¢ÀàÐÍ
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½
 		TcpMessage parsedMessage = TcpMessage::fromJson(message.payload);
 		int socketId = std::stoi(message.sourceId);
 
@@ -426,19 +426,19 @@ void TcpClientManager::OnTcpMessage(const TcpMessage& message)
 			break;
 
 		default:
-			LOG_INFO(QString("ÊÕµ½Î´ÖªÏûÏ¢ÀàÐÍ: %1").arg(static_cast<int>(parsedMessage.messageType)));
+			LOG_INFO(QString("ï¿½Õµï¿½Î´Öªï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½: %1").arg(static_cast<int>(parsedMessage.messageType)));
 			break;
 		}
 
 	}
 	catch (const std::exception& e) {
-		LOG_INFO(QString("´¦ÀíTCPÏûÏ¢Òì³£: %1").arg(e.what()));
+		LOG_INFO(QString("ï¿½ï¿½ï¿½ï¿½TCPï¿½ï¿½Ï¢ï¿½ì³£: %1").arg(e.what()));
 	}
 }
 
 void TcpClientManager::OnTcpError(int errorCode, const std::string& errorMessage)
 {
-	LOG_INFO(QString("TCP·þÎñÆ÷´íÎó [%1]: %2").arg(errorCode).arg(errorMessage.c_str()));
+	LOG_INFO(QString("TCPï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ [%1]: %2").arg(errorCode).arg(errorMessage.c_str()));
 	emit m_signals.SigManagerError(errorCode, errorMessage);
 }
 
@@ -450,7 +450,7 @@ void TcpClientManager::HandleClientRegister(int socketId, const std::string& pay
 
 		if (RegisterClient(socketId, registerInfo)) 
 		{
-			LOG_INFO(QString("¿Í»§¶Ë×¢²á³É¹¦: Socket=%1, Device=%2, Type=%3")
+			LOG_INFO(QString("ï¿½Í»ï¿½ï¿½ï¿½×¢ï¿½ï¿½É¹ï¿½: Socket=%1, Device=%2, Type=%3")
 				.arg(socketId)
 				.arg(registerInfo.deviceId.c_str())
 				.arg(static_cast<int>(registerInfo.clientType)));
@@ -459,7 +459,7 @@ void TcpClientManager::HandleClientRegister(int socketId, const std::string& pay
 	}
 	catch (const std::exception& e) 
 	{
-		LOG_INFO(QString("¿Í»§¶Ë×¢²áÒì³£: %1").arg(e.what()));
+		LOG_INFO(QString("ï¿½Í»ï¿½ï¿½ï¿½×¢ï¿½ï¿½ï¿½ì³£: %1").arg(e.what()));
 	}
 }
 
@@ -469,14 +469,14 @@ void TcpClientManager::HandleClientHeartbeat(int socketId, const std::string& pa
 		TcpClientHeartbeat heartbeat = TcpClientHeartbeat::fromJson(payload);
 		UpdateClientHeartbeat(socketId, heartbeat);
 
-		// ·¢ËÍÐÄÌøÓ¦´ð
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½
 		SendHeartbeatAck(socketId, heartbeat.clientId);
 
 		emit m_signals.SigClientHeartbeat(heartbeat);
 
 	}
 	catch (const std::exception& e) {
-		LOG_INFO(QString("´¦ÀíÐÄÌøÏûÏ¢Òì³£: %1").arg(e.what()));
+		LOG_INFO(QString("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ì³£: %1").arg(e.what()));
 	}
 }
 
@@ -485,7 +485,7 @@ void TcpClientManager::HandleClientDeviceStatus(int socketId, const std::string&
 	try {
 		TcpClientDeviceStatus deviceStatus = TcpClientDeviceStatus::fromJson(payload);
 
-		// ¸üÐÂ¿Í»§¶Ë×´Ì¬
+		// ï¿½ï¿½ï¿½Â¿Í»ï¿½ï¿½ï¿½×´Ì¬
 		{
 			std::lock_guard<std::mutex> lock(m_clientsMutex);
 			auto it = m_socketToClient.find(socketId);
@@ -494,7 +494,7 @@ void TcpClientManager::HandleClientDeviceStatus(int socketId, const std::string&
 			}
 		}
 
-		LOG_INFO(QString("Éè±¸×´Ì¬¸üÐÂ: Device=%1, Status=%2")
+		LOG_INFO(QString("ï¿½è±¸×´Ì¬ï¿½ï¿½ï¿½ï¿½: Device=%1, Status=%2")
 			.arg(deviceStatus.deviceId.c_str())
 			.arg(static_cast<int>(deviceStatus.deviceStatus)));
 
@@ -502,7 +502,7 @@ void TcpClientManager::HandleClientDeviceStatus(int socketId, const std::string&
 
 	}
 	catch (const std::exception& e) {
-		LOG_INFO(QString("´¦ÀíÉè±¸×´Ì¬Òì³£: %1").arg(e.what()));
+		LOG_INFO(QString("ï¿½ï¿½ï¿½ï¿½ï¿½è±¸×´Ì¬ï¿½ì³£: %1").arg(e.what()));
 	}
 
 }
@@ -512,7 +512,7 @@ void TcpClientManager::HandleClientTaskStatus(int socketId, const std::string& p
 	try {
 		TcpClientTaskStatus taskStatus = TcpClientTaskStatus::fromJson(payload);
 
-		LOG_INFO(QString("ÈÎÎñ×´Ì¬¸üÐÂ: Task=%1, Device=%2, Status=%3, Progress=%4%%")
+		LOG_INFO(QString("ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½: Task=%1, Device=%2, Status=%3, Progress=%4%%")
 			.arg(taskStatus.taskId.c_str())
 			.arg(taskStatus.deviceId.c_str())
 			.arg(static_cast<int>(taskStatus.taskStatus))
@@ -522,7 +522,7 @@ void TcpClientManager::HandleClientTaskStatus(int socketId, const std::string& p
 
 	}
 	catch (const std::exception& e) {
-		LOG_INFO(QString("´¦ÀíÈÎÎñ×´Ì¬Òì³£: %1").arg(e.what()));
+		LOG_INFO(QString("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ì³£: %1").arg(e.what()));
 	}
 }
 
@@ -530,26 +530,26 @@ bool TcpClientManager::RegisterClient(int socketId, const TcpClientRegisterInfo&
 {
 	std::lock_guard<std::mutex> lock(m_clientsMutex);
 
-	// ÑéÖ¤Éè±¸IDÓÐÐ§ÐÔ
+	// ï¿½ï¿½Ö¤ï¿½è±¸IDï¿½ï¿½Ð§ï¿½ï¿½
 	if (!IsValidDeviceId(registerInfo.deviceId)) {
-		LOG_INFO(QString("ÎÞÐ§µÄÉè±¸ID: %1").arg(registerInfo.deviceId.c_str()));
+		LOG_INFO(QString("ï¿½ï¿½Ð§ï¿½ï¿½ï¿½è±¸ID: %1").arg(registerInfo.deviceId.c_str()));
 		return false;
 	}
 
-	// ÑéÖ¤¿Í»§¶ËÀàÐÍ
+	// ï¿½ï¿½Ö¤ï¿½Í»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	if (!IsClientTypeAllowed(registerInfo.clientType)) {
-		LOG_INFO(QString("²»ÔÊÐíµÄ¿Í»§¶ËÀàÐÍ: %1").arg(static_cast<int>(registerInfo.clientType)));
+		LOG_INFO(QString("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿Í»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: %1").arg(static_cast<int>(registerInfo.clientType)));
 		return false;
 	}
 
-	// ¼ì²éÉè±¸IDÊÇ·ñÒÑ±»ÆäËû¿Í»§¶ËÊ¹ÓÃ
+	// ï¿½ï¿½ï¿½ï¿½è±¸IDï¿½Ç·ï¿½ï¿½Ñ±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í»ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½
 	auto deviceIt = m_deviceToSocket.find(registerInfo.deviceId);
 	if (deviceIt != m_deviceToSocket.end() && deviceIt->second != socketId) {
-		LOG_INFO(QString("Éè±¸IDÒÑ±»Ê¹ÓÃ: %1").arg(registerInfo.deviceId.c_str()));
+		LOG_INFO(QString("ï¿½è±¸IDï¿½Ñ±ï¿½Ê¹ï¿½ï¿½: %1").arg(registerInfo.deviceId.c_str()));
 		return false;
 	}
 
-	// ¸üÐÂ¿Í»§¶ËÐÅÏ¢
+	// ï¿½ï¿½ï¿½Â¿Í»ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
 	auto clientIt = m_socketToClient.find(socketId);
 	if (clientIt != m_socketToClient.end()) {
 		TcpClientInfo& clientInfo = clientIt->second;
@@ -562,7 +562,7 @@ bool TcpClientManager::RegisterClient(int socketId, const TcpClientRegisterInfo&
 		clientInfo.isRegistered = true;
 		clientInfo.registerTime = GetCurrentTimestamp();
 
-		// ¸üÐÂÓ³Éä±í
+		// ï¿½ï¿½ï¿½ï¿½Ó³ï¿½ï¿½ï¿½
 		m_deviceToSocket[registerInfo.deviceId] = socketId;
 		m_clientIdToSocket[registerInfo.clientId] = socketId;
 
@@ -581,7 +581,7 @@ void TcpClientManager::UnregisterClient(int socketId)
 	if (it != m_socketToClient.end()) {
 		const TcpClientInfo& clientInfo = it->second;
 
-		// ´ÓÓ³Éä±íÖÐÒÆ³ý
+		// ï¿½ï¿½Ó³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ³ï¿½
 		if (!clientInfo.deviceId.empty()) {
 			m_deviceToSocket.erase(clientInfo.deviceId);
 			emit m_signals.SigClientDisconnected(clientInfo.deviceId);
@@ -591,10 +591,10 @@ void TcpClientManager::UnregisterClient(int socketId)
 			m_clientIdToSocket.erase(clientInfo.clientId);
 		}
 
-		// ÒÆ³ý¿Í»§¶ËÐÅÏ¢
+		// ï¿½Æ³ï¿½ï¿½Í»ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
 		m_socketToClient.erase(it);
 
-		LOG_INFO(QString("¿Í»§¶ËÒÑ×¢Ïú: Socket=%1, Device=%2")
+		LOG_INFO(QString("ï¿½Í»ï¿½ï¿½ï¿½ï¿½ï¿½×¢ï¿½ï¿½: Socket=%1, Device=%2")
 			.arg(socketId).arg(clientInfo.deviceId.c_str()));
 	}
 }
@@ -637,15 +637,15 @@ void TcpClientManager::CleanupTimeoutClients()
 		if (clientInfo.isRegistered &&
 			(currentTime - clientInfo.lastHeartbeatTime) > timeoutMs) {
 
-			LOG_INFO(QString("ÇåÀí³¬Ê±¿Í»§¶Ë: Socket=%1, Device=%2, ³¬Ê±=%3Ãë")
+			LOG_INFO(QString("ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½Í»ï¿½ï¿½ï¿½: Socket=%1, Device=%2, ï¿½ï¿½Ê±=%3ï¿½ï¿½")
 				.arg(it->first)
 				.arg(clientInfo.deviceId.c_str())
 				.arg((currentTime - clientInfo.lastHeartbeatTime) / 1000));
 
-			// ¶Ï¿ªÁ¬½Ó
+			// ï¿½Ï¿ï¿½ï¿½ï¿½ï¿½ï¿½
 			m_tcpServer->DisconnectClient(it->first);
 
-			// ´ÓÓ³Éä±íÒÆ³ý
+			// ï¿½ï¿½Ó³ï¿½ï¿½ï¿½ï¿½Æ³ï¿½
 			if (!clientInfo.deviceId.empty()) {
 				m_deviceToSocket.erase(clientInfo.deviceId);
 			}
@@ -662,7 +662,7 @@ void TcpClientManager::CleanupTimeoutClients()
 	}
 
 	if (cleanupCount > 0) {
-		LOG_INFO(QString("ÇåÀíÁË %1 ¸ö³¬Ê±¿Í»§¶Ë£¬Ê£Óà¿Í»§¶ËÊý: %2")
+		LOG_INFO(QString("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ %1 ï¿½ï¿½ï¿½ï¿½Ê±ï¿½Í»ï¿½ï¿½Ë£ï¿½Ê£ï¿½ï¿½Í»ï¿½ï¿½ï¿½ï¿½ï¿½: %2")
 			.arg(cleanupCount).arg(m_socketToClient.size()));
 	}
 }
@@ -681,7 +681,6 @@ void TcpClientManager::SendHeartbeatAck(int socketId, const std::string& clientI
 	std::string jsonData = message.toJson();
 	m_tcpServer->SendData(socketId, jsonData);
 }
-}
 
 bool TcpClientManager::IsValidDeviceId(const std::string& deviceId) const
 {
@@ -694,7 +693,7 @@ bool TcpClientManager::IsClientTypeAllowed(TcpClientType clientType) const
 
 }
 
-// µ¥ÀýÊµÏÖ
+// ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½
 //----------------------------TcpClientManagerInstance----------------------------------------------
 //----------------------------TcpClientManagerInstance----------------------------------------------
 //----------------------------TcpClientManagerInstance----------------------------------------------

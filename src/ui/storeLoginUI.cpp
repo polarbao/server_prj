@@ -1,4 +1,4 @@
-#include "storeLoginUI.h"
+ï»¿#include "storeLoginUI.h"
 
 #include "global.h"
 
@@ -29,7 +29,7 @@ void StoreLoginUI::Init()
 {
 	InitUI();
 	InitConnect();
-	//ÉèÖÃÄ¬ÈÏ²ÎÊý
+	//ï¿½ï¿½ï¿½ï¿½Ä¬ï¿½Ï²ï¿½ï¿½ï¿½
 	SetDefaultParam();
 }
 
@@ -66,9 +66,9 @@ void StoreLoginUI::UpdateButtonStates(bool bConn)
 {
 	if (m_btnGroup) 
 	{
-		// ¼ÙÉè°´Å¥Ë÷Òý: 0=Á¬½Ó, 1=¶Ï¿ª
-		m_btnGroup->button(0)->setEnabled(!bConn); // Á¬½Ó°´Å¥
-		m_btnGroup->button(1)->setEnabled(bConn);  // ¶Ï¿ª°´Å¥
+		// ï¿½ï¿½ï¿½è°´Å¥ï¿½ï¿½ï¿½ï¿½: 0=ï¿½ï¿½ï¿½ï¿½, 1=ï¿½Ï¿ï¿½
+		m_btnGroup->button(0)->setEnabled(!bConn); // ï¿½ï¿½ï¿½Ó°ï¿½Å¥
+		m_btnGroup->button(1)->setEnabled(bConn);  // ï¿½Ï¿ï¿½ï¿½ï¿½Å¥
 	}
 }
 
@@ -84,22 +84,22 @@ void StoreLoginUI::InitUI()
 		{
 			QHBoxLayout* ph_wsLogin = new QHBoxLayout();
 			{
-				QLabel* titleLab = new QLabel(u8"ÉÌÆÌId");
+				QLabel* titleLab = new QLabel(u8"ï¿½ï¿½ï¿½ï¿½Id");
 				m_storeId = new QLineEdit();
-				m_storeId->setPlaceholderText(u8"ÇëÊäÈëÉÌÆÌId");
-				QLabel* statusLab = new QLabel(u8"¹¤×÷×´Ì¬");
-				m_status = new QLabel(u8"Î´Á¬½Ó");
+				m_storeId->setPlaceholderText(u8"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Id");
+				QLabel* statusLab = new QLabel(u8"ï¿½ï¿½ï¿½ï¿½×´Ì¬");
+				m_status = new QLabel(u8"Î´ï¿½ï¿½ï¿½ï¿½");
 				m_status->setStyleSheet("QLabel { color : red; font-weight: bold; }");
-				QPushButton* connBtn = new QPushButton(u8"Á¬½Ó");
-				QPushButton* disconnBtn = new QPushButton(u8"¶Ï¿ªÁ¬½Ó");
-				QPushButton* testOperBtn1 = new QPushButton(u8"»ñÈ¡OSS²ÎÊý");
+				QPushButton* connBtn = new QPushButton(u8"ï¿½ï¿½ï¿½ï¿½");
+				QPushButton* disconnBtn = new QPushButton(u8"ï¿½Ï¿ï¿½ï¿½ï¿½ï¿½ï¿½");
+				QPushButton* testOperBtn1 = new QPushButton(u8"ï¿½ï¿½È¡OSSï¿½ï¿½ï¿½ï¿½");
 				QPushButton* testOperBtn2 = new QPushButton(u8"test_oper2");
-				QPushButton* simulateDataBtn = new QPushButton(u8"Ä£ÄâÊý¾Ý");
+				QPushButton* simulateDataBtn = new QPushButton(u8"Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 				simulateDataBtn->setCheckable(true);
 				simulateDataBtn->setChecked(true);
 				g_simulateReturnData = true;
 
-				// release°æ±¾ÖÐ£¬½ûÓÃ²âÊÔÏà¹Ø°´Å¥
+				// releaseï¿½æ±¾ï¿½Ð£ï¿½ï¿½ï¿½ï¿½Ã²ï¿½ï¿½ï¿½ï¿½ï¿½Ø°ï¿½Å¥
 				//testOperBtn1->setEnabled(false);
 				testOperBtn2->setEnabled(false);
 
@@ -126,16 +126,16 @@ void StoreLoginUI::InitUI()
 
 			QHBoxLayout* ph_httpLogin = new QHBoxLayout();
 			{
-				QLabel* userLab = new QLabel(u8"ÓÃ»§Ãû");
+				QLabel* userLab = new QLabel(u8"ï¿½Ã»ï¿½ï¿½ï¿½");
 				m_userName = new QLineEdit();
-				m_userName->setPlaceholderText(u8"ÇëÊäÈëÓÃ»§Ãû");
+				m_userName->setPlaceholderText(u8"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½");
 
-				QLabel* pwdLab = new QLabel(u8"ÃÜÂë");
+				QLabel* pwdLab = new QLabel(u8"ï¿½ï¿½ï¿½ï¿½");
 				m_pwd = new QLineEdit();
-				m_pwd->setPlaceholderText(u8"ÇëÊäÈëÃÜÂë");
+				m_pwd->setPlaceholderText(u8"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 
-				QPushButton* connBtn = new QPushButton(u8"µÇÂ½");
-				QPushButton* disconnBtn = new QPushButton(u8"Í¬²½Éè±¸ÈÎÎñ×´Ì¬");
+				QPushButton* connBtn = new QPushButton(u8"ï¿½ï¿½Â½");
+				QPushButton* disconnBtn = new QPushButton(u8"Í¬ï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½×´Ì¬");
 				m_btnGroup->addButton(connBtn, EUI::EIOT_Login);
 				m_btnGroup->addButton(disconnBtn, EUI::EIOT_LoginBindDev);
 
@@ -152,11 +152,11 @@ void StoreLoginUI::InitUI()
 
 			QHBoxLayout* ph_ws = new QHBoxLayout();
 			{
-				QLabel* titleLab = new QLabel(u8"³¤Á¬½ÓURL");
+				QLabel* titleLab = new QLabel(u8"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½URL");
 				m_wsUrl = new QLineEdit();
-				m_wsUrl->setPlaceholderText(u8"ÇëÊäÈë³¤Á¬½ÓURL");
+				m_wsUrl->setPlaceholderText(u8"ï¿½ï¿½ï¿½ï¿½ï¿½ë³¤ï¿½ï¿½ï¿½ï¿½URL");
 
-				QPushButton* updateBtn = new QPushButton(u8"¸üÐÂ");
+				QPushButton* updateBtn = new QPushButton(u8"ï¿½ï¿½ï¿½ï¿½");
 				m_btnGroup->addButton(updateBtn, EUI::EIOT_WSChange);
 
 				ph_ws->addWidget(titleLab, 1);
@@ -172,11 +172,11 @@ void StoreLoginUI::InitUI()
 			{
 				QLabel* urlLab = new QLabel(u8"HTTP_URL");
 				m_httpUrl = new QLineEdit();
-				m_httpUrl->setPlaceholderText(u8"ÇëÊäÈëHTTP_URL");
+				m_httpUrl->setPlaceholderText(u8"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½HTTP_URL");
 				QLabel* portLab = new QLabel(u8"Port");
 				m_httpPort = new QLineEdit();
-				m_httpPort->setPlaceholderText(u8"ÇëÊäÈëHTTP_port");
-				QPushButton* updateBtn = new QPushButton(u8"¸üÐÂ");
+				m_httpPort->setPlaceholderText(u8"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½HTTP_port");
+				QPushButton* updateBtn = new QPushButton(u8"ï¿½ï¿½ï¿½ï¿½");
 				m_btnGroup->addButton(updateBtn, EUI::EIOT_HttpChange);
 
 
@@ -196,7 +196,7 @@ void StoreLoginUI::InitUI()
 
 
 
-	//TODO£º½ûÓÃ¸üÐÂ°´Å¥
+	//TODOï¿½ï¿½ï¿½ï¿½ï¿½Ã¸ï¿½ï¿½Â°ï¿½Å¥
 	for (const auto& it : m_btnGroup->buttons())
 	{
 		if (m_btnGroup->id(it) == EUI::EIOT_HttpChange ||
@@ -205,7 +205,7 @@ void StoreLoginUI::InitUI()
 			it->setEnabled(false);
 		}
 	}
-	//¸üÐÂ³õÊ¼×´Ì¬
+	//ï¿½ï¿½ï¿½Â³ï¿½Ê¼×´Ì¬
 	//OnUpdateConnStatus(false);
 }
 
@@ -232,7 +232,7 @@ void StoreLoginUI::OnBtnClicked(int btnIdx)
 			m_loginInfo.httpUrlBase = m_httpUrl->text().toStdString();
 			m_loginInfo.httpPort = m_httpPort->text().toStdString();
 			emit SigLoinSerOper(m_loginInfo);
-			//·¢ËÍÊý¾ÝÖÁcomm_mgr£¬½øÐÐµÇÂ¼²Ù×÷
+			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½comm_mgrï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½Â¼ï¿½ï¿½ï¿½ï¿½
 			break;
 		}
 		case EUI::EIOT_Disconn:
@@ -270,7 +270,7 @@ void StoreLoginUI::OnBtnClicked(int btnIdx)
 		}
 		case  EUI::EIOT_SimulateData:
 		{
-			//ÉèÖÃ
+			//ï¿½ï¿½ï¿½ï¿½
 			auto bClicked = m_btnGroup->button(EUI::EIOT_SimulateData)->isChecked();
 			//emit SigSimulateDataOper(bClicked);
 
@@ -301,34 +301,34 @@ void StoreLoginUI::NetworkStatusChanged(ConnectionType connType, NetworkStatus s
 	switch (status) 
 	{
 	case NetworkStatus::DISCONNECTED:
-		statusStr = u8"¶Ï¿ªÁ¬½Ó";
+		statusStr = u8"ï¿½Ï¿ï¿½ï¿½ï¿½ï¿½ï¿½";
 		statusColor = Qt::red;
 		break;
 	case NetworkStatus::CONNECTING:
-		statusStr = u8"Á¬½ÓÖÐ";
+		statusStr = u8"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
 		statusColor = Qt::blue;
 		break;
 	case NetworkStatus::CONNECTED:
-		statusStr = u8"ÒÑÁ¬½Ó";
+		statusStr = u8"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
 		statusColor = Qt::darkGreen;
 		break;
 	case NetworkStatus::RECONNECTING:
-		statusStr = u8"ÖØÁ¬ÖÐ";
-		statusColor = QColor(255, 165, 0); // ³ÈÉ«
+		statusStr = u8"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
+		statusColor = QColor(255, 165, 0); // ï¿½ï¿½É«
 		break;
 	case NetworkStatus::FAILED:
-		statusStr = u8"Á¬½ÓÊ§°Ü";
+		statusStr = u8"ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½";
 		statusColor = Qt::red;
 		break;
 	}
 
-	// Èç¹ûÊÇÖ÷ÒªÁ¬½Ó×´Ì¬¸üÐÂ£¬¸üÐÂÖ÷×´Ì¬ÏÔÊ¾
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½Â£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½Ê¾
 	if (connType == ConnectionType::WEBSOCKET) 
 	{
 		m_status->setText(statusStr);
 		m_status->setStyleSheet(QString("QLabel { color : %1; font-weight: bold; }").arg(statusColor.name()));
 
-		// ¸üÐÂ°´Å¥×´Ì¬
+		// ï¿½ï¿½ï¿½Â°ï¿½Å¥×´Ì¬
 		if (status == NetworkStatus::CONNECTED)
 		{
 			m_btnGroup->button(EUI::EIOT_Conn)->setEnabled(false);
@@ -341,17 +341,17 @@ void StoreLoginUI::NetworkStatusChanged(ConnectionType connType, NetworkStatus s
 		}
 	}
 
-	//QString statusStr = bConn ? u8"ÒÑÁ¬½Ó" : u8"Î´Á¬½Ó";
+	//QString statusStr = bConn ? u8"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" : u8"Î´ï¿½ï¿½ï¿½ï¿½";
 	//QColor statusColor = bConn ? Qt::darkGreen : Qt::red;
 	//m_status->setText(statusStr);
 	//m_status->setStyleSheet(QString("QLabel { color : %1; font-weight: bold; }").arg(statusColor.name()));
 	PrintLogInfo(QString("Connection status: %1").arg(statusStr));
 }
 
-// ·ÏÆú½Ó¿Ú£ºver_1027
+// ï¿½ï¿½ï¿½ï¿½ï¿½Ó¿Ú£ï¿½ver_1027
 void StoreLoginUI::ConnStatucChange(bool bConn)
 {
-	QString statusStr = bConn ? u8"ÒÑÁ¬½Ó" : u8"Î´Á¬½Ó";
+	QString statusStr = bConn ? u8"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" : u8"Î´ï¿½ï¿½ï¿½ï¿½";
 	QColor statusColor = bConn ? Qt::darkGreen : Qt::red;
 	m_status->setText(statusStr);
 	m_status->setStyleSheet(QString("QLabel { color : %1; font-weight: bold; }").arg(statusColor.name()));
@@ -369,38 +369,38 @@ void StoreLoginUI::ConnStatucChange(bool bConn)
 	}
 }
 
-//À©Õ¹½Ó¿Ú
+//ï¿½ï¿½Õ¹ï¿½Ó¿ï¿½
 void StoreLoginUI::ReconnectAttempt(ConnectionType connType, int attemptCount, int maxAttempts)
 {
 	QString connTypeStr = (connType == ConnectionType::WEBSOCKET) ? "WebSocket" : "HTTP";
-	QString message = QString("%1 ÖØÁ¬³¢ÊÔ: µÚ %2/%3 ´Î").arg(connTypeStr).arg(attemptCount).arg(maxAttempts);
+	QString message = QString("%1 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ %2/%3 ï¿½ï¿½").arg(connTypeStr).arg(attemptCount).arg(maxAttempts);
 
-	// ¸üÐÂ×´Ì¬ÏÔÊ¾
+	// ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½Ê¾
 	m_status->setText(message);
 	m_status->setStyleSheet("QLabel { color : orange; font-weight: bold; }");
 
 	PrintLogInfo(message);
 
-	// ÖØÁ¬¹ý³ÌÖÐ½ûÓÃÁ¬½Ó°´Å¥£¬ÆôÓÃ¶Ï¿ª°´Å¥£¨ÔÊÐíÓÃ»§È¡ÏûÖØÁ¬£©
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó°ï¿½Å¥ï¿½ï¿½ï¿½ï¿½ï¿½Ã¶Ï¿ï¿½ï¿½ï¿½Å¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	if (m_btnGroup) 
 	{
-		m_btnGroup->button(0)->setEnabled(false); // Á¬½Ó°´Å¥½ûÓÃ
-		m_btnGroup->button(1)->setEnabled(true);  // ¶Ï¿ª°´Å¥ÆôÓÃ
+		m_btnGroup->button(0)->setEnabled(false); // ï¿½ï¿½ï¿½Ó°ï¿½Å¥ï¿½ï¿½ï¿½ï¿½
+		m_btnGroup->button(1)->setEnabled(true);  // ï¿½Ï¿ï¿½ï¿½ï¿½Å¥ï¿½ï¿½ï¿½ï¿½
 	}
 }
 
 void StoreLoginUI::ReconnectFailed(ConnectionType connType, const QString& reason)
 {
 	QString connTypeStr = (connType == ConnectionType::WEBSOCKET) ? "WebSocket" : "HTTP";
-	QString message = QString("%1 ÖØÁ¬Ê§°Ü: %2").arg(connTypeStr).arg(reason);
+	QString message = QString("%1 ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½: %2").arg(connTypeStr).arg(reason);
 
-	// ¸üÐÂ×´Ì¬ÏÔÊ¾
+	// ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½Ê¾
 	m_status->setText(message);
 	m_status->setStyleSheet("QLabel { color : red; font-weight: bold; }");
 
 	PrintLogInfo(message);
 
-	// ÖØÁ¬Ê§°Üºó»Ö¸´Á¬½Ó°´Å¥
+	// ï¿½ï¿½ï¿½ï¿½Ê§ï¿½Üºï¿½Ö¸ï¿½ï¿½ï¿½ï¿½Ó°ï¿½Å¥
 	UpdateButtonStates(false);
 }
 

@@ -1,4 +1,4 @@
-#include "TcpServerWrapper.h"
+ï»¿#include "TcpServerWrapper.h"
 #include "hv/hlog.h"
 #include "CLogManager.h"
 #include <algorithm>
@@ -156,15 +156,15 @@ bool TcpServerWrapperImpl::Start(const std::string& ip /*= "0.0.0.0"*/, int port
 		m_bindIp = ip;
 		m_bindPort = port;
 
-		// ÉèÖÃ·þÎñÆ÷ÅäÖÃ
+		// ï¿½ï¿½ï¿½Ã·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		//m_server->setMaxConnectionCount(m_maxConnections);
 		//m_server->setKeepalive(m_keepAlive);
 		//if (m_timeout > 0) 
 		//{
-		//	m_server->setReadTimeout(m_timeout * 1000); // ×ª»»ÎªºÁÃë
+		//	m_server->setReadTimeout(m_timeout * 1000); // ×ªï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½
 		//}
 
-		// ÉèÖÃ»Øµ÷º¯Êý
+		// ï¿½ï¿½ï¿½Ã»Øµï¿½ï¿½ï¿½ï¿½ï¿½
 		m_server->onConnection = [this](const hv::SocketChannelPtr& channel) {
 			OnConnection(channel);
 		};
@@ -177,7 +177,7 @@ bool TcpServerWrapperImpl::Start(const std::string& ip /*= "0.0.0.0"*/, int port
 			OnWriteComplete(channel, buf);
 		};
 
-		// Æô¶¯·þÎñÆ÷
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		int ret = m_server->createsocket(port);
 		if (ret < 0) 
 		{
@@ -215,7 +215,7 @@ void TcpServerWrapperImpl::Stop()
 
 	try 
 	{
-		// ÇåÀíËùÓÐÁ¬½Ó
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		{
 			std::lock_guard<std::mutex> lock(m_connectionsMutex);
 			m_connections.clear();
@@ -223,7 +223,7 @@ void TcpServerWrapperImpl::Stop()
 			m_connIdToChannel.clear();
 		}
 
-		// Í£Ö¹·þÎñÆ÷
+		// Í£Ö¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		m_server->stop();
 		m_isRunning = false;
 
@@ -251,7 +251,7 @@ int TcpServerWrapperImpl::GetPort() const
 bool TcpServerWrapperImpl::SendData(int connId, const std::string& data)
 {
 	hv::SocketChannelPtr channel;
-	// Ê¹ÓÃRAIIËø±£»¤£¬ËõÐ¡ËøµÄ×÷ÓÃÓò
+	// Ê¹ï¿½ï¿½RAIIï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	{
 		std::lock_guard<std::mutex> lock(m_connectionsMutex);
 
@@ -291,7 +291,7 @@ int TcpServerWrapperImpl::BroadcastData(const std::string& data)
 {
 	std::vector<hv::SocketChannelPtr> channels;
 
-	//»ñÈ¡ËùÒÔchannelµÄ¸±±¾ÐÅÏ¢
+	//ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½channelï¿½Ä¸ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
 	{
 		std::lock_guard<std::mutex> lock(m_connectionsMutex);
 		channels.reserve(m_connIdToChannel.size());
@@ -306,7 +306,7 @@ int TcpServerWrapperImpl::BroadcastData(const std::string& data)
 
 	}
 
-	//ËøÍâ½øÐÐÊµ¼Ê·¢ËÍÊý¾Ý
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Êµï¿½Ê·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	int successCnt = 0;
 	for (const auto& channel : channels)
 	{
@@ -409,22 +409,22 @@ bool TcpServerWrapperImpl::SendDataAsync(int connId, const std::string& data)
 {
 	if (!m_asyncSendEnabled)
 	{
-		//Òì²½·¢ËÍÎ´ÆôÓÃ£¬Ê¹ÓÃÍ¬²½·¢ËÍ
+		//ï¿½ì²½ï¿½ï¿½ï¿½ï¿½Î´ï¿½ï¿½ï¿½Ã£ï¿½Ê¹ï¿½ï¿½Í¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		return SendData(connId, data);
 	}
 
 	{
 		std::lock_guard<std::mutex> lock(m_asyncSendMutex);
-		// ÅÐ¶ÏÒì²½¶ÓÁÐÊÇ·ñÒÑÂú
+		// ï¿½Ð¶ï¿½ï¿½ì²½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½
 		if (m_asyncSendQueue.size() >= static_cast<size_t>(m_maxAsyncQueueSize.load()))
 		{
-			LOG_INFO(QString(u8"Òì²½·¢ËÍ¶ÓÁÐÒÑÂú£¬¶ªÆú×îÔçµÄÏûÏ¢"));
+			LOG_INFO(QString(u8"ï¿½ì²½ï¿½ï¿½ï¿½Í¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢"));
 			m_asyncSendQueue.pop();
 		}
-		// Ìí¼Óµ½Òì²½·¢ËÍ¶ÓÁÐ
+		// ï¿½ï¿½Óµï¿½ï¿½ì²½ï¿½ï¿½ï¿½Í¶ï¿½ï¿½ï¿½
 		m_asyncSendQueue.emplace(connId, data);
 	}
-	LOG_INFO(QString(u8"ÏûÏ¢ÒÑ¼ÓÈëÒì²½·¢ËÍ¶ÓÁÐ: ConnID=%1, ¶ÓÁÐ´óÐ¡=%2")
+	LOG_INFO(QString(u8"ï¿½ï¿½Ï¢ï¿½Ñ¼ï¿½ï¿½ï¿½ï¿½ì²½ï¿½ï¿½ï¿½Í¶ï¿½ï¿½ï¿½: ConnID=%1, ï¿½ï¿½ï¿½Ð´ï¿½Ð¡=%2")
 		.arg(connId).arg(m_asyncSendQueue.size()));
 	return true;
 }
@@ -436,15 +436,15 @@ void TcpServerWrapperImpl::EnableAsyncSend(bool enable /*= true*/)
 	if (enable && !wasEnable)
 	{
 		m_asyncSendTimer->stop();
-		LOG_INFO("Òì²½·¢ËÍ»úÖÆÒÑ½ûÓÃ");
-		// Æô¶¯Òì²½·¢ËÍ¶¨Ê±Æ÷
+		LOG_INFO("ï¿½ì²½ï¿½ï¿½ï¿½Í»ï¿½ï¿½ï¿½ï¿½Ñ½ï¿½ï¿½ï¿½");
+		// ï¿½ï¿½ï¿½ï¿½ì²½ï¿½ï¿½ï¿½Í¶ï¿½Ê±ï¿½ï¿½
 		OnAsyncSendTimer();
 	}
 	else if(!enable && wasEnable)
 	{
-		// Í£Ö¹Òì²½·¢ËÍ¶¨Ê±Æ÷
+		// Í£Ö¹ï¿½ì²½ï¿½ï¿½ï¿½Í¶ï¿½Ê±ï¿½ï¿½
 		m_asyncSendTimer->stop();
-		// ´¦ÀíÊ£ÓàµÄ¶ÓÁÐÏûÏ¢
+		// ï¿½ï¿½ï¿½ï¿½Ê£ï¿½ï¿½Ä¶ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
 		OnAsyncSendTimer();
 	}
 }
@@ -454,14 +454,14 @@ void TcpServerWrapperImpl::SetAsyncSendConfig(int maxQueueSize /*= 5000*/, int p
 	m_maxAsyncQueueSize = maxQueueSize;
 	m_asyncProcessInterval = processInterval;
 
-	// Èç¹û¶¨Ê±Æ÷ÕýÔÚÔËÐÐ£¬¸üÐÂ¼ä¸ô
+	// ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð£ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½
 	if (m_asyncSendEnabled && m_asyncSendTimer->isActive())
 	{
 		m_asyncSendTimer->stop();
 		m_asyncSendTimer->start(processInterval);
 	}
 
-	LOG_INFO(QString(u8"Òì²½·¢ËÍÅäÖÃÒÑ¸üÐÂ: ×î´ó¶ÓÁÐ´óÐ¡=%1, ´¦Àí¼ä¸ô=%2ms")
+	LOG_INFO(QString(u8"ï¿½ì²½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¸ï¿½ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½Ð¡=%1, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½=%2ms")
 		.arg(maxQueueSize).arg(processInterval));
 }
 
@@ -470,7 +470,7 @@ void TcpServerWrapperImpl::HandleNewConnection(const hv::SocketChannelPtr& chann
 	TcpConnection conn;
 
 	{
-		// ÐÂÁ¬½Ó
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		std::lock_guard<std::mutex> lock(m_connectionsMutex);
 		int connId = GenerateConnectionId();
 		CreateConnectionInfo(channel, conn);
@@ -483,7 +483,7 @@ void TcpServerWrapperImpl::HandleNewConnection(const hv::SocketChannelPtr& chann
 		LOG_INFO(QString(u8"New TCP connection: ID=%1, Client=%2:%3, Total=%4")
 			.arg(connId).arg(conn.clientIp.c_str()).arg(conn.clientPort).arg(m_connections.size()));
 	}
-	// ÔÚËøÍâ´¥·¢»Øµ÷
+	// ï¿½ï¿½ï¿½ï¿½ï¿½â´¥ï¿½ï¿½ï¿½Øµï¿½
 	if (m_onConnectionCallback)
 	{
 		m_onConnectionCallback(conn);
@@ -494,7 +494,7 @@ void TcpServerWrapperImpl::HandleDisconnection(const hv::SocketChannelPtr& chann
 {
 	int connId = -1;
 	{
-		// Á¬½Ó¶Ï¿ª
+		// ï¿½ï¿½ï¿½Ó¶Ï¿ï¿½
 		std::lock_guard<std::mutex> lock(m_connectionsMutex);
 
 		auto it = m_channelToConnId.find(channel);
@@ -510,7 +510,7 @@ void TcpServerWrapperImpl::HandleDisconnection(const hv::SocketChannelPtr& chann
 				.arg(connId).arg(m_connections.size()));
 		}
 	}
-	// ´¥·¢»Øµ÷
+	// ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½
 	if ( -1 != connId && m_onDisconnectionCallback)
 	{
 		m_onDisconnectionCallback(connId);
@@ -542,7 +542,7 @@ void TcpServerWrapperImpl::OnMessage(const hv::SocketChannelPtr& channel, hv::Bu
 	}
 
 	OldTcpMessage message;
-	//ËõÐ¡ËøÊ¹ÓÃ·¶Î§
+	//ï¿½ï¿½Ð¡ï¿½ï¿½Ê¹ï¿½Ã·ï¿½Î§
 	{
 		std::lock_guard<std::mutex> lock(m_connectionsMutex);
 
@@ -560,7 +560,7 @@ void TcpServerWrapperImpl::OnMessage(const hv::SocketChannelPtr& channel, hv::Bu
 			.arg(connId).arg(data.size()));
 	}
 
-	// ÔÚËøÍâµ÷ÓÃ»Øµ÷º¯Êý£¬±ÜÃâËÀËø
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»Øµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	if (m_onMessageCallback) 
 	{
 		m_onMessageCallback(message);
@@ -569,7 +569,7 @@ void TcpServerWrapperImpl::OnMessage(const hv::SocketChannelPtr& channel, hv::Bu
 
 void TcpServerWrapperImpl::OnWriteComplete(const hv::SocketChannelPtr& channel, hv::Buffer* buf)
 {
-	// ¿ÉÒÔÔÚÕâÀï´¦ÀíÐ´ÈëÍê³ÉÊÂ¼þ£¬±ÈÈçÍ³¼Æ·¢ËÍÊý¾ÝÁ¿µÈ
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï´¦ï¿½ï¿½Ð´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í³ï¿½Æ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	if (buf) 
 	{
 		std::lock_guard<std::mutex> lock(m_connectionsMutex);
@@ -599,7 +599,7 @@ void TcpServerWrapperImpl::CreateConnectionInfo(const hv::SocketChannelPtr& chan
 	{
 		auto ipData = channel->peeraddr();
 		std::pair<std::string, int> data;
-		//¿Í»§¶ËÁ¬½Ó²ð·Öip¡¢¶Ë¿Ú
+		//ï¿½Í»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó²ï¿½ï¿½ipï¿½ï¿½ï¿½Ë¿ï¿½
 		{
 			std::regex pattern(R"(^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})(?::(\d{1,5}))?$)");
 			std::smatch matches;
@@ -608,7 +608,7 @@ void TcpServerWrapperImpl::CreateConnectionInfo(const hv::SocketChannelPtr& chan
 			{
 				std::string ip = matches[1];
 				int port = 0;
-				// Èç¹ûÓÐ¶Ë¿Ú×é
+				// ï¿½ï¿½ï¿½ï¿½Ð¶Ë¿ï¿½ï¿½ï¿½
 				if (matches.size() > 2 && matches[2].matched)
 				{
 					try
@@ -617,7 +617,7 @@ void TcpServerWrapperImpl::CreateConnectionInfo(const hv::SocketChannelPtr& chan
 					}
 					catch (const std::exception& e)
 					{
-						std::cerr << "¾¯¸æ£ºÎÞÐ§µÄ¶Ë¿ÚºÅ¸ñÊ½" << std::endl;
+						std::cerr << "ï¿½ï¿½ï¿½æ£ºï¿½ï¿½Ð§ï¿½Ä¶Ë¿ÚºÅ¸ï¿½Ê½" << std::endl;
 					}
 				}
 				data = { ip, port };
@@ -660,18 +660,18 @@ void TcpServerWrapperImpl::OnAsyncSendTimer()
 			m_asyncSendQueue.pop();
 			processCount++;
 
-			// ¼ì²éÏûÏ¢ÊÇ·ñ³¬Ê±
+			// ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½Ç·ï¿½Ê±
 			long long currentTime = std::chrono::duration_cast<std::chrono::milliseconds>(
 				std::chrono::system_clock::now().time_since_epoch()).count();
 			if ((currentTime - item.timestamp) > MESSAGE_TIMEOUT_MS)
 			{
-				LOG_INFO(QString(u8"¶ªÆú³¬Ê±ÏûÏ¢: ConnID=%1").arg(item.connId));
+				LOG_INFO(QString(u8"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Ï¢: ConnID=%1").arg(item.connId));
 				continue;
 			}
 
-			// ³¢ÊÔ·¢ËÍÏûÏ¢ (²»ÔÚËøÄÚ½øÐÐÍøÂç²Ù×÷)
+			// ï¿½ï¿½ï¿½Ô·ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
 			bool success = false;
-			// ÁÙÊ±½âËøÀ´·¢ËÍÊý¾Ý
+			// ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			m_connectionsMutex.unlock();
 			success = SendData(item.connId, item.data);
 			m_asyncSendMutex.lock();
@@ -682,7 +682,7 @@ void TcpServerWrapperImpl::OnAsyncSendTimer()
 			}
 			else
 			{
-				// ·¢ËÍÊ§°Ü£¬¼ì²éÖØÊÔ´ÎÊý
+				// ï¿½ï¿½ï¿½ï¿½Ê§ï¿½Ü£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½ï¿½ï¿½
 				if (item.retryCount < MAX_RETRY_COUNT)
 				{
 					item.retryCount++;
@@ -690,12 +690,12 @@ void TcpServerWrapperImpl::OnAsyncSendTimer()
 				}
 				else
 				{
-					LOG_INFO(QString(u8"ÏûÏ¢·¢ËÍÊ§°Ü£¬ÒÑ´ïµ½×î´óÖØÊÔ´ÎÊý: ConnID=%1")
+					LOG_INFO(QString(u8"ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½Ê§ï¿½Ü£ï¿½ï¿½Ñ´ïµ½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½ï¿½ï¿½: ConnID=%1")
 						.arg(item.connId));
 				}
 			}
 		}
-		// ½«ÒªÖØÊÔµÄÏûÏ¢ÖØÐÂ¼ÓÈë¶ÓÁÐ
+		// ï¿½ï¿½Òªï¿½ï¿½ï¿½Ôµï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		while (!retryQueue.empty())
 		{
 			m_asyncSendQueue.push(retryQueue.front());
@@ -704,7 +704,7 @@ void TcpServerWrapperImpl::OnAsyncSendTimer()
 	}
 	if (processCount > 0)
 	{
-		LOG_INFO(QString(u8"Òì²½·¢ËÍ´¦ÀíÍê³É: ´¦Àí=%1Ìõ, ³É¹¦=%2Ìõ, Ê£Óà=%3Ìõ")
+		LOG_INFO(QString(u8"ï¿½ì²½ï¿½ï¿½ï¿½Í´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½=%1ï¿½ï¿½, ï¿½É¹ï¿½=%2ï¿½ï¿½, Ê£ï¿½ï¿½=%3ï¿½ï¿½")
 			.arg(processCount).arg(successCount).arg(m_asyncSendQueue.size()));
 	}
 }

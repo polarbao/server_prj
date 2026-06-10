@@ -1,45 +1,34 @@
-#pragma once
-
-
+ï»¿#pragma once
 #include "CSingleton.h"
-#include "global.h"
-#include <filesystem>
-
+#include <string>
+#include <vector>
+#include <map>
 
 /**
-*  @author      lrz
-*  @class       CTheadManger
-*  @brief       Ïß³Ì¹ÜÀíÀà
+*  @class       CommFun
+*  @brief       é€šç”¨åŠ©æ‰‹å‡½æ•°ç±» (å» Qt ä¾èµ–ï¼Œä½¿ç”¨ std::filesystem)
 */
-
-namespace fs = std::filesystem;
-class CommFun : public QObject, public CSingleton<CommFun>
+class CommFun : public CSingleton<CommFun>
 {
-	Q_OBJECT
-	friend class CSingleton< CommFun>;
+	friend class CSingleton<CommFun>;
 public:
+	// æ‹·è´å•ä¸ªæ–‡ä»¶
+	bool FileCopy(const std::string& sourceFilePath, const std::string& targetFilePath);
 
-	// ¸´ÖÆµ¥¸öÎÄ¼ş
-	bool FileCopy(const QString& srcFolder, const QString& dstFolder);
+	// é€’å½’æ‹·è´æ–‡ä»¶å¤¹
+	bool FolderCopy(const std::string& sourceDirPath, const std::string& targetDirPath);
 
-	// µİ¹é¸´ÖÆÎÄ¼ş¼Ğ
-	bool FolderCopy(const QString& srcFolder, const QString& dstFolder);
+	// è·å–æ–‡ä»¶å¤¹ä¸‹æ‰€æœ‰çš„æ–‡ä»¶è·¯å¾„ï¼ˆé€’å½’ï¼‰
+	void GetFolderFile(const std::string& folderPath, std::vector<std::string>& vFile);
 
-	// »ñÈ¡ÎÄ¼ş¼ĞÖĞËùÓĞÎÄ¼şµÄÂ·¾¶£¨°üÀ¨×ÓÎÄ¼ş¼Ğ£©
-	void GetFolderFile(const QString& folderPath, std::vector<std::string>& vFile);
-
-	// »ñÈ¡µ±Ç°Ê±¼ä´Á×Ö·û´®£¨- : ¿Õ¸ñ Ìæ»»Îª_£©
+	// è·å–å½“å‰æ—¶é—´æˆ³å­—ç¬¦ä¸² YYYY_MM_DD_HH_MM_SS
 	std::string GetCurrentTimeStr();
 
-	// ¸¨Öúº¯Êı£º´òÓ¡ÈÕÖ¾
-	void printLog(const QString& message);
-	
+	// æ‰“å°æ—¥å¿—
+	void printLog(const std::string& message);
 
 	/**
-	*  @brief       Êı¾İÀàĞÍ×ª»»º¯Êı
-	*  @param[in]    QtMapÊı¾İÀàĞÍ
-	*  @param[out]   std::mapÊı¾İÀàĞÍ
-	*  @return
+	*  @brief       å°† Qt QMap è½¬æ¢ä¸º std::map çš„æ¨¡æ¿åŠ©æ‰‹å‡½æ•°
 	*/
 	template<typename QtMap, typename StdMap>
 	StdMap ConvertQMap2StdMap(const QtMap& qtMap)
@@ -52,9 +41,7 @@ public:
 		return stdMap;
 	}
 
-
-
 private:
-
-
+	CommFun() = default;
+	~CommFun() = default;
 };

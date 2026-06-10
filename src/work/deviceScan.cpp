@@ -1,4 +1,4 @@
-#include "deviceScan.h"
+ï»¿#include "deviceScan.h"
 
 
 #include <QObject>
@@ -11,10 +11,10 @@
 
 
 DeviceScan::DeviceScan(const std::string& device_id)
-	// µ÷ÓÃ»ùÀà¹¹Ôìº¯Êý
+	// ï¿½ï¿½ï¿½Ã»ï¿½ï¿½à¹¹ï¿½ìº¯ï¿½ï¿½
 	: IODeviceBase(device_id, 1)
 {
-		this->m_pImpl = std::make_unique<DeviceScanImpl>(device_id); // ÖØÐÂ¸³ÖµÎªÅÉÉúImpl
+		this->m_pImpl = std::make_unique<DeviceScanImpl>(device_id); // ï¿½ï¿½ï¿½Â¸ï¿½ÖµÎªï¿½ï¿½ï¿½ï¿½Impl
 }
 
 
@@ -28,8 +28,8 @@ DeviceScanImpl::DeviceScanImpl(const std::string& id)
 bool DeviceScanImpl::PerformTask(const BusinessTask& task)
 {
 	LOG_INFO(QString("Printer Device %1 is printing: %2").arg(QString::fromStdString(m_devID)).arg(QString::fromStdString(task.op)));
-	// Ä£Äâ´òÓ¡ÈÎÎñµÄÌØ¶¨Âß¼­
-	// ÅÐ¶ÏÈÎÎñ´¦ÀíÀàÐÍ£¬1. Õý³£Ö´ÐÐ£» 2. È¡ÏûÈÏÎª
+	// Ä£ï¿½ï¿½ï¿½Ó¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø¶ï¿½ï¿½ß¼ï¿½
+	// ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í£ï¿½1. ï¿½ï¿½ï¿½ï¿½Ö´ï¿½Ð£ï¿½ 2. È¡ï¿½ï¿½ï¿½ï¿½Îª
 	bool ret = false;
 	if(task.op != "2" && m_devStatus == DeviceStatus::BUSY)
 	{
@@ -38,10 +38,10 @@ bool DeviceScanImpl::PerformTask(const BusinessTask& task)
 	else if(task.op == "1" && m_devStatus == DeviceStatus::IDLE)
 	{
 		m_handleData.workType = SimulateWorkType::WORK_SCAN;
-		//ÉèÖÃÉè±¸×´Ì¬ÎªÃ¦ÂµÌ¬
+		//ï¿½ï¿½ï¿½ï¿½ï¿½è±¸×´Ì¬ÎªÃ¦ÂµÌ¬
 		SetStatus(DeviceStatus::BUSY);
 		ret = PerformSimulateTask(task);
-		//ÏÂ·¢ÈÎÎñ¿ªÊ¼Ö¸Áî
+		//ï¿½Â·ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼Ö¸ï¿½ï¿½
 	}
 	return ret;
 }
@@ -57,7 +57,7 @@ bool DeviceScanImpl::PerformSimulateTask(const BusinessTask& task)
 
 	try
 	{
-		// ÖØÖÃÈ¡Ïû±êÖ¾²¢¼ÇÂ¼µ±Ç°ÈÎÎñID
+		// ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ID
 		{
 			std::lock_guard<std::mutex> lock(m_cancelMtx);
 			m_taskCancelled = false;
@@ -65,8 +65,8 @@ bool DeviceScanImpl::PerformSimulateTask(const BusinessTask& task)
 			m_curRunTask = task;
 		}
 
-		// Ä£ÄâÈÎÎñÖ´ÐÐ£¬Êµ¼ÊÖÐ¿ÉÄÜÉæ¼°¸´ÔÓIO²Ù×÷
-		// »ñÈ¡ÖÐ¶ÏÊý¾Ý´¦Àí
+		// Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½Ð£ï¿½Êµï¿½ï¿½ï¿½Ð¿ï¿½ï¿½ï¿½ï¿½æ¼°ï¿½ï¿½ï¿½ï¿½IOï¿½ï¿½ï¿½ï¿½
+		// ï¿½ï¿½È¡ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½Ý´ï¿½ï¿½ï¿½
 		//SetStatus(DeviceStatus::BUSY);
 
 		auto curTimerStr = QString::fromStdString(CommFun::GetInstance().GetCurrentTimeStr());
@@ -74,13 +74,13 @@ bool DeviceScanImpl::PerformSimulateTask(const BusinessTask& task)
 		auto srcFolderPath = QCoreApplication::applicationDirPath() + QDir::separator() + QString("simulate_scan_data") + QDir::separator() + QString("src_data");
 		std::vector<std::string> vFilePath, vURLData;
 		std::string retInfo;
-		// »ñÈ¡Ô´ÎÄ¼þ¼ÐÖÐËùÓÐÌõÄ¿£¨ÎÄ¼þºÍ×ÓÎÄ¼þ¼Ð£©
-		CommFun::GetInstance().FolderCopy(srcFolderPath, dstFolderPath);
-		CommFun::GetInstance().GetFolderFile(dstFolderPath, vFilePath);
+		// È¡Ô´Ä¼Ä¿Ä¼Ä¼Ð£
+		CommFun::GetInstance().FolderCopy(srcFolderPath.toStdString(), dstFolderPath.toStdString());
+		CommFun::GetInstance().GetFolderFile(dstFolderPath.toStdString(), vFilePath);
 
 
-		// Ê¹ÓÃ¿ÉÖÐ¶ÏµÄË¯ÃßÀ´Ä£Äâ¹¤×÷£¬Êµ¼ÊÓ¦ÓÃÖÐÓ¦¸ÃÊÇÕæÊµµÄÉè±¸²Ù×÷
-		//------------ÈÎÎñ¿ªÊ¼--------------
+		// Ê¹Ã¿Ð¶ÏµË¯Ä£â¹¤ÊµÓ¦Ó¦Êµè±¸
+		//------------Ê¼--------------
 		auto start_time = std::chrono::steady_clock::now();
 		auto target_duration = std::chrono::seconds(30);
 		while (std::chrono::steady_clock::now() - start_time < target_duration)
@@ -89,17 +89,17 @@ bool DeviceScanImpl::PerformSimulateTask(const BusinessTask& task)
 			{
 				int a = 1;
 			}
-			// ¼ì²éÈ¡ÏûÈÎÎñÐÅºÅ
+			// ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åºï¿½
 			if (m_taskCancelled.load())
 			{
 				LOG_INFO(QString("Device %1 task %2 was cancelled.")
 					.arg(QString::fromStdString(m_devID))
 					.arg(QString::fromStdString(task.proId)));
 			
-				//·Ç¹ÊÕÏ×´Ì¬ÏÂÈ¡ÏûÈÎÎñ£¬ÉèÖÃ×´Ì¬ÉèÖÃÎª¿ÕÏÐ
+				//ï¿½Ç¹ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½
 				if (m_devStatus != DeviceStatus::ERR)
 				{
-					//Í¬²½Éè±¸×´Ì¬
+					//Í¬ï¿½ï¿½ï¿½è±¸×´Ì¬
 					SetStatus(DeviceStatus::IDLE);
 				}
 				{
@@ -107,10 +107,10 @@ bool DeviceScanImpl::PerformSimulateTask(const BusinessTask& task)
 					m_currentTaskId.clear();
 					m_curRunTask.Clear();
 				}
-				return false; // ÈÎÎñ±»È¡Ïû
+				return false; // ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½
 			}
-			//Í¬²½È¡ÏûµÄÉè±¸×´Ì¬
-			// Ê¹ÓÃÌõ¼þ±äÁ¿ÊµÏÖ¿ÉÖÐ¶ÏµÄµÈ´ý
+			//Í¬ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½è±¸×´Ì¬
+			// Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Êµï¿½Ö¿ï¿½ï¿½Ð¶ÏµÄµÈ´ï¿½
 			std::unique_lock<std::mutex> lock(m_cancelMtx);
 			m_cancelCV.wait_for(lock, std::chrono::milliseconds(100), [this]
 			{
@@ -130,8 +130,8 @@ bool DeviceScanImpl::PerformSimulateTask(const BusinessTask& task)
 				return false;
 			}
 		}
-		// ÊµÏÖOSSÉÏ´«²Ù×÷
-		LOG_INFO(QString(u8"É¨ÃèÒµÎñÏß³ÌÄ£ÄâÉè±¸ºÄÊ±²Ù×÷¶¨Ê±Æ÷µ½ÆÚ£¬Ä£ÄâÍê³ÉÉ¨Ãè²Ù×÷"));
+		// Êµï¿½ï¿½OSSï¿½Ï´ï¿½ï¿½ï¿½ï¿½ï¿½
+		LOG_INFO(QString(u8"É¨ï¿½ï¿½Òµï¿½ï¿½ï¿½ß³ï¿½Ä£ï¿½ï¿½ï¿½è±¸ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Ú£ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½É¨ï¿½ï¿½ï¿½ï¿½ï¿½"));
 		SingleOSSToken::GetInstance().UploadMulti(vFilePath, retInfo, vURLData);
 		for (int i = 0; i < vURLData.size(); ++i)
 		{
@@ -141,7 +141,7 @@ bool DeviceScanImpl::PerformSimulateTask(const BusinessTask& task)
 			tmpData.data_path = vURLData.at(i);
 			m_handleData.scanData.push_back(tmpData);
 		}
-		//------------ÈÎÎñÍê³É--------------
+		//------------ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½--------------
 
 		SetStatus(DeviceStatus::IDLE);
 		{
@@ -172,6 +172,6 @@ bool DeviceScanImpl::PerformSimulateTask(const BusinessTask& task)
 
 bool DeviceScanImpl::CancelTask(const BusinessTask& task)
 {
-	//È¡ÏûÈÎÎñµÄ´¦Àí
+	//È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä´ï¿½ï¿½ï¿½
 	return IODeviceBaseImpl::CancelTask(task);
 }

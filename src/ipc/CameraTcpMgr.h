@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "TcpServerWrapper.h"
 #include "MessageDefine.h"
@@ -16,21 +16,21 @@
 
 
 /**
- * @brief Ïà»úÈí¼þTCP¿Í»§¶ËÐÅÏ¢½á¹¹Ìå
+ * @brief ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½TCPï¿½Í»ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½á¹¹ï¿½ï¿½
  */
 struct CameraTcpClientInfo
 {
-	int socketId;                       // SocketÁ¬½ÓID
-	std::string deviceId;               // Éè±¸ID
-	std::string deviceStatus;           // Éè±¸×´Ì¬ "online/offline/destory"
-	bool isConnected;                   // ÊÇ·ñÁ¬½Ó
-	long long lastHeartbeatTime;        // ×îºóÐÄÌøÊ±¼ä
-	long long connectTime;              // Á¬½ÓÊ±¼ä
-	TcpConnection connection;           // TCPÁ¬½ÓÐÅÏ¢
+	int socketId;                       // Socketï¿½ï¿½ï¿½ï¿½ID
+	std::string deviceId;               // ï¿½è±¸ID
+	std::string deviceStatus;           // ï¿½è±¸×´Ì¬ "online/offline/destory"
+	bool isConnected;                   // ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½
+	long long lastHeartbeatTime;        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
+	long long connectTime;              // ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
+	TcpConnection connection;           // TCPï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
 
-	// ÈÎÎñ×´Ì¬
-	std::string currentTaskId;          // µ±Ç°ÈÎÎñID
-	bool isTaskRunning;                 // ÊÇ·ñÓÐÈÎÎñÔÚÔËÐÐ
+	// ï¿½ï¿½ï¿½ï¿½×´Ì¬
+	std::string currentTaskId;          // ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ID
+	bool isTaskRunning;                 // ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 	CameraTcpClientInfo()
 		: socketId(-1)
@@ -42,14 +42,14 @@ struct CameraTcpClientInfo
 };
 
 /**
- * @brief ÏûÏ¢»º´æ½á¹¹
+ * @brief ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½á¹¹
  */
 struct CachedMessage
 {
-	std::string deviceId;               // Ä¿±êÉè±¸ID
-	CameraJsonMessage message;          // »º´æµÄÏûÏ¢
-	long long cacheTime;                // »º´æÊ±¼ä
-	int retryCount;                     // ÖØÊÔ´ÎÊý
+	std::string deviceId;               // Ä¿ï¿½ï¿½ï¿½è±¸ID
+	CameraJsonMessage message;          // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
+	long long cacheTime;                // ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
+	int retryCount;                     // ï¿½ï¿½ï¿½Ô´ï¿½ï¿½ï¿½
 
 	CachedMessage(const std::string& devId, const CameraJsonMessage& msg)
 		: deviceId(devId)
@@ -68,14 +68,14 @@ struct CachedMessage
 //----------------------------CameraTcpManagerSignals----------------------------------------------
 
 /**
- * @brief Ïà»úÈí¼þTCP¿Í»§¶Ë¹ÜÀíÆ÷ÐÅºÅÀà
+ * @brief ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½TCPï¿½Í»ï¿½ï¿½Ë¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åºï¿½ï¿½ï¿½
  */
 class CameraTcpManagerSignals : public QObject
 {
 	Q_OBJECT
 
 signals:
-	// ¿Í»§¶ËÊÂ¼þÐÅºÅ
+	// ï¿½Í»ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½Åºï¿½
 	void SigCameraConnected(const std::string& deviceId);
 	void SigTest(const std::string& deviceId);
 
@@ -84,7 +84,7 @@ signals:
 	void SigCameraTaskFinished(const std::string& deviceId, const std::vector<CameraScanData>& scanData);
 	void SigCameraTaskError(const std::string& deviceId, const std::string& errorMsg);
 
-	// ¹ÜÀíÆ÷×´Ì¬ÐÅºÅ
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½Åºï¿½
 	void SigManagerError(int errorCode, const std::string& errorMessage);
 };
 
@@ -94,9 +94,9 @@ signals:
 //----------------------------CameraTcpManager----------------------------------------------
 
 /**
- * @brief Ïà»úÈí¼þTCP¿Í»§¶Ë¹ÜÀíÆ÷Àà£¨µ¥Àý£©
+ * @brief ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½TCPï¿½Í»ï¿½ï¿½Ë¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½à£¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
  * @author hard2Ser Team
- * @brief ×¨ÃÅ¹ÜÀíÏà»úÈí¼þTCPÁ¬½Ó£¨¶Ë¿Ú6001£©£¬ÊµÏÖÏà»úÈí¼þJSONÐ­Òé
+ * @brief ×¨ï¿½Å¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½TCPï¿½ï¿½ï¿½Ó£ï¿½ï¿½Ë¿ï¿½6001ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½JSONÐ­ï¿½ï¿½
  */
 class CameraTcpManager : public QObject//, public CSingleton<CameraTcpManager>
 {
@@ -110,54 +110,54 @@ public:
 	~CameraTcpManager();
 
 
-	// ·þÎñÆ÷¹ÜÀí½Ó¿Ú
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¿ï¿½
 	bool StartServer(int port = 6001);
 	void StopServer();
 	bool IsServerRunning() const;
 	int GetServerPort() const;
 
-	// ¿Í»§¶Ë¹ÜÀí½Ó¿Ú
+	// ï¿½Í»ï¿½ï¿½Ë¹ï¿½ï¿½ï¿½Ó¿ï¿½
 	bool SendMessageToCamera(const std::string& deviceId, const CameraJsonMessage& message);
 	bool SendTaskStartToCamera(const std::string& deviceId);
-	bool SendTaskCancelToCamera(const std::string& deviceId, const std::string& taskId);  // ÐÂÔö£º·¢ËÍÈÎÎñÈ¡ÏûÃüÁî
+	bool SendTaskCancelToCamera(const std::string& deviceId, const std::string& taskId);  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	bool SendDeviceStatusResponse(const std::string& deviceId, bool success = true, const std::string& msg = "success");
 	bool BroadcastMessage(const CameraJsonMessage& message);
 	bool DisconnectCamera(const std::string& deviceId);
 
-	// ²éÑ¯½Ó¿Ú
+	// ï¿½ï¿½Ñ¯ï¿½Ó¿ï¿½
 	int GetConnectedCameraCount() const;
 	std::vector<CameraTcpClientInfo> GetAllCameras() const;
 	CameraTcpClientInfo GetCameraByDeviceId(const std::string& deviceId) const;
 	std::vector<std::string> GetOnlineCameraDeviceIds() const;
 	bool IsCameraOnline(const std::string& deviceId) const;
 
-	// ÅäÖÃ¹ÜÀí
+	// ï¿½ï¿½ï¿½Ã¹ï¿½ï¿½ï¿½
 	void SetHeartbeatTimeout(int timeoutSeconds);
 	void SetMaxRetryCount(int maxRetry);
 	void EnableMessageCache(bool enable);
 
-	// ¡ï »Øµ÷º¯ÊýÀàÐÍ¶¨Òå
+	// ï¿½ï¿½ ï¿½Øµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¶ï¿½ï¿½ï¿½
 	using CameraConnectedCallback = std::function<void(const std::string&)>;
 	using CameraDisconnectedCallback = std::function<void(const std::string&)>;
 	using CameraTaskFinishedCallback = std::function<void(const std::string&, const std::vector<CameraScanData>&)>;
-	using CameraTaskCancelledCallback = std::function<void(const std::string&, bool)>;  // ÐÂÔö£ºÈÎÎñÈ¡Ïû»Øµ÷
+	using CameraTaskCancelledCallback = std::function<void(const std::string&, bool)>;  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½Øµï¿½
 	using CameraTaskErrorCallback = std::function<void(const std::string&, const std::string&)>;
 	using CameraDeviceStatusCallback = std::function<void(const std::string&, const std::string&)>;
 	using CameraManagerErrorCallback = std::function<void(int, const std::string&)>;
 
 
-	// ¡ï »Øµ÷º¯Êý×¢²á½Ó¿Ú
+	// ï¿½ï¿½ ï¿½Øµï¿½ï¿½ï¿½ï¿½ï¿½×¢ï¿½ï¿½Ó¿ï¿½
 	void RegisterCameraConnectedCallback(CameraConnectedCallback callback);
 	void RegisterCameraDisconnectedCallback(CameraDisconnectedCallback callback);
 	void RegisterCameraTaskFinishedCallback(CameraTaskFinishedCallback callback);
-	void RegisterCameraTaskCancelledCallback(CameraTaskCancelledCallback callback);  // ÐÂÔö£º×¢²áÈÎÎñÈ¡Ïû»Øµ÷
+	void RegisterCameraTaskCancelledCallback(CameraTaskCancelledCallback callback);  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½Øµï¿½
 	void RegisterCameraTaskErrorCallback(CameraTaskErrorCallback callback);
 	void RegisterCameraDeviceStatusCallback(CameraDeviceStatusCallback callback);
 	void RegisterCameraManagerErrorCallback(CameraManagerErrorCallback callback);
 
 
-	// ÐÅºÅ·¢ËÍÆ÷£¨±£³Ö¼æÈÝÐÔ£¬¿ÉÑ¡Ê¹ÓÃ£©
-	// ÐÅºÅ·ÃÎÊÆ÷
+	// ï¿½ÅºÅ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¼ï¿½ï¿½ï¿½ï¿½Ô£ï¿½ï¿½ï¿½Ñ¡Ê¹ï¿½Ã£ï¿½
+	// ï¿½ÅºÅ·ï¿½ï¿½ï¿½ï¿½ï¿½
 	CameraTcpManagerSignals* GetSignals() { return &m_signals; }
 
 signals:
@@ -165,98 +165,98 @@ signals:
 	void SigTest2();
 
 private slots:
-	// TCP·þÎñÆ÷ÊÂ¼þ´¦Àí
+	// TCPï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½
 	void OnTcpConnection(const TcpConnection& connection);
 	void OnTcpDisconnection(int socketId);
 	void OnTcpMessage(const OldTcpMessage& message);
 	void OnTcpError(int errorCode, const std::string& errorMessage);
 
-	// ¶¨Ê±Æ÷´¦Àí
+	// ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	void OnCleanupTimer();
 	void OnCacheRetryTimer();
 
 private:
-	// Ë½ÓÐ¹¹Ôìº¯Êý£¨µ¥ÀýÄ£Ê½£©
+	// Ë½ï¿½Ð¹ï¿½ï¿½ìº¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½
 	explicit CameraTcpManager(QObject* parent = nullptr);
 
 
-	// ½ûÓÃ¿½±´¹¹ÔìºÍ¸³Öµ²Ù×÷
+	// ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½Öµï¿½ï¿½ï¿½ï¿½
 	CameraTcpManager(const CameraTcpManager&) = delete;
 	CameraTcpManager& operator=(const CameraTcpManager&) = delete;
 
-	// ÏûÏ¢´¦Àí
+	// ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½
 	void HandleCameraMessage(int socketId, const std::string& messageData);
 	void HandleDeviceStatusMessage(int socketId, const CameraJsonMessage& message);
 	void HandleTaskFinishMessage(int socketId, const CameraJsonMessage& message);
 	void HandleTaskErrorMessage(int socketId, const CameraJsonMessage& message);
-	void HandleTaskCancelAckMessage(int socketId, const CameraJsonMessage& message);  // ÐÂÔö£º´¦ÀíÈÎÎñÈ¡ÏûÈ·ÈÏÏûÏ¢
-	void HandleTaskStartAckMessage(int socketId, const CameraJsonMessage& message);  // ÐÂÔö£º´¦ÀíÈÎÎñÈ¡ÏûÈ·ÈÏÏûÏ¢
+	void HandleTaskCancelAckMessage(int socketId, const CameraJsonMessage& message);  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½È·ï¿½ï¿½ï¿½ï¿½Ï¢
+	void HandleTaskStartAckMessage(int socketId, const CameraJsonMessage& message);  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½È·ï¿½ï¿½ï¿½ï¿½Ï¢
 
 
-	// ¿Í»§¶Ë¹ÜÀí
+	// ï¿½Í»ï¿½ï¿½Ë¹ï¿½ï¿½ï¿½
 	void RegisterCamera(int socketId, const std::string& deviceId);
 	void UnregisterCamera(int socketId);
 	void UpdateCameraHeartbeat(int socketId);
 	void UpdateCameraDeviceStatus(const std::string& deviceId, const std::string& status);
 
-	// »º´æ¹ÜÀí
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	void CacheMessage(const std::string& deviceId, const CameraJsonMessage& message);
 	void ProcessCachedMessages();
 	void ClearExpiredCache();
 
-	// ¸¨Öúº¯Êý
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	long long GetCurrentTimestamp();
 	void SendResponse(int socketId, const CameraJsonMessage& response);
 	bool IsValidDeviceId(const std::string& deviceId) const;
 
 private:
-	// µ¥ÀýÏà¹Ø
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	static std::unique_ptr<CameraTcpManager> s_instance;
 	static std::mutex s_instanceMutex;
 
-	// TCP·þÎñÆ÷ÊµÀý
+	// TCPï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½
 	std::unique_ptr<TcpServerWrapper> m_tcpServer;
 
-	// ¿Í»§¶Ë¹ÜÀí
+	// ï¿½Í»ï¿½ï¿½Ë¹ï¿½ï¿½ï¿½
 	mutable std::mutex m_camerasMutex;
 	std::unordered_map<int, CameraTcpClientInfo> m_socketToCamera;        // socketId -> CameraTcpClientInfo
 	std::unordered_map<std::string, int> m_deviceToSocket;               // deviceId -> socketId
 
-	// ÏûÏ¢»º´æ
+	// ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½
 	mutable std::mutex m_cacheMutex;
-	std::queue<CachedMessage> m_messageCache;                            // ÏûÏ¢»º´æ¶ÓÁÐ
-	std::atomic<bool> m_cacheEnabled;                                    // ÊÇ·ñÆôÓÃ»º´æ
-	static constexpr size_t MAX_CACHE_SIZE = 1000;                      // ×î´ó»º´æ´óÐ¡
-	static constexpr int MAX_CACHE_AGE_MS = 300000;                     // ×î´ó»º´æÊ±¼ä(5·ÖÖÓ)
+	std::queue<CachedMessage> m_messageCache;                            // ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	std::atomic<bool> m_cacheEnabled;                                    // ï¿½Ç·ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½
+	static constexpr size_t MAX_CACHE_SIZE = 1000;                      // ï¿½ï¿½ó»º´ï¿½ï¿½Ð¡
+	static constexpr int MAX_CACHE_AGE_MS = 300000;                     // ï¿½ï¿½ó»º´ï¿½Ê±ï¿½ï¿½(5ï¿½ï¿½ï¿½ï¿½)
 
-	// ÅäÖÃ²ÎÊý
-	std::atomic<int> m_heartbeatTimeout;    // ÐÄÌø³¬Ê±Ê±¼ä(Ãë)
-	std::atomic<int> m_maxRetryCount;       // ×î´óÖØÊÔ´ÎÊý
+	// ï¿½ï¿½ï¿½Ã²ï¿½ï¿½ï¿½
+	std::atomic<int> m_heartbeatTimeout;    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±Ê±ï¿½ï¿½(ï¿½ï¿½)
+	std::atomic<int> m_maxRetryCount;       // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½ï¿½ï¿½
 
-	// ¶¨Ê±Æ÷
-	QTimer* m_cleanupTimer;                 // ÇåÀí¶¨Ê±Æ÷
-	QTimer* m_cacheRetryTimer;              // »º´æÖØÊÔ¶¨Ê±Æ÷
+	// ï¿½ï¿½Ê±ï¿½ï¿½
+	QTimer* m_cleanupTimer;                 // ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
+	QTimer* m_cacheRetryTimer;              // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½Ê±ï¿½ï¿½
 
-	// ÐÅºÅ¶ÔÏó
+	// ï¿½ÅºÅ¶ï¿½ï¿½ï¿½
 	CameraTcpManagerSignals m_signals;
 
-	// ¡ï »Øµ÷º¯Êý´æ´¢
+	// ï¿½ï¿½ ï¿½Øµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ´¢
 	std::vector<CameraConnectedCallback> m_connectedCallbacks;
 	std::vector<CameraDisconnectedCallback> m_disconnectedCallbacks;
 	std::vector<CameraTaskFinishedCallback> m_taskFinishedCallbacks;
-	std::vector<CameraTaskCancelledCallback> m_taskCancelledCallbacks;  // ÐÂÔö£ºÈÎÎñÈ¡Ïû»Øµ÷´æ´¢
+	std::vector<CameraTaskCancelledCallback> m_taskCancelledCallbacks;  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½Øµï¿½ï¿½æ´¢
 	std::vector<CameraTaskErrorCallback> m_taskErrorCallbacks;
 	std::vector<CameraDeviceStatusCallback> m_deviceStatusCallbacks;
 	std::vector<CameraManagerErrorCallback> m_managerErrorCallbacks;
 
-	// »Øµ÷º¯Êý»¥³âËø
+	// ï¿½Øµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	mutable std::mutex m_callbacksMutex;
 
-	// ¡ï »Øµ÷º¯ÊýÍ¨Öª·½·¨
+	// ï¿½ï¿½ ï¿½Øµï¿½ï¿½ï¿½ï¿½ï¿½Í¨Öªï¿½ï¿½ï¿½ï¿½
 	void NotifyCameraConnected(const std::string& deviceId);
 	void NotifyCameraDisconnected(const std::string& deviceId);
 	void NotifyCameraTaskFinished(const std::string& deviceId, const std::vector<CameraScanData>& scanData);
-	void NotifyCameraTaskCancelled(const std::string& deviceId, bool success);  // ÐÂÔö£ºÍ¨ÖªÈÎÎñÈ¡Ïû½á¹û
+	void NotifyCameraTaskCancelled(const std::string& deviceId, bool success);  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¨Öªï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½
 	void NotifyCameraTaskError(const std::string& deviceId, const std::string& errorMsg);
 	void NotifyCameraDeviceStatus(const std::string& deviceId, const std::string& status);
 	void NotifyCameraManagerError(int errorCode, const std::string& errorMessage);

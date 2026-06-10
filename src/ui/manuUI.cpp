@@ -1,4 +1,4 @@
-#include "manuUI.h"
+ï»¿#include "manuUI.h"
 #include "global.h"
 
 #include <QGridLayout>
@@ -34,11 +34,11 @@ void ManuUI::Init()
 	m_devRegTimer = new QTimer(this);
 	//connect(m_devRegTimer, &QTimer::timeout, this, &ManuUI::OnSendDevReg);
 	m_devRegTimer->setSingleShot(false);
-	//Ã¿10Ãë·¢ËÍÒ»´ÎÉè±¸×¢²áÐÅÏ¢
+	//Ã¿10ï¿½ë·¢ï¿½ï¿½Ò»ï¿½ï¿½ï¿½è±¸×¢ï¿½ï¿½ï¿½ï¿½Ï¢
 	m_devRegTimer->start(10000);
 
-	//»ñÈ¡µ±Ç°Éè±¸×´Ì¬
-	//Ìí¼ÓÉè±¸
+	//ï¿½ï¿½È¡ï¿½ï¿½Ç°ï¿½è±¸×´Ì¬
+	//ï¿½ï¿½ï¿½ï¿½è±¸
 }
 
 void ManuUI::InitConnect()
@@ -50,23 +50,23 @@ void ManuUI::ClearDevStatus(int idx)
 {
 	QString slotKey = QString("slot_%1").arg(idx);
 
-	// Çå¿ÕÉè±¸IDÏÔÊ¾
+	// ï¿½ï¿½ï¿½ï¿½è±¸IDï¿½ï¿½Ê¾
 	if (m_LabMap.contains(slotKey))
 	{
 		QLabel* devIdLabel = m_devIdLabMap[slotKey];
-		devIdLabel->setText("Î´Á¬½Ó");
+		devIdLabel->setText("Î´ï¿½ï¿½ï¿½ï¿½");
 		devIdLabel->setToolTip("");
 	}
 
-	// Çå¿ÕÉè±¸×´Ì¬ÏÔÊ¾
+	// ï¿½ï¿½ï¿½ï¿½è±¸×´Ì¬ï¿½ï¿½Ê¾
 	if (m_devStatusLabMap.contains(slotKey))
 	{
 		QLabel* statusLabel = m_devStatusLabMap[slotKey];
-		statusLabel->setText("ÀëÏß");
+		statusLabel->setText("ï¿½ï¿½ï¿½ï¿½");
 		statusLabel->setStyleSheet("QLabel { color: gray; font-weight: bold; }");
 	}
 
-	// Çå¿Õ²ÛÎ»Ó³Éä
+	// ï¿½ï¿½Õ²ï¿½Î»Ó³ï¿½ï¿½
 	m_devMap.remove(idx);
 }
 
@@ -79,7 +79,7 @@ void ManuUI::GetDevStatusInfo(const DeviceStatus status, QString& devStatus, QCo
 	case DeviceStatus::IDLE:
 	{
 		devStatusColor = Qt::green;
-		devStatus = QString::fromLocal8Bit("¿ÕÏÐ");
+		devStatus = QString::fromLocal8Bit("ï¿½ï¿½ï¿½ï¿½");
 		break;
 	}
 	case DeviceStatus::BUSY:
@@ -91,13 +91,13 @@ void ManuUI::GetDevStatusInfo(const DeviceStatus status, QString& devStatus, QCo
 	case DeviceStatus::ERR:
 	{
 		devStatusColor = Qt::red;
-		devStatus = QString::fromLocal8Bit("´íÎó");
+		devStatus = QString::fromLocal8Bit("ï¿½ï¿½ï¿½ï¿½");
 		break;
 	}
 	case DeviceStatus::OFFLINE:
 	{
 		devStatusColor = Qt::gray;
-		devStatus = QString::fromLocal8Bit("ÀëÏß");
+		devStatus = QString::fromLocal8Bit("ï¿½ï¿½ï¿½ï¿½");
 		break;
 	}
 	default:
@@ -123,14 +123,14 @@ void ManuUI::InitUI()
 
 	QVBoxLayout* pv_work = new QVBoxLayout();
 	{
-		QGroupBox* workGroup = new QGroupBox(u8"ÖÆ×÷Ä£¿é");
+		QGroupBox* workGroup = new QGroupBox(u8"ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½");
 		{
 			QVBoxLayout* ph_v = new QVBoxLayout(workGroup);
 			{
 				QHBoxLayout* ph_lab = new QHBoxLayout();
 				{
-					QLabel* workLab = new QLabel(u8"ÖÆ×÷Ïß³Ì");
-					QLabel* workStatus = new QLabel(u8"Ïß³Ì×´Ì¬");
+					QLabel* workLab = new QLabel(u8"ï¿½ï¿½ï¿½ï¿½ï¿½ß³ï¿½");
+					QLabel* workStatus = new QLabel(u8"ï¿½ß³ï¿½×´Ì¬");
 					ph_lab->addWidget(workLab, 1);
 					ph_lab->addWidget(workStatus, 1);
 
@@ -140,23 +140,23 @@ void ManuUI::InitUI()
 				QHBoxLayout* ph_btn = new QHBoxLayout();
 				{
 
-					QPushButton* startBtn = new QPushButton(u8"¿ªÊ¼Ïß³Ì", this);
-					QPushButton* stopBtn = new QPushButton(u8"Í£Ö¹Ïß³Ì", this);
-					QPushButton* addBtn = new QPushButton(u8"Ôö¼ÓÉè±¸", this);
+					QPushButton* startBtn = new QPushButton(u8"ï¿½ï¿½Ê¼ï¿½ß³ï¿½", this);
+					QPushButton* stopBtn = new QPushButton(u8"Í£Ö¹ï¿½ß³ï¿½", this);
+					QPushButton* addBtn = new QPushButton(u8"ï¿½ï¿½ï¿½ï¿½ï¿½è±¸", this);
 					ph_btn->addWidget(startBtn, 1);
 					ph_btn->addWidget(stopBtn, 1);
 					ph_btn->addWidget(addBtn, 1);
 
-					//TODO: ½ûÓÃÏß³Ì¹ÜÀí°´Å¥
+					//TODO: ï¿½ï¿½ï¿½ï¿½ï¿½ß³Ì¹ï¿½ï¿½ï¿½ï¿½Å¥
 					startBtn->setEnabled(false);
 					stopBtn->setEnabled(false);
 					addBtn->setEnabled(false);
 
 				}
 				ph_v->addLayout(ph_btn);
-				QGroupBox* devGroup1 = new QGroupBox(u8"Éè±¸1");
+				QGroupBox* devGroup1 = new QGroupBox(u8"ï¿½è±¸1");
 				{
-					//ph½øÐÐ·â×°
+					//phï¿½ï¿½ï¿½Ð·ï¿½×°
 					QHBoxLayout* pv_devUnit = new QHBoxLayout(devGroup1);
 					{
 						//devID devStatus
@@ -165,7 +165,7 @@ void ManuUI::InitUI()
 						QVBoxLayout* pv_devID = new QVBoxLayout();
 						{
 							QLabel* devLab = new QLabel();
-							devLab->setText(u8"Éè±¸ID");
+							devLab->setText(u8"ï¿½è±¸ID");
 
 							QLabel* devID = new QLabel();
 							devID->setText("00");
@@ -183,7 +183,7 @@ void ManuUI::InitUI()
 						QVBoxLayout* pv_devStatus = new QVBoxLayout();
 						{
 							QLabel* titleLab = new QLabel();
-							titleLab->setText(u8"Éè±¸×´Ì¬");
+							titleLab->setText(u8"ï¿½è±¸×´Ì¬");
 
 							QLabel* statusLab = new QLabel();
 							statusLab->setText("offline");
@@ -203,17 +203,17 @@ void ManuUI::InitUI()
 							{
 
 								QLabel* titleLab = new QLabel();
-								titleLab->setText(u8"Éè±¸²Ù×÷");
+								titleLab->setText(u8"ï¿½è±¸ï¿½ï¿½ï¿½ï¿½");
 								ph_title->addWidget(titleLab);
 							}
 							pv_btnOper->addLayout(ph_title);
 
 							QHBoxLayout* ph_btn = new QHBoxLayout();
 							{
-								QPushButton* btn1 = new QPushButton(u8"·Ö·¢");
-								QPushButton* btn2 = new QPushButton(u8"¹ÊÕÏ");
-								QPushButton* btn3 = new QPushButton(u8"È¡Ïû");
-								QPushButton* btn4 = new QPushButton(u8"Íê³É");
+								QPushButton* btn1 = new QPushButton(u8"ï¿½Ö·ï¿½");
+								QPushButton* btn2 = new QPushButton(u8"ï¿½ï¿½ï¿½ï¿½");
+								QPushButton* btn3 = new QPushButton(u8"È¡ï¿½ï¿½");
+								QPushButton* btn4 = new QPushButton(u8"ï¿½ï¿½ï¿½");
 
 								btn1->setProperty("layout", QVariant::fromValue(pv_devID));
 								btn2->setProperty("layout", QVariant::fromValue(pv_devID));
@@ -242,9 +242,9 @@ void ManuUI::InitUI()
 					devGroup1->setLayout(pv_devUnit);
 				}
 
-				QGroupBox* devGroup2 = new QGroupBox(u8"Éè±¸2");
+				QGroupBox* devGroup2 = new QGroupBox(u8"ï¿½è±¸2");
 				{
-					//ph½øÐÐ·â×°
+					//phï¿½ï¿½ï¿½Ð·ï¿½×°
 					QHBoxLayout* pv_devUnit = new QHBoxLayout(devGroup2);
 					{
 						//devID devStatus
@@ -253,7 +253,7 @@ void ManuUI::InitUI()
 						QVBoxLayout* pv_devID = new QVBoxLayout();
 						{
 							QLabel* devLab = new QLabel();
-							devLab->setText(u8"Éè±¸ID");
+							devLab->setText(u8"ï¿½è±¸ID");
 
 							QLabel* devID = new QLabel();
 							devID->setText("01");
@@ -270,7 +270,7 @@ void ManuUI::InitUI()
 						QVBoxLayout* pv_devStatus = new QVBoxLayout();
 						{
 							QLabel* titleLab = new QLabel();
-							titleLab->setText(u8"Éè±¸×´Ì¬");
+							titleLab->setText(u8"ï¿½è±¸×´Ì¬");
 
 							QLabel* statusLab = new QLabel();
 							statusLab->setText("offline");
@@ -291,17 +291,17 @@ void ManuUI::InitUI()
 							{
 
 								QLabel* titleLab = new QLabel();
-								titleLab->setText(u8"Éè±¸²Ù×÷");
+								titleLab->setText(u8"ï¿½è±¸ï¿½ï¿½ï¿½ï¿½");
 								ph_title->addWidget(titleLab);
 							}
 							pv_btnOper->addLayout(ph_title);
 
 							QHBoxLayout* ph_btn = new QHBoxLayout();
 							{
-								QPushButton* btn1 = new QPushButton(u8"·Ö·¢");
-								QPushButton* btn2 = new QPushButton(u8"¹ÊÕÏ");
-								QPushButton* btn3 = new QPushButton(u8"È¡Ïû");
-								QPushButton* btn4 = new QPushButton(u8"Íê³É");
+								QPushButton* btn1 = new QPushButton(u8"ï¿½Ö·ï¿½");
+								QPushButton* btn2 = new QPushButton(u8"ï¿½ï¿½ï¿½ï¿½");
+								QPushButton* btn3 = new QPushButton(u8"È¡ï¿½ï¿½");
+								QPushButton* btn4 = new QPushButton(u8"ï¿½ï¿½ï¿½");
 
 								btn1->setProperty("layout", QVariant::fromValue(pv_devID));
 								btn2->setProperty("layout", QVariant::fromValue(pv_devID));
@@ -330,9 +330,9 @@ void ManuUI::InitUI()
 					devGroup2->setLayout(pv_devUnit);
 				}
 
-				QGroupBox* devGroup3 = new QGroupBox(u8"Éè±¸3");
+				QGroupBox* devGroup3 = new QGroupBox(u8"ï¿½è±¸3");
 				{
-					//ph½øÐÐ·â×°
+					//phï¿½ï¿½ï¿½Ð·ï¿½×°
 					QHBoxLayout* pv_devUnit = new QHBoxLayout(devGroup3);
 					{
 						//devID devStatus
@@ -341,7 +341,7 @@ void ManuUI::InitUI()
 						QVBoxLayout* pv_devID = new QVBoxLayout();
 						{
 							QLabel* devLab = new QLabel();
-							devLab->setText(u8"Éè±¸ID");
+							devLab->setText(u8"ï¿½è±¸ID");
 
 							QLabel* devID = new QLabel();
 							devID->setText("02");
@@ -359,7 +359,7 @@ void ManuUI::InitUI()
 						QVBoxLayout* pv_devStatus = new QVBoxLayout();
 						{
 							QLabel* titleLab = new QLabel();
-							titleLab->setText(u8"Éè±¸×´Ì¬");
+							titleLab->setText(u8"ï¿½è±¸×´Ì¬");
 
 							QLabel* statusLab = new QLabel();
 							statusLab->setText("offline");
@@ -379,17 +379,17 @@ void ManuUI::InitUI()
 							{
 
 								QLabel* titleLab = new QLabel();
-								titleLab->setText(u8"Éè±¸²Ù×÷");
+								titleLab->setText(u8"ï¿½è±¸ï¿½ï¿½ï¿½ï¿½");
 								ph_title->addWidget(titleLab);
 							}
 							pv_btnOper->addLayout(ph_title);
 
 							QHBoxLayout* ph_btn = new QHBoxLayout();
 							{
-								QPushButton* btn1 = new QPushButton(u8"·Ö·¢");
-								QPushButton* btn2 = new QPushButton(u8"¹ÊÕÏ");
-								QPushButton* btn3 = new QPushButton(u8"È¡Ïû");
-								QPushButton* btn4 = new QPushButton(u8"Íê³É");
+								QPushButton* btn1 = new QPushButton(u8"ï¿½Ö·ï¿½");
+								QPushButton* btn2 = new QPushButton(u8"ï¿½ï¿½ï¿½ï¿½");
+								QPushButton* btn3 = new QPushButton(u8"È¡ï¿½ï¿½");
+								QPushButton* btn4 = new QPushButton(u8"ï¿½ï¿½ï¿½");
 
 								btn1->setProperty("layout", QVariant::fromValue(pv_devID));
 								btn2->setProperty("layout", QVariant::fromValue(pv_devID));
@@ -431,7 +431,7 @@ void ManuUI::InitUI()
 	pv_main->addLayout(pv_work);
 
 
-	//½ûÓÃ³ý¹ÊÕÏÍâµÄËùÓÐ°´Å¥
+	//ï¿½ï¿½ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð°ï¿½Å¥
 	for (const auto& it : m_btnGroup->buttons())
 	{
 
@@ -445,14 +445,14 @@ void ManuUI::InitUI()
 
 void ManuUI::SyncRegDevStatus(const std::vector<DeviceInfo>& data)
 {
-	//Note: Í¬²½Éè±¸×´Ì¬£¬ÈÎÎñ×´Ì¬
+	//Note: Í¬ï¿½ï¿½ï¿½è±¸×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬
 
 	//clear_dev_info
 
 	int slotIdx = 0;
 	for (const auto& it : data)
 	{
-		//2Îªµ±Ç°ÖÆ×÷Ïß³Ì¶ÔÓ¦µÄÃ¶¾Ù
+		//2Îªï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ß³Ì¶ï¿½Ó¦ï¿½ï¿½Ã¶ï¿½ï¿½
 		if (it.devType != 2)
 		{
 			continue;
@@ -467,7 +467,7 @@ void ManuUI::SyncRegDevStatus(const std::vector<DeviceInfo>& data)
 
 void ManuUI::SyncWorkDevStatus(const DeviceInfo& data)
 {
-	//ÅÐ¶ÏÉè±¸Ëù´¦ÓÚµÄslot
+	//ï¿½Ð¶ï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½slot
 	int slotIdx = 0;
 	auto valList = m_devMap.values();
 	for (auto i = m_devMap.begin(); i != m_devMap.end(); ++i)
@@ -486,17 +486,17 @@ void ManuUI::UpdateDevInfo(int idx, const DeviceInfo& devInfo)
 	QString slotKey = QString("slot_%1").arg(idx);
 	QString	devId = QString::fromStdString(devInfo.devId);
 
-	//¸üÐÂIDÏÔÊ¾
+	//ï¿½ï¿½ï¿½ï¿½IDï¿½ï¿½Ê¾
 	if (m_devIdLabMap.contains(slotKey))
 	{
 		QLabel* devIdLab = m_devIdLabMap[slotKey];
 		devIdLab->setText(devId);
-		devIdLab->setToolTip(QString("Éè±¸ÀàÐÍ: %1").arg(devInfo.devType));
+		devIdLab->setToolTip(QString("ï¿½è±¸ï¿½ï¿½ï¿½ï¿½: %1").arg(devInfo.devType));
 
 		m_devIdLabMap[devId] = devIdLab;
 	}
 
-	//¸üÐÂÉè±¸×´Ì¬ÏÔÊ¾
+	//ï¿½ï¿½ï¿½ï¿½ï¿½è±¸×´Ì¬ï¿½ï¿½Ê¾
 	if (m_devStatusLabMap.contains(slotKey))
 	{
 		QLabel* devStatusLab = m_devStatusLabMap[slotKey];
@@ -521,23 +521,23 @@ void ManuUI::UpdateDevStatusInfo(QLabel* lab, const DeviceStatus& data)
 
 void ManuUI::OnConnBtnClicked(QAbstractButton* btn)
 {
-	//»ñÈ¡°´Å¥´¥·¢¶ÔÓ¦µÄBtn×´Ì¬
+	//ï¿½ï¿½È¡ï¿½ï¿½Å¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½Btn×´Ì¬
 	auto a1 = btn->text();
 	auto a2 = m_btnGroup->id(btn);
 
 	QVariant layoutVar = btn->property("layout");
 	if (!layoutVar.canConvert<QVBoxLayout*>())
 	{
-		LOG_INFO(QString::fromLocal8Bit("ÎÞ·¨»ñÈ¡µ±Ç°²¼¾ÖÐÅÏ¢"));
+		LOG_INFO(QString::fromLocal8Bit("ï¿½Þ·ï¿½ï¿½ï¿½È¡ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢"));
 		return;
 	}
 
-	//»ñÈ¡µ±Ç°Éè±¸ID
+	//ï¿½ï¿½È¡ï¿½ï¿½Ç°ï¿½è±¸ID
 	QVBoxLayout* layout = layoutVar.value<QVBoxLayout*>();
 	QLayoutItem* devItem = layout->itemAt(1);
 	if (!devItem)
 	{
-		LOG_INFO(QString::fromLocal8Bit("µ±Ç°²¼¾ÖÖÐÎÞQLabel¿Ø¼þ£¬ÎÞ·¨»ñÈ¡DevÐÅÏ¢"));
+		LOG_INFO(QString::fromLocal8Bit("ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½QLabelï¿½Ø¼ï¿½ï¿½ï¿½ï¿½Þ·ï¿½ï¿½ï¿½È¡Devï¿½ï¿½Ï¢"));
 		return;
 	}
 	QLabel* devLab = qobject_cast<QLabel*>(devItem->widget());

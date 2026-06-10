@@ -1,4 +1,4 @@
-#include "scanWork.h"
+ï»¿#include "scanWork.h"
 #include "global.h"
 
 
@@ -19,7 +19,7 @@
 ScanWorkThd::ScanWorkThd()
 	: WorkThdBase("scan")
 {
-	//m_pImpl ÊÇ unique_ptr<IBusinessThread> ÀàÐÍ£¬¿ÉÒÔÖ±½ÓÅÉÉúImpl
+	//m_pImpl ï¿½ï¿½ unique_ptr<IBusinessThread> ï¿½ï¿½ï¿½Í£ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Impl
 	this->m_pImpl = std::make_unique<ScanWorkThdImpl>();
 
 	//connect
@@ -47,10 +47,10 @@ void ScanWorkThd::AddDevice(const std::shared_ptr<DeviceScan>& dev)
 ScanWorkThdImpl::ScanWorkThdImpl()
 	: WorkThdBaseImpl("scan")
 {	
-	//³õÊ¼»¯Ïà»úÉè±¸ID¼¯ºÏ£¨¿É¸ù¾ÝÅäÖÃÎÄ¼þ»òÊý¾Ý¿âÅäÖÃ£©
-	m_cameraDeviceIds.insert("100001"); // Ïà»úÉè±¸ID
+	//ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸IDï¿½ï¿½ï¿½Ï£ï¿½ï¿½É¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¿ï¿½ï¿½ï¿½ï¿½Ã£ï¿½
+	m_cameraDeviceIds.insert("100001"); // ï¿½ï¿½ï¿½ï¿½è±¸ID
 
-	////// Á¬½ÓÏà»úTCP¹ÜÀíÆ÷ÐÅºÅ
+	////// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½TCPï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åºï¿½
 	//auto cameraMgrSig = CameraTcpManager::GetInstance().GetSignals();
 	//CameraTcpManager::GetInstance().StartServer(); 
 	////auto sig = CameraTcpManager::GetInstance();
@@ -60,14 +60,14 @@ ScanWorkThdImpl::ScanWorkThdImpl()
 	//connect(cameraMgrSig, &CameraTcpManagerSignals::SigCameraDisconnected, this, &ScanWorkThdImpl::OnCameraDisconnected, Qt::QueuedConnection);
 	//connect(cameraMgrSig, &CameraTcpManagerSignals::SigCameraTaskFinished, this, &ScanWorkThdImpl::OnCameraTaskFinished, Qt::QueuedConnection);
 	//connect(cameraMgrSig, &CameraTcpManagerSignals::SigCameraTaskError, this, &ScanWorkThdImpl::OnCameraTaskError, Qt::QueuedConnection);
-	//LOG_INFO(QString(u8"É¨ÃèÒµÎñÏß³ÌÒÑÁ¬½ÓÏà»úTCP¹ÜÀíÆ÷"));
+	//LOG_INFO(QString(u8"É¨ï¿½ï¿½Òµï¿½ï¿½ï¿½ß³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½TCPï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"));
 
 
-	// ¡ï Ê¹ÓÃ»Øµ÷º¯Êý×¢²áÏà»úÊÂ¼þ´¦Àí
+	// ï¿½ï¿½ Ê¹ï¿½Ã»Øµï¿½ï¿½ï¿½ï¿½ï¿½×¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½
 	auto& cameraMgr = CameraTcpManager::GetInstance();
 	cameraMgr.StartServer();
 
-	// ×¢²á»Øµ÷º¯Êý - Ê¹ÓÃlambda±í´ïÊ½²¶»ñthisÖ¸Õë
+	// ×¢ï¿½ï¿½Øµï¿½ï¿½ï¿½ï¿½ï¿½ - Ê¹ï¿½ï¿½lambdaï¿½ï¿½ï¿½Ê½ï¿½ï¿½ï¿½ï¿½thisÖ¸ï¿½ï¿½
 	cameraMgr.RegisterCameraConnectedCallback([this](const std::string& deviceId)	
 	{
 		this->OnCameraConnected(deviceId);
@@ -88,18 +88,18 @@ ScanWorkThdImpl::ScanWorkThdImpl()
 		this->OnCameraTaskError(deviceId, errorMsg);
 	});
 
-	// ×¢²áÏà»úÈÎÎñÈ¡Ïû»Øµ÷
+	// ×¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½Øµï¿½
 	cameraMgr.RegisterCameraTaskCancelledCallback([this](const std::string& deviceId, bool success)
 	{
 		this->OnCameraTaskCancelled(deviceId, success);
 	});
 
-	LOG_INFO(QString(u8"É¨ÃèÒµÎñÏß³Ì×¢²áÏà»úTCP¹ÜÀíÆ÷»Øµ÷º¯ÊýÍê³É"));
+	LOG_INFO(QString(u8"É¨ï¿½ï¿½Òµï¿½ï¿½ï¿½ß³ï¿½×¢ï¿½ï¿½ï¿½ï¿½ï¿½TCPï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"));
 }
 
 ScanWorkThdImpl::~ScanWorkThdImpl()
 {
-	// ÇåÀíÏà»úÈÎÎñ×´Ì¬
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬
 	std::lock_guard<std::mutex> lock(m_cameraTasksMutex);
 	m_cameraRunningTasks.clear();
 }
@@ -113,17 +113,17 @@ void ScanWorkThdImpl::AddDevice(const std::shared_ptr<DeviceScan>& dev)
 	});
 	auto a = dev->GetDeviceID();
 	auto size = m_devicesMap.size();
-	// ¸üÐÂ×î´ó²¢·¢ÈÎÎñÊý
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ó²¢·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	UpdateMaxConcurrentTasks();
 	LOG_INFO(QString(u8"scan_work_thd: Added device %1").arg(dev->GetDeviceID().c_str()));
 }
 
-//op(ÈÎÎñ²Ù×÷ÀàÐÍ 1¿ªÊ¼ 3½áÊø 4È¡ÏûÈÎÎñ£¬½ø³ÌÖØÐÂÅÅ¶Ó 5ÖÕÖ¹ÈÎÎñ
+//op(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 1ï¿½ï¿½Ê¼ 3ï¿½ï¿½ï¿½ï¿½ 4È¡ï¿½ï¿½ï¿½ï¿½ï¿½ñ£¬½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¶ï¿½ 5ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½ï¿½
 void ScanWorkThdImpl::Run()
 {
 	while (m_bRunning)
 	{
-		// ÇåÀíÒÑÍê³ÉµÄÈÎÎñ
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Éµï¿½ï¿½ï¿½ï¿½ï¿½
 		CleanupCompletedTasks();
 
 		std::unique_lock<std::mutex> lock(m_taskMtx);
@@ -137,7 +137,7 @@ void ScanWorkThdImpl::Run()
 			break;
 		}
 
-		// ´¦Àí¶ÓÁÐÖÐµÄÈÎÎñ£¬ÇÒ²»³¬¹ý×î´ó²¢·¢Êý£¨TODO£ººóÐø¸ù¾ÝÉè±¸Êý½øÐÐÐÞ¸Ä
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ó²¢·ï¿½ï¿½ï¿½ï¿½ï¿½TODOï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½
 		while (!m_taskQueue.empty() && GetRunningTaskCount() < GetMaxConcurrentTasks()) 
 		{
 			BusinessTask curTask = m_taskQueue.front();
@@ -148,29 +148,29 @@ void ScanWorkThdImpl::Run()
 			m_taskQueue.pop();
 			lock.unlock();
 
-			// ¼ì²éÉè±¸ÊÇ·ñ´æÔÚÇÒ¿ÉÓÃ
+			// ï¿½ï¿½ï¿½ï¿½è±¸ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½Ò¿ï¿½ï¿½ï¿½
 			auto device_it = m_devicesMap.find(curTask.devId);
 			if (device_it != m_devicesMap.end()) 
 			{
 
-				// ¼ì²éÉè±¸ÊÇ·ñ¿ÕÏÐ
+				// ï¿½ï¿½ï¿½ï¿½è±¸ï¿½Ç·ï¿½ï¿½ï¿½ï¿½
 				if (device_it->second->GetStatus() == DeviceStatus::IDLE) 
 				{
 					//LOG_INFO(QString("scan_work_thd processing task: %1 for device %2").arg(QString::fromStdString(curTask.proId)).arg(QString::fromStdString(curTask.devId)));
-					//×¼±¸¿ªÊ¼Ö´ÐÐÈÎÎñ£¬Í¬²½·¢Éú¿ªÊ¼ÈÎÎñ±¨ÎÄ
+					//×¼ï¿½ï¿½ï¿½ï¿½Ê¼Ö´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 					auto startOp = "1";
 					task.op = startOp;
 					m_taskStatusCallBack1(task);
-					// Ö´ÐÐÈÎÎñ£¬ÔÚ¾ßÌåÈÎÎñÖØ¸ù¾Ý±êÖ¾Î»Êý¾Ý£¬ÅÐ¶ÏÊÇÕæÊµÊý¾Ý»¹ÊÇÄ£ÄâÊý¾Ý
+					// Ö´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½Ý±ï¿½Ö¾Î»ï¿½ï¿½ï¿½Ý£ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½ï¿½Ý»ï¿½ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 					ExecuteTaskAsync(curTask);
 				}
 				else 
 				{
-					// Éè±¸Ã¦Âµ£¬ÖØÐÂ·ÅÈë¶ÓÁÐ
+					// ï¿½è±¸Ã¦Âµï¿½ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 					lock.lock();
 					m_taskQueue.push(curTask);
 					lock.unlock();
-					break; // µÈ´ýÏÂ´ÎÑ­»·
+					break; // ï¿½È´ï¿½ï¿½Â´ï¿½Ñ­ï¿½ï¿½
 				}
 			}
 			else
@@ -185,7 +185,7 @@ void ScanWorkThdImpl::Run()
 		}
 	}
 
-	// Í£Ö¹Ê±µÈ´ýËùÓÐÈÎÎñÍê³É
+	// Í£Ö¹Ê±ï¿½È´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	while (GetRunningTaskCount() > 0) 
 	{
 		CleanupCompletedTasks();
@@ -196,19 +196,19 @@ void ScanWorkThdImpl::Run()
 void ScanWorkThdImpl::ExecuteTaskAsync(const BusinessTask& task)
 {
 	std::lock_guard<std::mutex> lock(m_runningTasksMtx);
-	// ´´½¨ÈÎÎñÖ´ÐÐÐÅÏ¢
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ï¿½ï¿½ï¿½Ï¢
 	auto task_info = std::make_shared<RunningTaskInfo>(task);
-	// ´´½¨²¢Æô¶¯ÈÎÎñÖ´ÐÐÏß³Ì
-	// Õë¶ÔÈÎÎñ½øÐÐ´¦Àí£¬ÅÐ¶ÏÊÇÄ£ÄâÊý¾Ý´¦Àí»¹ÊÇÕæÊµÊý¾Ý´¦Àí
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ï¿½ï¿½ß³ï¿½
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½Ý´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½ï¿½Ý´ï¿½ï¿½ï¿½
 	if (!g_simulateReturnData)
-	{	//ÕæÊµÊý¾Ý
+	{	//ï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½
 		task_info->task_thread = std::make_shared<std::thread>(&ScanWorkThdImpl::PerformTaskInThread, this, task);
 	}
 	else
-	{	//Ä£ÄâÊý¾Ý
+	{	//Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		task_info->task_thread = std::make_shared<std::thread>(&ScanWorkThdImpl::PerformSimulateTaskInThread, this, task);
 	}
-	// Ìí¼Óµ½ÕýÔÚÔËÐÐµÄÈÎÎñÁÐ±í
+	// ï¿½ï¿½Óµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð±ï¿½
 	m_runningTasks[task.proId] = task_info;
 
 	LOG_INFO(QString("Started async task %1 for device %2 in %3 thread")
@@ -222,68 +222,68 @@ void ScanWorkThdImpl::PerformTaskInThread(const BusinessTask& task)
 {
 	try 
 	{
-		LOG_INFO(QString(u8"É¨ÃèÒµÎñÏß³Ì´¦ÀíÈÎÎñ: %1 for device %2")
+		LOG_INFO(QString(u8"É¨ï¿½ï¿½Òµï¿½ï¿½ï¿½ß³Ì´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: %1 for device %2")
 			.arg(QString::fromStdString(task.proId))
 			.arg(QString::fromStdString(task.devId)));
 		auto a = m_devicesMap;
 
-		// ÅÐ¶Ïµ±Ç°ÈÎÎñÊÇ·ñÎªÈ¡ÏûÈÎÎñ£¬Èç¹ûÊÇÈ¡ÏûÈÎÎñÔòÍ¨ÖªÏàÓ¦·þÎñ½øÐÐ½øÐÐÈ¡Ïû²Ù×÷
+		// ï¿½Ð¶Ïµï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ÎªÈ¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¨Öªï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-		// ¼ì²éÊÇ·ñÎªÏà»úÉè±¸
+		// ï¿½ï¿½ï¿½ï¿½Ç·ï¿½Îªï¿½ï¿½ï¿½ï¿½è±¸
 		if (IsCameraDevice(task.devId)) 
 		{
-			LOG_INFO(QString(u8"¼ì²âµ½Ïà»úÉè±¸ÈÎÎñ: Device=%1, Task=%2")
+			LOG_INFO(QString(u8"ï¿½ï¿½âµ½ï¿½ï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½: Device=%1, Task=%2")
 				.arg(QString::fromStdString(task.devId))
 				.arg(QString::fromStdString(task.proId)));
 
-			// ·¢ËÍÈÎÎñµ½Ïà»úÉè±¸
+			// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸
 			if (SendTaskToCamera(task)) 
 			{
-				LOG_INFO(QString(u8"ÈÎÎñÒÑ·¢ËÍµ½Ïà»úÉè±¸: %1").arg(QString::fromStdString(task.devId)));
+				LOG_INFO(QString(u8"ï¿½ï¿½ï¿½ï¿½ï¿½Ñ·ï¿½ï¿½Íµï¿½ï¿½ï¿½ï¿½ï¿½è±¸: %1").arg(QString::fromStdString(task.devId)));
 			}
 			else 
 			{
-				LOG_INFO(QString(u8"·¢ËÍÈÎÎñµ½Ïà»úÉè±¸Ê§°Ü: %1").arg(QString::fromStdString(task.devId)));
+				LOG_INFO(QString(u8"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸Ê§ï¿½ï¿½: %1").arg(QString::fromStdString(task.devId)));
 				if (m_taskStatusCallBack1)
 				{
 					SyncBusinessTask taskStatus;
 					taskStatus.proId = task.proId;
 					taskStatus.op = "4";
 					taskStatus.devId = task.devId;
-					m_taskStatusCallBack1(taskStatus); // 4±íÊ¾ÖÕÖ¹·þÎñ
+					m_taskStatusCallBack1(taskStatus); // 4ï¿½ï¿½Ê¾ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½ï¿½
 				}
 			}
 			return;
 		}
-		// µ÷ÓÃ»ùÀàµÄÊµÏÖ´¦Àí±¾µØÉè±¸
+		// ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½Êµï¿½Ö´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸
 		//WorkThdBaseImpl::PerformTaskInThread(task);
 	}
 	catch (const std::exception& e) 
 	{
-		LOG_INFO(QString(u8"É¨ÃèÈÎÎñÖ´ÐÐÒì³£: %1").arg(e.what()));
+		LOG_INFO(QString(u8"É¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ï¿½ï¿½ì³£: %1").arg(e.what()));
 	}
 }
 
 void ScanWorkThdImpl::PerformSimulateTaskInThread(const BusinessTask& inTask)
 {
-	// ÆäÖÐ°üº¬¿ªÊ¼ÈÎÎñ´¦Àí±¨ÎÄ£¬½«ÈÎÎñÐÅÏ¢·¢ËÍÖÁÏà»úÈí¼þ½øÐÐºóÐø´¦Àí
+	// ï¿½ï¿½ï¿½Ð°ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ðºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	try
 	{
 		auto task = inTask;
-		LOG_INFO(QString(u8"É¨ÃèÒµÎñÏß³Ì´¦ÀíÈÎÎñ_Ä£ÄâÊý¾Ý: %1 for device %2")
+		LOG_INFO(QString(u8"É¨ï¿½ï¿½Òµï¿½ï¿½ï¿½ß³Ì´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: %1 for device %2")
 			.arg(QString::fromStdString(task.proId))
 			.arg(QString::fromStdString(task.devId)));
 
-		// Ä£ÄâÊý¾Ý´¦ÀíÂß¼­ 
+		// Ä£ï¿½ï¿½ï¿½ï¿½ï¿½Ý´ï¿½ï¿½ï¿½ï¿½ß¼ï¿½ 
 		SetCameraTaskRunning(task.devId, task.proId, true);
 		
-		// ¸üÐÂÉè±¸×´Ì¬ÎªÃ¦ÂµÍ¬²½ÖÁ·þÎñ¶Ë(ÔÚÉè±¸ÖÐ½øÐÐ¸üÐÂÎªÃ¦Âµ×´Ì¬
-		//1120_¸üÐÂÉè±¸×´Ì¬µ½¹¤¿ØÈí¼þÖÐÉè±¸map
+		// ï¿½ï¿½ï¿½ï¿½ï¿½è±¸×´Ì¬ÎªÃ¦ÂµÍ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½è±¸ï¿½Ð½ï¿½ï¿½Ð¸ï¿½ï¿½ï¿½ÎªÃ¦Âµ×´Ì¬
+		//1120_ï¿½ï¿½ï¿½ï¿½ï¿½è±¸×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸map
 		//if (m_deviceStatusCallBack)
 		//{
 		//	DeviceInfo deviceInfo;
 		//	deviceInfo.devId = task.devId;
-		//	deviceInfo.devType = 1; // É¨ÃèÉè±¸ÀàÐÍ
+		//	deviceInfo.devType = 1; // É¨ï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½
 		//	deviceInfo.devStatus = DeviceStatus::BUSY; // Ã¦Âµ×´Ì¬
 		//	m_deviceStatusCallBack(deviceInfo);
 		//}
@@ -293,23 +293,23 @@ void ScanWorkThdImpl::PerformSimulateTaskInThread(const BusinessTask& inTask)
 		auto bCancel = false;
 		if (it != m_devicesMap.end())
 		{
-			// Ä£ÄâÉè±¸Ö´ÐÐÈÎÎñ
+			// Ä£ï¿½ï¿½ï¿½è±¸Ö´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			auto ret = it->second->PerformTask(task); 
 			bCancel = it->second->GetIsTaskCancel();
 			if (ret)
 			//if (it->second->PerformTask(task))
 			{
-				LOG_INFO(QString(u8"É¨ÃèÒµÎñÏß³Ì´¦ÀíÈÎÎñÍê³É_Ä£ÄâÊý¾Ý: %1 for device %2")
+				LOG_INFO(QString(u8"É¨ï¿½ï¿½Òµï¿½ï¿½ï¿½ß³Ì´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: %1 for device %2")
 					.arg(QString::fromStdString(task.proId))
 					.arg(QString::fromStdString(task.devId)));
 				fingerData = it->second->GetHandleWorkData().scanData;
 			}
 			else if (!ret && it->second->GetIsTaskCancel())
 			{
-				LOG_INFO(QString(u8"É¨ÃèÒµÎñÏß³Ì´¦ÀíÈÎÎñÈ¡Ïû_Ä£ÄâÊý¾Ý£¬·þÎñµ¥È¡Ïû·µ»Øop5: %1 for device %2")
+				LOG_INFO(QString(u8"É¨ï¿½ï¿½Òµï¿½ï¿½ï¿½ß³Ì´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½_Ä£ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½op5: %1 for device %2")
 					.arg(QString::fromStdString(task.proId))
 					.arg(QString::fromStdString(task.devId)));
-				// ÅÐ¶Ïµ±Ç°Éè±¸ÊÇ·ñÎª¹ÊÕÏ×´Ì¬£¬ÊÇÔò·µ»ØÅÅ¶ÓÌ¬'4', ÈôÎªÈ¡ÏûÈÎÎñÔò·µ»Ø'5'
+				// ï¿½Ð¶Ïµï¿½Ç°ï¿½è±¸ï¿½Ç·ï¿½Îªï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ò·µ»ï¿½ï¿½Å¶ï¿½Ì¬'4', ï¿½ï¿½ÎªÈ¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ò·µ»ï¿½'5'
 				task.op = DeviceStatus::ERR == it->second->GetStatus() ? "4" : "5";
 			}
 		}
@@ -317,24 +317,24 @@ void ScanWorkThdImpl::PerformSimulateTaskInThread(const BusinessTask& inTask)
 	}
 	catch (const std::exception& e) 
 	{
-		LOG_INFO(QString(u8"É¨ÃèÈÎÎñÖ´ÐÐÒì³£: %1").arg(e.what()));
+		LOG_INFO(QString(u8"É¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ï¿½ï¿½ì³£: %1").arg(e.what()));
 	}
 }
 
-// Ïà»úTCP¹ÜÀíÆ÷ÊÂ¼þ´¦Àí
+// ï¿½ï¿½ï¿½TCPï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½
 void ScanWorkThdImpl::OnCameraConnected(const std::string& deviceId)
 {
-	LOG_INFO(QString(u8"Ïà»úÉè±¸Á¬½Ó: %1").arg(QString::fromStdString(deviceId)));
+	LOG_INFO(QString(u8"ï¿½ï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½: %1").arg(QString::fromStdString(deviceId)));
 
-	// ¸üÐÂÉè±¸×´Ì¬ÎªÔÚÏß
+	// ï¿½ï¿½ï¿½ï¿½ï¿½è±¸×´Ì¬Îªï¿½ï¿½ï¿½ï¿½
 	if (m_deviceStatusCallBack) 
 	{
 		DeviceInfo deviceInfo;
 		deviceInfo.devId = deviceId;
-		deviceInfo.devType = 1; // É¨ÃèÉè±¸ÀàÐÍ
-		deviceInfo.devStatus = DeviceStatus::IDLE; // ¿ÕÏÐ×´Ì¬
+		deviceInfo.devType = 1; // É¨ï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½
+		deviceInfo.devStatus = DeviceStatus::IDLE; // ï¿½ï¿½ï¿½ï¿½×´Ì¬
 		m_deviceStatusCallBack(deviceInfo);
-		//1120_¸üÐÂÉè±¸×´Ì¬µ½¹¤¿ØÈí¼þÖÐÉè±¸map
+		//1120_ï¿½ï¿½ï¿½ï¿½ï¿½è±¸×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸map
 		UpdateDeviceMapStatus(deviceId, DeviceStatus::IDLE);
 	}
 }
@@ -342,9 +342,9 @@ void ScanWorkThdImpl::OnCameraConnected(const std::string& deviceId)
 
 void ScanWorkThdImpl::OnCameraDisconnected(const std::string& deviceId)
 {
-	LOG_INFO(QString(u8"Ïà»úÉè±¸¶Ï¿ª: %1").arg(QString::fromStdString(deviceId)));
+	LOG_INFO(QString(u8"ï¿½ï¿½ï¿½ï¿½è±¸ï¿½Ï¿ï¿½: %1").arg(QString::fromStdString(deviceId)));
 
-	// ÇåÀí¸ÃÉè±¸µÄÔËÐÐÈÎÎñ
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	{
 		std::lock_guard<std::mutex> lock(m_cameraTasksMutex);
 		auto it = m_cameraRunningTasks.find(deviceId);
@@ -352,27 +352,27 @@ void ScanWorkThdImpl::OnCameraDisconnected(const std::string& deviceId)
 			std::string taskId = it->second;
 			m_cameraRunningTasks.erase(it);
 
-			//// »Øµ÷ÈÎÎñÊ§°Ü×´Ì¬
+			//// ï¿½Øµï¿½ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½×´Ì¬
 			if (m_taskStatusCallBack1)
 			{
 				SyncBusinessTask taskStatus;
 				taskStatus.proId = taskId;
 				taskStatus.op = "4";
 				taskStatus.devId = deviceId;
-				m_taskStatusCallBack1(taskStatus); // 4±íÊ¾ÖÕÖ¹·þÎñ
+				m_taskStatusCallBack1(taskStatus); // 4ï¿½ï¿½Ê¾ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½ï¿½
 			}
 		}
 	}
 
-	// ¸üÐÂÉè±¸×´Ì¬ÎªÀëÏß
+	// ï¿½ï¿½ï¿½ï¿½ï¿½è±¸×´Ì¬Îªï¿½ï¿½ï¿½ï¿½
 	if (m_deviceStatusCallBack) 
 	{
 		DeviceInfo deviceInfo;
 		deviceInfo.devId = deviceId;
-		deviceInfo.devType = 1; // É¨ÃèÉè±¸ÀàÐÍ
-		deviceInfo.devStatus = DeviceStatus::OFFLINE; // ÀëÏß×´Ì¬
+		deviceInfo.devType = 1; // É¨ï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½
+		deviceInfo.devStatus = DeviceStatus::OFFLINE; // ï¿½ï¿½ï¿½ï¿½×´Ì¬
 		m_deviceStatusCallBack(deviceInfo);
-		//1120_¸üÐÂÉè±¸×´Ì¬µ½¹¤¿ØÈí¼þÖÐÉè±¸map
+		//1120_ï¿½ï¿½ï¿½ï¿½ï¿½è±¸×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸map
 		UpdateDeviceMapStatus(deviceId, DeviceStatus::OFFLINE);
 	}
 }
@@ -382,10 +382,10 @@ void ScanWorkThdImpl::OnCameraTaskFinished(const std::string& deviceId,
 										   const std::vector<CameraScanData>& scanData, 
 										   const BusinessTask& task)
 {
-	LOG_INFO(QString(u8"Ïà»úÈÎÎñÍê³É: Device=%1, Êý¾ÝÌõÊý=%2")
+	LOG_INFO(QString(u8"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: Device=%1, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½=%2")
 		.arg(QString::fromStdString(deviceId)).arg(scanData.size()));
 
-	// »ñÈ¡ÕýÔÚÔËÐÐµÄÈÎÎñID
+	// ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½ID
 	std::string taskId;
 	{
 		std::lock_guard<std::mutex> lock(m_cameraTasksMutex);
@@ -396,19 +396,19 @@ void ScanWorkThdImpl::OnCameraTaskFinished(const std::string& deviceId,
 			m_cameraRunningTasks.erase(it);
 		}
 	}
-	//ÕýÈ·Âß¼­
+	//ï¿½ï¿½È·ï¿½ß¼ï¿½
 	//if (!taskId.empty())
 	if (taskId.empty() || !taskId.empty())
 	{
-		// ´¦ÀíÉ¨Ãè½á¹ûÊý¾Ý
+		// ï¿½ï¿½ï¿½ï¿½É¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		std::vector<FingerScanData> processData;
 		ProcessCameraScanData1(scanData, processData);
-		// »Øµ÷ÈÎÎñÍê³É×´Ì¬
+		// ï¿½Øµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬
 		if (m_taskStatusCallBack1)
 		{
 			SyncBusinessTask taskStatus;
 			taskStatus.proId = taskId;
-			//Í¨¹ým_cameraTaskInfo[deviceId]²éÑ¯µ±Ç°Éè±¸
+			//Í¨ï¿½ï¿½m_cameraTaskInfo[deviceId]ï¿½ï¿½Ñ¯ï¿½ï¿½Ç°ï¿½è±¸
 			if (g_simulateReturnData)
 			{
 				//m_cameraTaskInfo[deviceId].op;
@@ -431,21 +431,21 @@ void ScanWorkThdImpl::OnCameraTaskFinished(const std::string& deviceId,
 			}
 			taskStatus.devId = deviceId;
 			taskStatus.scanData = processData;
-			//Õë¶ÔÊý¾Ý½øÐÐÉÏ´«´¦Àí£¬²¢ÇÒ¹¹ÔìÊý¾Ý		
-			m_taskStatusCallBack1(taskStatus); // 3±íÊ¾Íê³É
+			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½		
+			m_taskStatusCallBack1(taskStatus); // 3ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½
 		}
 		//-------------------------------------------
 
-		// ¸üÐÂÉè±¸×´Ì¬Îª¿ÕÏÐ
-		// Éè±¸×´Ì¬ÔÙDevÖÐÒÑ¾­ÉèÖÃ
+		// ï¿½ï¿½ï¿½ï¿½ï¿½è±¸×´Ì¬Îªï¿½ï¿½ï¿½ï¿½
+		// ï¿½è±¸×´Ì¬ï¿½ï¿½Devï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½
 		if (m_deviceStatusCallBack) 
 		{
 			//DeviceInfo deviceInfo;
 			//deviceInfo.devId = deviceId;
-			//deviceInfo.devType = 1; // É¨ÃèÉè±¸ÀàÐÍ
-			//deviceInfo.devStatus = DeviceStatus::IDLE; // ¿ÕÏÐ×´Ì¬
+			//deviceInfo.devType = 1; // É¨ï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½
+			//deviceInfo.devStatus = DeviceStatus::IDLE; // ï¿½ï¿½ï¿½ï¿½×´Ì¬
 			//m_deviceStatusCallBack(deviceInfo);
-			//1120_¸üÐÂÉè±¸×´Ì¬µ½¹¤¿ØÈí¼þÖÐÉè±¸map
+			//1120_ï¿½ï¿½ï¿½ï¿½ï¿½è±¸×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸map
 			//UpdateDeviceMapStatus(deviceId, DeviceStatus::IDLE);
 		}
 	}
@@ -453,10 +453,10 @@ void ScanWorkThdImpl::OnCameraTaskFinished(const std::string& deviceId,
 
 void ScanWorkThdImpl::OnCameraTaskError(const std::string& deviceId, const std::string& errorMsg)
 {
-	LOG_INFO(QString(u8"Ïà»úÈÎÎñ´íÎó: Device=%1, Error=%2")
+	LOG_INFO(QString(u8"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: Device=%1, Error=%2")
 		.arg(QString::fromStdString(deviceId)).arg(QString::fromStdString(errorMsg)));
 
-	// »ñÈ¡ÕýÔÚÔËÐÐµÄÈÎÎñID
+	// ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½ID
 	std::string taskId;
 	{
 		std::lock_guard<std::mutex> lock(m_cameraTasksMutex);
@@ -468,10 +468,10 @@ void ScanWorkThdImpl::OnCameraTaskError(const std::string& deviceId, const std::
 	}
 
 	if (!taskId.empty()) {
-		// »Øµ÷ÈÎÎñÊ§°Ü×´Ì¬
+		// ï¿½Øµï¿½ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½×´Ì¬
 		//if (m_taskStatusCallBack) 
 		//{
-		//	m_taskStatusCallBack(taskId, "4", deviceId); // 4±íÊ¾ÖÕÖ¹·þÎñ
+		//	m_taskStatusCallBack(taskId, "4", deviceId); // 4ï¿½ï¿½Ê¾ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½ï¿½
 		//}
 		if (m_taskStatusCallBack1)
 		{
@@ -479,29 +479,29 @@ void ScanWorkThdImpl::OnCameraTaskError(const std::string& deviceId, const std::
 			taskStatus.proId = taskId;
 			taskStatus.op = "4";
 			taskStatus.devId = deviceId;
-			m_taskStatusCallBack1(taskStatus); // 4±íÊ¾ÖÕÖ¹·þÎñ
+			m_taskStatusCallBack1(taskStatus); // 4ï¿½ï¿½Ê¾ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½ï¿½
 		}
 
-		// ¸üÐÂÉè±¸×´Ì¬Îª´íÎó
+		// ï¿½ï¿½ï¿½ï¿½ï¿½è±¸×´Ì¬Îªï¿½ï¿½ï¿½ï¿½
 		if (m_deviceStatusCallBack) 
 		{
 			DeviceInfo deviceInfo;
 			deviceInfo.devId = deviceId;
-			deviceInfo.devType = 1; // É¨ÃèÉè±¸ÀàÐÍ
-			deviceInfo.devStatus = DeviceStatus::ERR; // ´íÎó×´Ì¬
+			deviceInfo.devType = 1; // É¨ï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½
+			deviceInfo.devStatus = DeviceStatus::ERR; // ï¿½ï¿½ï¿½ï¿½×´Ì¬
 			m_deviceStatusCallBack(deviceInfo);
 
-			// 1120Î´Í¬²½µ½±¾µØËùÓÐÉè±¸µÄ×´Ì¬ÖÐ
-			//1120_¸üÐÂÉè±¸×´Ì¬µ½¹¤¿ØÈí¼þÖÐÉè±¸map
+			// 1120Î´Í¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸ï¿½ï¿½×´Ì¬ï¿½ï¿½
+			//1120_ï¿½ï¿½ï¿½ï¿½ï¿½è±¸×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸map
 			//UpdateDeviceMapStatus(deviceId, DeviceStatus::ERR);
 		}
 	}
 }
 
-// Ïà»úÉè±¸´¦Àí·½·¨
+// ï¿½ï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 bool ScanWorkThdImpl::IsCameraDevice(const std::string& deviceId) const
 {
-	// 1125_ÅÐ¶ÏÊÇ·ñÔÚ³õÊ¼×´Ì¬Ìí¼ÓÏà¹ØÉè±¸ID
+	// 1125_ï¿½Ð¶ï¿½ï¿½Ç·ï¿½ï¿½Ú³ï¿½Ê¼×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸ID
 	return m_cameraDeviceIds.find(deviceId) != m_cameraDeviceIds.end();
 }
 
@@ -509,37 +509,37 @@ bool ScanWorkThdImpl::SendTaskToCamera(const BusinessTask& task)
 {
 	CameraTcpManager& cameraMgr = CameraTcpManager::GetInstance();
 
-	// ¼ì²éÏà»úÊÇ·ñÔÚÏß
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½
 	if (!cameraMgr.IsCameraOnline(task.devId)) 
 	{
-		LOG_INFO(QString(u8"Ïà»úÉè±¸²»ÔÚÏß: %1").arg(QString::fromStdString(task.devId)));
+		LOG_INFO(QString(u8"ï¿½ï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: %1").arg(QString::fromStdString(task.devId)));
 		return false;
 	}
 
-	// ¼ì²éÊÇ·ñÒÑÓÐÈÎÎñÔÚÔËÐÐ
+	// ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	if (IsCameraTaskRunning(task.devId)) 
 	{
-		LOG_INFO(QString(u8"Ïà»úÉè±¸ÕýÔÚÖ´ÐÐÆäËûÈÎÎñ: %1").arg(QString::fromStdString(task.devId)));
+		LOG_INFO(QString(u8"ï¿½ï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: %1").arg(QString::fromStdString(task.devId)));
 		return false;
 	}
 
-	// ·¢ËÍÈÎÎñ¿ªÊ¼±¨ÎÄ
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½
 	bool success = cameraMgr.SendTaskStartToCamera(task.devId);
 
 	if (success) 
 	{
-		// ¼ÇÂ¼ÈÎÎñÔËÐÐ×´Ì¬
+		// ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬
 		SetCameraTaskRunning(task.devId, task.proId, true);
-		// ¸üÐÂÉè±¸×´Ì¬ÎªÃ¦Âµ
+		// ï¿½ï¿½ï¿½ï¿½ï¿½è±¸×´Ì¬ÎªÃ¦Âµ
 		if (m_deviceStatusCallBack) 
 		{
 			DeviceInfo deviceInfo;
 			deviceInfo.devId = task.devId;
-			deviceInfo.devType = 1; // É¨ÃèÉè±¸ÀàÐÍ
+			deviceInfo.devType = 1; // É¨ï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½
 			deviceInfo.devStatus = DeviceStatus::BUSY; // Ã¦Âµ×´Ì¬
 			m_deviceStatusCallBack(deviceInfo);
 			m_cameraTaskInfo.insert({ task.devId , task });
-			//1120_¸üÐÂÉè±¸×´Ì¬µ½¹¤¿ØÈí¼þÖÐÉè±¸map
+			//1120_ï¿½ï¿½ï¿½ï¿½ï¿½è±¸×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸map
 			//m_devicesMap[task.devId]->SetStatus(DeviceStatus::BUSY);
 		}
 	}
@@ -548,14 +548,14 @@ bool ScanWorkThdImpl::SendTaskToCamera(const BusinessTask& task)
 
 void ScanWorkThdImpl::ProcessCameraScanData(const BusinessTask& task, const std::vector<CameraScanData>& scanData)
 {
-	// ÐòÁÐ»¯É¨Ãè½á¹ûÊý¾Ý
+	// ï¿½ï¿½ï¿½Ð»ï¿½É¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	std::string serializedData = SerializeCameraScanResults(scanData);
 
-	LOG_INFO(QString(u8"Ïà»úÉ¨ÃèÊý¾ÝÐòÁÐ»¯Íê³É£¬Êý¾Ý´óÐ¡: %1 bytes").arg(serializedData.size()));
+	LOG_INFO(QString(u8"ï¿½ï¿½ï¿½É¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð»ï¿½ï¿½ï¿½É£ï¿½ï¿½ï¿½ï¿½Ý´ï¿½Ð¡: %1 bytes").arg(serializedData.size()));
 
-	// ÕâÀï¿ÉÒÔ½«ÐòÁÐ»¯ºóµÄÊý¾Ý·¢ËÍµ½·þÎñÆ÷
-	// ÀýÈçÍ¨¹ýHTTP»òWebSocket·¢ËÍµ½·þÎñÆ÷
-	// ¼ÓÈëOSSÉÏ´«Êý¾ÝÐÅÏ¢Âß¼­
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô½ï¿½ï¿½ï¿½ï¿½Ð»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý·ï¿½ï¿½Íµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	// ï¿½ï¿½ï¿½ï¿½Í¨ï¿½ï¿½HTTPï¿½ï¿½WebSocketï¿½ï¿½ï¿½Íµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	// ï¿½ï¿½ï¿½ï¿½OSSï¿½Ï´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ß¼ï¿½
 }
 
 void ScanWorkThdImpl::ProcessCameraScanData1(const std::vector<CameraScanData>& scanData,
@@ -578,11 +578,11 @@ void ScanWorkThdImpl::ProcessCameraScanData1(const std::vector<CameraScanData>& 
 		vFilePath.push_back(it.data_path);
 	}
 
-	//´¦ÀíÉÏ´«Êý¾Ý
+	//ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ï¿½ï¿½ï¿½ï¿½
 	//auto curTimerStr = QString::fromStdString(CommFun::GetInstance().GetCurrentTimeStr());
 	//auto dstFolderPath = QCoreApplication::applicationDirPath() + QDir::separator() + QString("simulate_scan_data") + QDir::separator() + curTimerStr;
 	//auto srcFolderPath = QCoreApplication::applicationDirPath() + QDir::separator() + QString("simulate_scan_data") + QDir::separator() + QString("src_data");
-	// »ñÈ¡Ô´ÎÄ¼þ¼ÐÖÐËùÓÐÌõÄ¿£¨ÎÄ¼þºÍ×ÓÎÄ¼þ¼Ð£©
+	// ï¿½ï¿½È¡Ô´ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½Ð£ï¿½
 	//CommFun::GetInstance().FolderCopy(srcFolderPath, dstFolderPath);
 	//CommFun::GetInstance().GetFolderFile(dstFolderPath, vFilePath);
 	SingleOSSToken::GetInstance().UploadMulti(vFilePath, retInfo, vURLData);
@@ -636,19 +636,19 @@ bool ScanWorkThdImpl::IsCameraTaskRunning(const std::string& deviceId) const
 void ScanWorkThdImpl::HandleSimulateData(const BusinessTask& task)
 {
 	/*
-	1. ¸´ÖÆµ±Ç°ÎÄ¼þ¼Ð
-	2. ½«µ±Ç°ÎÄ¼þ¼ÐÖØÃüÃû
-	3. ÌáÈ¡µ±Ç°ÎÄ¼þ¼ÐÖÐÊý¾Ý
-	4. µ÷ÓÃÎÄ¼þ¼Ð
+	1. ï¿½ï¿½ï¿½Æµï¿½Ç°ï¿½Ä¼ï¿½ï¿½ï¿½
+	2. ï¿½ï¿½ï¿½ï¿½Ç°ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	3. ï¿½ï¿½È¡ï¿½ï¿½Ç°ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	4. ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
 	*/
 	auto curTimerStr = QString::fromStdString(CommFun::GetInstance().GetCurrentTimeStr());
 	auto dstFolderPath = QCoreApplication::applicationDirPath() + QDir::separator() + QString("simulate_scan_data") + QDir::separator() + curTimerStr;
 	auto srcFolderPath = QCoreApplication::applicationDirPath() + QDir::separator() + QString("simulate_scan_data") + QDir::separator() + QString("src_data");
 	std::vector<std::string> vFilePath, vURLData;
 	std::string retInfo;
-	// »ñÈ¡Ô´ÎÄ¼þ¼ÐÖÐËùÓÐÌõÄ¿£¨ÎÄ¼þºÍ×ÓÎÄ¼þ¼Ð£©
-	CommFun::GetInstance().FolderCopy(srcFolderPath, dstFolderPath);
-	CommFun::GetInstance().GetFolderFile(dstFolderPath, vFilePath);
+	// È¡Ô´Ä¼Ä¿Ä¼Ä¼Ð£
+	CommFun::GetInstance().FolderCopy(srcFolderPath.toStdString(), dstFolderPath.toStdString());
+	CommFun::GetInstance().GetFolderFile(dstFolderPath.toStdString(), vFilePath);
 	SingleOSSToken::GetInstance().UploadMulti(vFilePath, retInfo, vURLData);
 
 	std::vector<CameraScanData> fingerData;
@@ -666,9 +666,9 @@ void ScanWorkThdImpl::HandleSimulateData(const BusinessTask& task)
 
 void ScanWorkThdImpl::HandleCancelTask()
 {
-	LOG_INFO(u8"Ö´ÐÐÈ¡ÏûÈÎÎñ´¦ÀíÂß¼­");
+	LOG_INFO(u8"Ö´ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß¼ï¿½");
 
-	// ¼ì²éÊÇ·ñÓÐ³¬Ê±µÄÈ¡ÏûÇëÇó
+	// ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½Ð³ï¿½Ê±ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	std::lock_guard<std::mutex> lock(m_cancelTasksMutex);
 	auto currentTime = std::chrono::duration_cast<std::chrono::milliseconds>(
 		std::chrono::system_clock::now().time_since_epoch()).count();
@@ -678,10 +678,10 @@ void ScanWorkThdImpl::HandleCancelTask()
 		const std::string& deviceId = it->first;
 		const std::string& taskId = it->second.first;
 
-		// ÕâÀï¿ÉÒÔÌí¼Ó³¬Ê±¼ì²éÂß¼­
-		// ÀýÈç£ºÈç¹û³¬¹ý30ÃëÃ»ÓÐÊÕµ½»Ø¸´£¬Ç¿ÖÆÈ¡Ïû
-		// Ä¿Ç°ÔÝÊ±±£Áô£¬¿ÉÒÔºóÐøÀ©Õ¹
-		LOG_INFO(QString(u8"´ýÈ¡ÏûÈÎÎñ: Device=%1, TaskId=%2")
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó³ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ß¼ï¿½
+		// ï¿½ï¿½ï¿½ç£ºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½30ï¿½ï¿½Ã»ï¿½ï¿½ï¿½Õµï¿½ï¿½Ø¸ï¿½ï¿½ï¿½Ç¿ï¿½ï¿½È¡ï¿½ï¿½
+		// Ä¿Ç°ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ôºï¿½ï¿½ï¿½ï¿½ï¿½Õ¹
+		LOG_INFO(QString(u8"ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: Device=%1, TaskId=%2")
 			.arg(QString::fromStdString(deviceId)).arg(QString::fromStdString(taskId)));
 		++it;
 	}
@@ -689,8 +689,8 @@ void ScanWorkThdImpl::HandleCancelTask()
 
 void ScanWorkThdImpl::OnCameraTaskCancelled(const std::string& deviceId, bool success)
 {
-	LOG_INFO(QString(u8"Ïà»úÈÎÎñÈ¡Ïû½á¹û: Device=%1, Success=%2")
-		.arg(QString::fromStdString(deviceId)).arg(success ? u8"³É¹¦" : u8"Ê§°Ü"));
+	LOG_INFO(QString(u8"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½: Device=%1, Success=%2")
+		.arg(QString::fromStdString(deviceId)).arg(success ? u8"ï¿½É¹ï¿½" : u8"Ê§ï¿½ï¿½"));
 
 	std::string taskId;
 	bool bStopped = false;
@@ -699,13 +699,13 @@ void ScanWorkThdImpl::OnCameraTaskCancelled(const std::string& deviceId, bool su
 	bool shouldCallStatusCallback = false;
 	bool shouldCallTaskCallback = false;
 
-	// »ñÈ¡²¢ÒÆ³ý´ýÈ¡ÏûµÄÈÎÎñÐÅÏ¢
-	// ÐÞ¸´£ºÊ¹ÓÃÍ³Ò»ËøË³Ðò²¢¼õÉÙËøµÄ³ÖÓÐÊ±¼ä£¬±ÜÃâËÀËøºÍÖØÈëÎÊÌâ
+	// ï¿½ï¿½È¡ï¿½ï¿½ï¿½Æ³ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
+	// ï¿½Þ¸ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½Í³Ò»ï¿½ï¿½Ë³ï¿½ò²¢¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä³ï¿½ï¿½ï¿½Ê±ï¿½ä£¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	{
 		std::lock_guard<std::mutex> cancelLock(m_cancelTasksMutex);
 		std::lock_guard<std::mutex> cameraLock(m_cameraTasksMutex);
 
-		// »ñÈ¡²¢ÒÆ³ý´ýÈ¡ÏûµÄÈÎÎñÐÅÏ¢
+		// ï¿½ï¿½È¡ï¿½ï¿½ï¿½Æ³ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
 		auto cancelIt = m_pendingCancelTasks.find(deviceId);
 		if (cancelIt != m_pendingCancelTasks.end()) 
 		{
@@ -716,11 +716,11 @@ void ScanWorkThdImpl::OnCameraTaskCancelled(const std::string& deviceId, bool su
 
 		if (success) 
 		{
-			// ÇåÀíÈÎÎñ×´Ì¬
+			// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬
 			m_cameraRunningTasks.erase(deviceId);
 			m_cameraTaskInfo.erase(deviceId);
 
-			// ×¼±¸»Øµ÷Êý¾Ý
+			// ×¼ï¿½ï¿½ï¿½Øµï¿½ï¿½ï¿½ï¿½ï¿½
 			deviceInfo.devId = deviceId;
 			deviceInfo.devType = 1;
 			deviceInfo.devStatus = bStopped ? DeviceStatus::ERR : DeviceStatus::IDLE;
@@ -729,32 +729,32 @@ void ScanWorkThdImpl::OnCameraTaskCancelled(const std::string& deviceId, bool su
 			if (!taskId.empty()) 
 			{
 				taskStatus.proId = taskId;
-				taskStatus.op = "4";  // "4" ±íÊ¾È¡Ïû×´Ì¬
+				taskStatus.op = "4";  // "4" ï¿½ï¿½Ê¾È¡ï¿½ï¿½×´Ì¬
 				taskStatus.devId = deviceId;
 				shouldCallTaskCallback = true;
 			}
 		}
 		else 
 		{
-			// È¡ÏûÊ§°Ü£¬×¼±¸±£³ÖÔËÐÐ×´Ì¬µÄ»Øµ÷Êý¾Ý
+			// È¡ï¿½ï¿½Ê§ï¿½Ü£ï¿½×¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½Ä»Øµï¿½ï¿½ï¿½ï¿½ï¿½
 			if (!taskId.empty()) 
 			{
 				taskStatus.proId = taskId;
-				taskStatus.op = "1";  // ±£³ÖÔËÐÐ×´Ì¬
+				taskStatus.op = "1";  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬
 				taskStatus.devId = deviceId;
 				shouldCallTaskCallback = true;
 			}
 		}
 	}
 
-	//ÐÞ¸´£ºÔÚËøÍâÖ´ÐÐ»Øµ÷£¬±ÜÃâÖØÈë·çÏÕºÍËÀËø
+	//ï¿½Þ¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½Ð»Øµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õºï¿½ï¿½ï¿½ï¿½ï¿½
 	if (success) 
 	{
 		if (shouldCallStatusCallback && m_deviceStatusCallBack) 
 		{
 			m_deviceStatusCallBack(deviceInfo);
 
-			// °²È«µØ¸üÐÂÉè±¸Ó³Éä×´Ì¬
+			// ï¿½ï¿½È«ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½è±¸Ó³ï¿½ï¿½×´Ì¬
 			UpdateDeviceMapStatus(deviceId, deviceInfo.devStatus);
 		}
 
@@ -763,12 +763,12 @@ void ScanWorkThdImpl::OnCameraTaskCancelled(const std::string& deviceId, bool su
 			m_taskStatusCallBack1(taskStatus);
 		}
 
-		LOG_INFO(QString(u8"Ïà»úÈÎÎñÈ¡Ïû³É¹¦: Device=%1, TaskId=%2")
+		LOG_INFO(QString(u8"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½É¹ï¿½: Device=%1, TaskId=%2")
 			.arg(QString::fromStdString(deviceId)).arg(QString::fromStdString(taskId)));
 	}
 	else 
 	{
-		LOG_ERROR(QString(u8"Ïà»úÈÎÎñÈ¡ÏûÊ§°Ü: Device=%1, TaskId=%2")
+		LOG_ERROR(QString(u8"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½Ê§ï¿½ï¿½: Device=%1, TaskId=%2")
 			.arg(QString::fromStdString(deviceId)).arg(QString::fromStdString(taskId)));
 
 		if (shouldCallTaskCallback && m_taskStatusCallBack1) 
@@ -779,23 +779,23 @@ void ScanWorkThdImpl::OnCameraTaskCancelled(const std::string& deviceId, bool su
 
 	if (success) 
 	{
-		// È¡Ïû³É¹¦£¬ÇåÀíÈÎÎñ×´Ì¬
+		// È¡ï¿½ï¿½ï¿½É¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬
 		{
 			std::lock_guard<std::mutex> lock(m_cameraTasksMutex);
 			m_cameraRunningTasks.erase(deviceId);
 			m_cameraTaskInfo.erase(deviceId);
 		}
 
-		// ¸üÐÂÉè±¸×´Ì¬
+		// ï¿½ï¿½ï¿½ï¿½ï¿½è±¸×´Ì¬
 		if (m_deviceStatusCallBack) 
 		{
 			DeviceInfo deviceInfo;
 			deviceInfo.devId = deviceId;
-			deviceInfo.devType = 1; // É¨ÃèÉè±¸ÀàÐÍ
+			deviceInfo.devType = 1; // É¨ï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½
 			deviceInfo.devStatus = bStopped ? DeviceStatus::ERR : DeviceStatus::IDLE;
 			m_deviceStatusCallBack(deviceInfo);
 
-			// ¸üÐÂÉè±¸Ó³ÉäÖÐµÄ×´Ì¬
+			// ï¿½ï¿½ï¿½ï¿½ï¿½è±¸Ó³ï¿½ï¿½ï¿½Ðµï¿½×´Ì¬
 			if (m_devicesMap.find(deviceId) != m_devicesMap.end()) 
 			{
 				if (bStopped)
@@ -811,31 +811,31 @@ void ScanWorkThdImpl::OnCameraTaskCancelled(const std::string& deviceId, bool su
 			}
 		}
 
-		// µ÷ÓÃÈÎÎñ×´Ì¬»Øµ÷£¬Í¨ÖªÈ¡Ïû³É¹¦
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½Øµï¿½ï¿½ï¿½Í¨ÖªÈ¡ï¿½ï¿½ï¿½É¹ï¿½
 		if (m_taskStatusCallBack1 && !taskId.empty()) 
 		{
 			SyncBusinessTask taskStatus;
 			taskStatus.proId = taskId;
-			taskStatus.op = "4";  // "4" ±íÊ¾È¡Ïû×´Ì¬
+			taskStatus.op = "4";  // "4" ï¿½ï¿½Ê¾È¡ï¿½ï¿½×´Ì¬
 			taskStatus.devId = deviceId;
 			m_taskStatusCallBack1(taskStatus);
 		}
 
-		LOG_INFO(QString(u8"Ïà»úÈÎÎñÈ¡Ïû³É¹¦: Device=%1, TaskId=%2")
+		LOG_INFO(QString(u8"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½É¹ï¿½: Device=%1, TaskId=%2")
 			.arg(QString::fromStdString(deviceId)).arg(QString::fromStdString(taskId)));
 	}
 	else 
 	{
-		// È¡ÏûÊ§°Ü£¬±£³ÖÔ­×´Ì¬
-		LOG_ERROR(QString(u8"Ïà»úÈÎÎñÈ¡ÏûÊ§°Ü: Device=%1, TaskId=%2")
+		// È¡ï¿½ï¿½Ê§ï¿½Ü£ï¿½ï¿½ï¿½ï¿½ï¿½Ô­×´Ì¬
+		LOG_ERROR(QString(u8"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½Ê§ï¿½ï¿½: Device=%1, TaskId=%2")
 			.arg(QString::fromStdString(deviceId)).arg(QString::fromStdString(taskId)));
 
-		// ¿ÉÒÔ¿¼ÂÇÖØÊÔ»òÕßÇ¿ÖÆÈ¡Ïû
+		// ï¿½ï¿½ï¿½Ô¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô»ï¿½ï¿½ï¿½Ç¿ï¿½ï¿½È¡ï¿½ï¿½
 		if (m_taskStatusCallBack1 && !taskId.empty()) 
 		{
 			SyncBusinessTask taskStatus;
 			taskStatus.proId = taskId;
-			taskStatus.op = "1";  // ±£³ÖÔËÐÐ×´Ì¬
+			taskStatus.op = "1";  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬
 			taskStatus.devId = deviceId;
 			m_taskStatusCallBack1(taskStatus);
 		}
@@ -844,14 +844,14 @@ void ScanWorkThdImpl::OnCameraTaskCancelled(const std::string& deviceId, bool su
 
 void ScanWorkThdImpl::CancelTaskOnDevice(const std::string& devId, bool bStopped)
 {
-	LOG_INFO(QString(u8"ÊÕµ½Éè±¸È¡ÏûÈÎÎñÇëÇó: Device=%1, Stopped=%2")
+	LOG_INFO(QString(u8"ï¿½Õµï¿½ï¿½è±¸È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: Device=%1, Stopped=%2")
 		.arg(QString::fromStdString(devId))
-		.arg(bStopped ? u8"ÊÇ" : u8"·ñ"));
+		.arg(bStopped ? u8"ï¿½ï¿½" : u8"ï¿½ï¿½"));
 
-	// ¼ì²éÊÇ·ñÊÇÏà»úÉè±¸£¨ÕæÊµÉè±¸
+	// ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½Êµï¿½è±¸
 	if (IsCameraDevice(devId) && !g_simulateReturnData) 
 	{
-		// »ñÈ¡µ±Ç°ÔËÐÐµÄÈÎÎñID
+		// ï¿½ï¿½È¡ï¿½ï¿½Ç°ï¿½ï¿½ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½ID
 		std::string taskId;
 		{
 			std::lock_guard<std::mutex> lock(m_cameraTasksMutex);
@@ -864,52 +864,52 @@ void ScanWorkThdImpl::CancelTaskOnDevice(const std::string& devId, bool bStopped
 
 		if (!taskId.empty()) 
 		{
-			// ¼ÇÂ¼´ýÈ¡ÏûµÄÈÎÎñ
+			// ï¿½ï¿½Â¼ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			{
 				std::lock_guard<std::mutex> lock(m_cancelTasksMutex);
 				m_pendingCancelTasks[devId] = std::make_pair(taskId, bStopped);
 			}
 
-			// ·¢ËÍÈ¡ÏûÃüÁîµ½Ïà»ú
-			// Èç¹ûµ±Ç°´¦ÓÚÄ£Äâ×´Ì¬£¬Ôò½«È¡Ïû¶¨Ê±Æ÷ÈÎÎñÍÆËÍÖÁÉè±¸
+			// ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½îµ½ï¿½ï¿½ï¿½
+			// ï¿½ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸
 			// 
 			auto& cameraMgr = CameraTcpManager::GetInstance();
 			bool sent = cameraMgr.SendTaskCancelToCamera(devId, taskId);
 
 			if (!sent)
 			{
-				LOG_ERROR(QString(u8"·¢ËÍÈÎÎñÈ¡ÏûÃüÁîÊ§°Ü: Device=%1, TaskId=%2")
+				LOG_ERROR(QString(u8"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½: Device=%1, TaskId=%2")
 					.arg(QString::fromStdString(devId))
 					.arg(QString::fromStdString(taskId)));
 
-				// ·¢ËÍÊ§°Ü£¬Ö±½Ó´¦ÀíÎªÈ¡ÏûÊ§°Ü
+				// ï¿½ï¿½ï¿½ï¿½Ê§ï¿½Ü£ï¿½Ö±ï¿½Ó´ï¿½ï¿½ï¿½ÎªÈ¡ï¿½ï¿½Ê§ï¿½ï¿½
 				OnCameraTaskCancelled(devId, false);
 			}
 			else 
 			{
-				LOG_INFO(QString(u8"ÒÑ·¢ËÍÈÎÎñÈ¡ÏûÃüÁî: Device=%1, TaskId=%2")
+				LOG_INFO(QString(u8"ï¿½Ñ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: Device=%1, TaskId=%2")
 					.arg(QString::fromStdString(devId))
 					.arg(QString::fromStdString(taskId)));
 			}
 		}
 		else 
 		{
-			LOG_INFO(QString(u8"Éè±¸µ±Ç°Ã»ÓÐÔËÐÐµÄÈÎÎñ: %1").arg(QString::fromStdString(devId)));
-			// Ã»ÓÐÔËÐÐµÄÈÎÎñ£¬Ö±½Ó·µ»Ø³É¹¦
+			LOG_INFO(QString(u8"ï¿½è±¸ï¿½ï¿½Ç°Ã»ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½: %1").arg(QString::fromStdString(devId)));
+			// Ã»ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½Ó·ï¿½ï¿½Ø³É¹ï¿½
 			OnCameraTaskCancelled(devId, true);
 		}
 	}
 	else if(g_simulateReturnData)
 	{
-		// Ä£ÄâÉè±¸£¬Ê¹ÓÃdeviceType½øÐÐÄ£ÄâÈ¡Ïû
-		// ·ÇÏà»úÉè±¸£¬Ê¹ÓÃÔ­À´µÄÈ¡ÏûÂß¼­
+		// Ä£ï¿½ï¿½ï¿½è±¸ï¿½ï¿½Ê¹ï¿½ï¿½deviceTypeï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½È¡ï¿½ï¿½
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸ï¿½ï¿½Ê¹ï¿½ï¿½Ô­ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ß¼ï¿½
 		WorkThdBaseImpl::CancelTaskOnDevice(devId, bStopped);
 	}
 }
 
 void ScanWorkThdImpl::UpdateDeviceMapStatus(const std::string& deviceId, DeviceStatus status)
 {
-	//Ê¹ÓÃ»ùÀàµÄm_taskMtx±£»¤m_devicesMapµÄ·ÃÎÊ£¬±ÜÃâ²¢·¢·ÃÎÊÎÊÌâ
+	//Ê¹ï¿½Ã»ï¿½ï¿½ï¿½ï¿½m_taskMtxï¿½ï¿½ï¿½ï¿½m_devicesMapï¿½Ä·ï¿½ï¿½Ê£ï¿½ï¿½ï¿½ï¿½â²¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	std::lock_guard<std::mutex> lock(m_taskMtx);
 	auto it = m_devicesMap.find(deviceId);
 	if (it != m_devicesMap.end()) 

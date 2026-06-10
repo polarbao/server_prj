@@ -1,4 +1,4 @@
-#include "WSClientMgr.h"
+ï»¿#include "WSClientMgr.h"
 #include "global.h"
 #include "MessageDefine.h"
 #include "HttpRepParser.h"
@@ -120,25 +120,25 @@ WSClientMgrImpl::WSClientMgrImpl()
 	m_sendThdRunning = true;
 	m_sendThd = std::thread(&WSClientMgrImpl::SendThreadFunction, this);
 
-	//Note:Æô¶¯ĞÄÌø·¢ËÍ
-	LOG_INFO(QString::fromLocal8Bit("net_mgr_moudle WSClientMgrImpl_fun Æô¶¯ĞÄÌø·¢ËÍ±¨ÎÄ"));
+	//Note:å¯åŠ¨å¿ƒè·³å‘é€
+	LOG_INFO(QString::fromLocal8Bit("net_mgr_moudle WSClientMgrImpl_fun å¯åŠ¨å¿ƒè·³å‘é€æŠ¥æ–‡"));
 	StartHeartbeat();
 }
 
 WSClientMgrImpl::~WSClientMgrImpl()
 {
 	DisconnectFromSer();
-	// Í£Ö¹ÖØÁ¬Ïß³Ì
+	// åœæ­¢é‡è¿çº¿ç¨‹
 	StopWSReconnect();
 	//StopHTTPReconnect();
-	// Í£Ö¹·¢ËÍÏß³Ì
+	// åœæ­¢å‘é€çº¿ç¨‹
 	m_sendThdRunning = false;
-	m_sendCV.notify_one(); // »½ĞÑ·¢ËÍÏß³Ì£¬Ê¹ÆäÍË³ö
+	m_sendCV.notify_one(); // å”¤é†’å‘é€çº¿ç¨‹ï¼Œä½¿å…¶é€€å‡º
 	if (m_sendThd.joinable()) 
 	{
 		m_sendThd.join();
 	}
-	// Í£Ö¹ĞÄÌøÏß³Ì
+	// åœæ­¢å¿ƒè·³çº¿ç¨‹
 	StopHeartbeat();
 }
 
@@ -151,16 +151,16 @@ void WSClientMgrImpl::Connect2Ser(const std::string& wsUrl, const std::string& h
 
 		if (!GetIsFriLoginStatus())
 		{
-			// Í£Ö¹ÈÎºÎÕıÔÚ½øĞĞµÄÖØÁ¬
+			// åœæ­¢ä»»ä½•æ­£åœ¨è¿›è¡Œçš„é‡è¿
 			StopWSReconnect();
 		}
 
-		// ¸üĞÂÁ¬½Ó×´Ì¬
+		// æ›´æ–°è¿æ¥çŠ¶æ€
 		m_wsStatus = NetworkStatus::CONNECTING;
-		emit m_wsSignals.SigNetworkStatusChanged(ConnectionType::WEBSOCKET, NetworkStatus::CONNECTING, u8"¿ªÊ¼Á¬½ÓWebSocket");
+		emit m_wsSignals.SigNetworkStatusChanged(ConnectionType::WEBSOCKET, NetworkStatus::CONNECTING, u8"å¼€å§‹è¿æ¥WebSocket");
 
 
-		//ÅäÖÃHTTP
+		//é…ç½®HTTP
 		if (!m_httpBaseUrl.empty())
 		{
 			m_httpClientWrap->SetBaseUrl(m_httpBaseUrl);
@@ -169,22 +169,22 @@ void WSClientMgrImpl::Connect2Ser(const std::string& wsUrl, const std::string& h
 			m_bHttpCfg = true;
 			LOG_INFO(QString("ipc_moudle http_client_cfg_base_url: %1").arg(m_httpBaseUrl.c_str()));
 		}
-		// Á¬½ÓWebSocket
+		// è¿æ¥WebSocket
 		m_wsClientWrap->Connect(m_wsSerUrl);
 	}
-	//ÅĞ¶ÏÊÇ·ñÎªµÚÒ»´ÎÆô¶¯£¬ÊÇÔòÈ¡·´£¬·ñÔò±£³ÖÔ­Ñù
+	//åˆ¤æ–­æ˜¯å¦ä¸ºç¬¬ä¸€æ¬¡å¯åŠ¨ï¼Œæ˜¯åˆ™å–åï¼Œå¦åˆ™ä¿æŒåŸæ ·
 	g_friLogin = g_friLogin ? !g_friLogin : g_friLogin;
 }
 
 void WSClientMgrImpl::DisconnectFromSer(bool bBtnClick /*=false*/)
 {
-	//ÅĞ¶ÏÊÇ·ñÎª°´Å¥´¥·¢CloseNet
+	//åˆ¤æ–­æ˜¯å¦ä¸ºæŒ‰é’®è§¦å‘CloseNet
 	g_closeNetBtnClick = bBtnClick;
 	if (m_bConnect)
 	{
 		m_wsClientWrap->Disconnect();
 		m_bConnect = false;
-		emit m_wsSignals.SigNetworkStatusChanged(ConnectionType::WEBSOCKET, NetworkStatus::DISCONNECTED, u8"¶Ï¿ªWebSocketÁ¬½Ó");
+		emit m_wsSignals.SigNetworkStatusChanged(ConnectionType::WEBSOCKET, NetworkStatus::DISCONNECTED, u8"æ–­å¼€WebSocketè¿æ¥");
 	}
 	m_bHttpCfg = false;
 }
@@ -229,14 +229,14 @@ void WSClientMgrImpl::StartHeartbeat()
 	{
 		while (m_heartbeatThdRunning) 
 		{
-			std::this_thread::sleep_for(std::chrono::seconds(5)); // Ã¿5Ãë·¢ËÍÒ»´ÎĞÄÌø
+			std::this_thread::sleep_for(std::chrono::seconds(5)); // æ¯5ç§’å‘é€ä¸€æ¬¡å¿ƒè·³
 			if (m_heartbeatThdRunning && m_bConnect &&  m_wsClientWrap->IsConnected())
 			{
 				try 
 				{
 					//WebSocketMessage heartbeat_msg;
 					//heartbeat_msg.type = MessageType::CLIENT_HEARTBEAT;
-					//heartbeat_msg.payload = "{}"; // ĞÄÌø±¨ÎÄ¿ÉÒÔÎª¿Õpayload
+					//heartbeat_msg.payload = "{}"; // å¿ƒè·³æŠ¥æ–‡å¯ä»¥ä¸ºç©ºpayload
 					//SendData(heartbeat_msg);
 
 					WSMsgBase msg;
@@ -282,7 +282,7 @@ void WSClientMgrImpl::SendThreadFunction()
 		{
 			UnifiedMessage msg_to_send = m_sendQue.front();
 			m_sendQue.pop();
-			lock.unlock(); // ÌáÇ°½âËø£¬±ÜÃâ send ×èÈûÆäËûÏß³Ì
+			lock.unlock(); // æå‰è§£é”ï¼Œé¿å… send é˜»å¡å…¶ä»–çº¿ç¨‹
 
 
 			//ConnectionType method = GetCommunicationMethod(msg_to_send.type);
@@ -323,18 +323,18 @@ void WSClientMgrImpl::SendViaWS(const WSMsgBase& msg)
 		{
 			LOG_INFO(QString("ipc_moudle send_via_ws failed_2_send_ws_msg = %1").arg(e.what()));
 
-			// ·¢ËÍÊ§°ÜÊ±»º´æÏûÏ¢
+			// å‘é€å¤±è´¥æ—¶ç¼“å­˜æ¶ˆæ¯
 			UnifiedMessage unifiedMsg(msg);
 			CacheMessage(unifiedMsg);
 
-			// Á¬½Ó¿ÉÄÜÒÑ¶Ï¿ª£¬¸üĞÂ×´Ì¬
+			// è¿æ¥å¯èƒ½å·²æ–­å¼€ï¼Œæ›´æ–°çŠ¶æ€
 			m_bConnect = false;
-			emit m_wsSignals.SigNetworkStatusChanged(ConnectionType::WEBSOCKET, NetworkStatus::DISCONNECTED, u8"Ö÷¶¯¶Ï¿ªWebSocketÁ¬½Ó");
+			emit m_wsSignals.SigNetworkStatusChanged(ConnectionType::WEBSOCKET, NetworkStatus::DISCONNECTED, u8"ä¸»åŠ¨æ–­å¼€WebSocketè¿æ¥");
 		}
 	}
 	else
 	{
-		// ÍøÂçÎ´Á¬½ÓÊ±»º´æÏûÏ¢
+		// ç½‘ç»œæœªè¿æ¥æ—¶ç¼“å­˜æ¶ˆæ¯
 		UnifiedMessage unifiedMsg(msg);
 		CacheMessage(unifiedMsg);
 		LOG_INFO(QString("ipc_moudle send_via_ws ws_not_connected, msg_no_send = %1").arg(msg.toJson().c_str()));
@@ -345,7 +345,7 @@ void WSClientMgrImpl::SnedViaHttp(const HttpMsgBase& msg)
 {
 	if (!m_bHttpCfg)
 	{
-		// HTTPÎ´ÅäÖÃÊ±»º´æÏûÏ¢
+		// HTTPæœªé…ç½®æ—¶ç¼“å­˜æ¶ˆæ¯
 		UnifiedMessage unifiedMsg(msg);
 		CacheMessage(unifiedMsg);
 
@@ -363,7 +363,7 @@ void WSClientMgrImpl::SnedViaHttp(const HttpMsgBase& msg)
 		std::string jsonMsg = msg.ToHttpBody();
 
 
-		//ÉèÖÃhttp headers
+		//è®¾ç½®http headers
 		auto headers = msg.GetHttpHeaders();
 		if (!headers.empty())
 		{
@@ -372,8 +372,8 @@ void WSClientMgrImpl::SnedViaHttp(const HttpMsgBase& msg)
 		}
 
 
-		//postµÄ»Øµ÷º¯Êı
-		//Note: 0915_test_http_fun sync_post·¢ËÍ
+		//postçš„å›è°ƒå‡½æ•°
+		//Note: 0915_test_http_fun sync_postå‘é€
 		//Note: 0924 todo: this-> shared_from_this
 		//auto a = m_httpClientWrap->Post(path, jsonMsg);
 		//if (MessageType::CLIENT_OSS_TOKEN != ParseHttpRep(msg))
@@ -387,10 +387,10 @@ void WSClientMgrImpl::SnedViaHttp(const HttpMsgBase& msg)
 		//	if (rep.statusCode >= 200 && rep.statusCode < 300)
 		//	{
 		//		LOG_INFO(QString("HTTP message sent successfully, status: %1").arg(rep.statusCode));
-		//		// Èç¹ûÏìÓ¦°üº¬Êı¾İ£¬´¦ÀíÏìÓ¦ÏûÏ¢
+		//		// å¦‚æœå“åº”åŒ…å«æ•°æ®ï¼Œå¤„ç†å“åº”æ¶ˆæ¯
 		//		if (!rep.body.empty())
 		//		{
-		//			//TODO: ½âÎömsgÖĞAPI½Ó¿Ú£¬¸ù¾İÏà¹ØĞÅÏ¢»ñÈ¡¸üĞÂÊı¾İÎÄ¼ş£¬²¢½øĞĞºóÆÚ´¦Àí
+		//			//TODO: è§£æmsgä¸­APIæ¥å£ï¼Œæ ¹æ®ç›¸å…³ä¿¡æ¯è·å–æ›´æ–°æ•°æ®æ–‡ä»¶ï¼Œå¹¶è¿›è¡ŒåæœŸå¤„ç†
 		//			auto reqType = ParseHttpRep(msg);
 		//			switch (reqType)
 		//			{
@@ -401,15 +401,15 @@ void WSClientMgrImpl::SnedViaHttp(const HttpMsgBase& msg)
 		//				if (response->IsSuccess())
 		//				{
 		//					auto ret = true;
-		//					//½âÎöoss_token_infoÊı¾İ
+		//					//è§£æoss_token_infoæ•°æ®
 		//					OssTokenResp* uResponse = dynamic_cast<OssTokenResp*>(response.get());
 		//					m_ossToken = uResponse->ossParam;
-		//					//»ñÈ¡µ½login_tokenºó£¬½øĞĞÉè±¸Êı¾İ»ñÈ¡¹¤×÷
+		//					//è·å–åˆ°login_tokenåï¼Œè¿›è¡Œè®¾å¤‡æ•°æ®è·å–å·¥ä½œ
 		//				}
 
 		//				////json_body_parse
 		//				//WSMsgBase msg = WSMsgBase::fromJson(rep.body);
-		//				//// ·¢ËÍĞÅºÅ£¬Í¨ÖªÒÑÍê³Éoss_tokenÊı¾İ»ñÈ¡
+		//				//// å‘é€ä¿¡å·ï¼Œé€šçŸ¥å·²å®Œæˆoss_tokenæ•°æ®è·å–
 		//				//emit m_wsSignals.SigMsgRecevied(QString::number(static_cast<int>(msg.type)), msg);
 		//				LOG_INFO(QString("cur_http_ipc_recv_body, http_type = CLIENT_HTTP_CONN, body  = %1").arg(QString::fromStdString(rep.body)));
 		//				break;
@@ -424,7 +424,7 @@ void WSClientMgrImpl::SnedViaHttp(const HttpMsgBase& msg)
 		//		else
 		//		{
 		//			LOG_INFO(QString("ipc_moudule send_via_http http_request_failed, status_%1, body_%2").arg(rep.statusCode).arg(rep.body.c_str()));
-		//			// HTTP·¢ËÍÊ§°ÜÊ±»º´æÏûÏ¢½øĞĞÖØÊÔ
+		//			// HTTPå‘é€å¤±è´¥æ—¶ç¼“å­˜æ¶ˆæ¯è¿›è¡Œé‡è¯•
 		//			UnifiedMessage unifiedMsg(msg);
 		//			CacheMessage(unifiedMsg);
 		//		}
@@ -437,10 +437,10 @@ void WSClientMgrImpl::SnedViaHttp(const HttpMsgBase& msg)
 			if (rep.statusCode >= 200 && rep.statusCode < 300)
 			{
 				LOG_INFO(QString("HTTP message sent successfully, status: %1").arg(rep.statusCode));
-				// Èç¹ûÏìÓ¦°üº¬Êı¾İ£¬´¦ÀíÏìÓ¦ÏûÏ¢
+				// å¦‚æœå“åº”åŒ…å«æ•°æ®ï¼Œå¤„ç†å“åº”æ¶ˆæ¯
 				if (!rep.body.empty())
 				{
-					//TODO: ½âÎömsgÖĞAPI½Ó¿Ú£¬¸ù¾İÏà¹ØĞÅÏ¢»ñÈ¡¸üĞÂÊı¾İÎÄ¼ş£¬²¢½øĞĞºóÆÚ´¦Àí
+					//TODO: è§£æmsgä¸­APIæ¥å£ï¼Œæ ¹æ®ç›¸å…³ä¿¡æ¯è·å–æ›´æ–°æ•°æ®æ–‡ä»¶ï¼Œå¹¶è¿›è¡ŒåæœŸå¤„ç†
 					auto reqType = ParseHttpRep(msg);
 					switch (reqType)
 					{
@@ -450,23 +450,23 @@ void WSClientMgrImpl::SnedViaHttp(const HttpMsgBase& msg)
 						if (response->IsSuccess())
 						{
 							auto ret = true;
-							//½âÎölogin_token_infoÊı¾İ
+							//è§£ælogin_token_infoæ•°æ®
 							UserResp* uResponse = dynamic_cast<UserResp*>(response.get());
 							//m_loginParam = uResponse->userParam;
 							m_logintoken = uResponse->token;
-							////»ñÈ¡µ½login_tokenºó£¬½øĞĞÉè±¸Êı¾İ»ñÈ¡¹¤×÷
+							////è·å–åˆ°login_tokenåï¼Œè¿›è¡Œè®¾å¤‡æ•°æ®è·å–å·¥ä½œ
 							auto sendDevMsg = CreateHttpMessage(MessageType::CLIENT_GET_DEV_INFO, "http://shop.moonbii.net");
 							SendHTTPMsg(sendDevMsg);
 
 
 							//m_bLoginSer = true;
 							//emit SigSendReplyInfo(QString::fromStdString(resp));
-							//printLog(QString::fromLocal8Bit("µÇÂ¼³É¹¦,·µ»Ø£º") + QString::fromStdString(resp));
+							//printLog(QString::fromLocal8Bit("ç™»å½•æˆåŠŸ,è¿”å›ï¼š") + QString::fromStdString(resp));
 						}
 
 						////json_body_parse
 						//WSMsgBase msg = WSMsgBase::fromJson(rep.body);
-						////·¢ËÍĞÅºÅ·¢³öÏìÓ¦ÏûÏ¢
+						////å‘é€ä¿¡å·å‘å‡ºå“åº”æ¶ˆæ¯
 						//emit m_wsSignals.SigMsgRecevied(QString::number(static_cast<int>(msg.type)), msg);
 						LOG_INFO(QString("cur_http_ipc_recv_body, http_type = CLIENT_HTTP_CONN, body  = %1").arg(QString::fromStdString(rep.body)));
 
@@ -484,17 +484,17 @@ void WSClientMgrImpl::SnedViaHttp(const HttpMsgBase& msg)
 						if (response->IsSuccess())
 						{
 							auto ret = true;
-							//½âÎöoss_token_infoÊı¾İ
+							//è§£æoss_token_infoæ•°æ®
 							OssTokenResp* uResponse = dynamic_cast<OssTokenResp*>(response.get());
 							m_ossToken = uResponse->ossParam;
-							//»ñÈ¡µ½login_tokenºó£¬½øĞĞÉè±¸Êı¾İ»ñÈ¡¹¤×÷
+							//è·å–åˆ°login_tokenåï¼Œè¿›è¡Œè®¾å¤‡æ•°æ®è·å–å·¥ä½œ
 							SingleOSSToken::GetInstance().SetOSSParam(m_ossToken);
 							SingleOSSToken::GetInstance().InitConnect();
 						}
 
 						////json_body_parse
 						//WSMsgBase msg = WSMsgBase::fromJson(rep.body);
-						//// ·¢ËÍĞÅºÅ£¬Í¨ÖªÒÑÍê³Éoss_tokenÊı¾İ»ñÈ¡
+						//// å‘é€ä¿¡å·ï¼Œé€šçŸ¥å·²å®Œæˆoss_tokenæ•°æ®è·å–
 						//emit m_wsSignals.SigMsgRecevied(QString::number(static_cast<int>(msg.type)), msg);
 						LOG_INFO(QString("cur_http_ipc_recv_body, http_type = CLIENT_HTTP_CONN, body  = %1").arg(QString::fromStdString(rep.body)));
 						break;
@@ -517,19 +517,19 @@ void WSClientMgrImpl::SnedViaHttp(const HttpMsgBase& msg)
 						if (response->IsSuccess())
 						{
 							auto ret = true;
-							//½âÎölogin_token_infoÊı¾İ
+							//è§£ælogin_token_infoæ•°æ®
 							DevBindResp* uResponse = dynamic_cast<DevBindResp*>(response.get());
-							//Éè±¸×¢²á´¦Àí
+							//è®¾å¤‡æ³¨å†Œå¤„ç†
 							emit m_wsSignals.SigBindRegDev(*uResponse);
 
 							//m_bLoginSer = true;
 							//emit SigSendReplyInfo(QString::fromStdString(resp));
-							//printLog(QString::fromLocal8Bit("µÇÂ¼³É¹¦,·µ»Ø£º") + QString::fromStdString(resp));
+							//printLog(QString::fromLocal8Bit("ç™»å½•æˆåŠŸ,è¿”å›ï¼š") + QString::fromStdString(resp));
 						}
 
 						////json_body_parse
 						//WSMsgBase msg = WSMsgBase::fromJson(rep.body);
-						////·¢ËÍĞÅºÅ·¢³öÏìÓ¦ÏûÏ¢
+						////å‘é€ä¿¡å·å‘å‡ºå“åº”æ¶ˆæ¯
 						//emit m_wsSignals.SigMsgRecevied(QString::number(static_cast<int>(msg.type)), msg);
 						LOG_INFO(QString("cur_http_ipc_recv_body, http_type = CLIENT_GET_DEV_INFO, body = %1").arg(QString::fromStdString(rep.body.c_str()).data()));
 						break;
@@ -539,11 +539,11 @@ void WSClientMgrImpl::SnedViaHttp(const HttpMsgBase& msg)
 						auto response = BaseSerResp::CreateResponse(rep.body);
 						if (response->IsSuccess())
 						{
-							//·¢ËÍĞÅºÅ£¬½øĞĞÊı¾İ°şÀë£¬½«Éè±¸ÉèÖÃÎª¿ÕÏĞ×´Ì¬
+							//å‘é€ä¿¡å·ï¼Œè¿›è¡Œæ•°æ®å‰¥ç¦»ï¼Œå°†è®¾å¤‡è®¾ç½®ä¸ºç©ºé—²çŠ¶æ€
 							auto ret = true;
-							//½âÎölogin_token_infoÊı¾İ
+							//è§£ælogin_token_infoæ•°æ®
 							DevSereMapResp* uResponse = dynamic_cast<DevSereMapResp*>(response.get());
-							//Éè±¸×¢²á´¦Àí
+							//è®¾å¤‡æ³¨å†Œå¤„ç†
 							emit m_wsSignals.SigRegDevTaskSync(*uResponse);
 						}
 						LOG_INFO(QString("cur_http_ipc_recv_body, http_type = CLIENT_GET_REG_RUN_DEV_INFO, body = %1").arg(QString::fromStdString(rep.body)));
@@ -557,7 +557,7 @@ void WSClientMgrImpl::SnedViaHttp(const HttpMsgBase& msg)
 					//try
 					//{
 					//	WSMsgBase msg = WSMsgBase::fromJson(rep.body);
-					//	//·¢ËÍĞÅºÅ·¢³öÏìÓ¦ÏûÏ¢
+					//	//å‘é€ä¿¡å·å‘å‡ºå“åº”æ¶ˆæ¯
 					//	emit m_wsSignals.SigMsgRecevied(QString::number(static_cast<int>(msg.type)), msg);
 					//	LOG_INFO(QString("%1").arg(QString::fromStdString(rep.body)));
 					//}
@@ -569,7 +569,7 @@ void WSClientMgrImpl::SnedViaHttp(const HttpMsgBase& msg)
 				else
 				{
 					LOG_INFO(QString("ipc_moudule send_via_http http_request_failed, status_%1, body_%2").arg(rep.statusCode).arg(rep.body.c_str()));
-					// HTTP·¢ËÍÊ§°ÜÊ±»º´æÏûÏ¢½øĞĞÖØÊÔ
+					// HTTPå‘é€å¤±è´¥æ—¶ç¼“å­˜æ¶ˆæ¯è¿›è¡Œé‡è¯•
 					UnifiedMessage unifiedMsg(msg);
 					CacheMessage(unifiedMsg);
 				}
@@ -581,7 +581,7 @@ void WSClientMgrImpl::SnedViaHttp(const HttpMsgBase& msg)
 	catch (const std::exception& e)
 	{
 
-		// ·¢ËÍÒì³£Ê±»º´æÏûÏ¢
+		// å‘é€å¼‚å¸¸æ—¶ç¼“å­˜æ¶ˆæ¯
 		UnifiedMessage unifiedMsg(msg);
 		CacheMessage(unifiedMsg);
 		LOG_INFO(QString("ipc_moudule send_via_http failed_2_send_http_msg = %1").arg(e.what()));
@@ -611,10 +611,10 @@ HttpMsgBase WSClientMgrImpl::CreateHttpMessage(MessageType type, const std::stri
 	httpMsg.bAppendix = false;
 	httpMsg.bSerialBody = false;
 
-	// ÉèÖÃAPIÂ·¾¶
+	// è®¾ç½®APIè·¯å¾„
 	httpMsg.urlData[EURLType::API_PATH] = GetHttpPath(type);
 
-	//HTTP ±¨ÎÄÊı¾İÉèÖÃ
+	//HTTP æŠ¥æ–‡æ•°æ®è®¾ç½®
 	switch (type)
 	{
 
@@ -629,10 +629,10 @@ HttpMsgBase WSClientMgrImpl::CreateHttpMessage(MessageType type, const std::stri
 			break;
 		case MessageType::CLIENT_OSS_TOKEN:
 		{
-			//ÉèÖÃbucketÊı¾İ
+			//è®¾ç½®bucketæ•°æ®
 			httpMsg.bodyInfo["biz_scene"] = "hand";
 			//httpMsg.headerInfo["Content-Type"] = "application/json";
-			////ÅĞ¶Ïµ±Ç°loginÊÇ·ñÊ§Ğ§£¬Ê§Ğ§Ôò¸üĞÂtoken
+			////åˆ¤æ–­å½“å‰loginæ˜¯å¦å¤±æ•ˆï¼Œå¤±æ•ˆåˆ™æ›´æ–°token
 			//if (!m_logintoken.empty())
 			//{
 			//	httpMsg.headerInfo["token"] = m_logintoken;
@@ -641,8 +641,8 @@ HttpMsgBase WSClientMgrImpl::CreateHttpMessage(MessageType type, const std::stri
 			//{
 			//	auto sendMsg = CreateHttpMessage(MessageType::CLIENT_HTTP_CONN, "http://shop.moonbii.net", {});
 			//	SendHTTPMsg(sendMsg);
-			//	//ÉèÖÃÒ»¸ö¶¨Ê±Æ÷ÑÓÊ±£¬ÔÙ½øĞĞtoken²éÑ¯Êı¾İ
-			//	// lam´¦Àí
+			//	//è®¾ç½®ä¸€ä¸ªå®šæ—¶å™¨å»¶æ—¶ï¼Œå†è¿›è¡ŒtokenæŸ¥è¯¢æ•°æ®
+			//	// lamå¤„ç†
 			//	if (!m_logintoken.empty())
 			//	{
 			//		httpMsg.headerInfo["token"] = m_logintoken;
@@ -658,7 +658,7 @@ HttpMsgBase WSClientMgrImpl::CreateHttpMessage(MessageType type, const std::stri
 			break;
 		case MessageType::CLIENT_GET_USER_INFO:
 			break;
-		//¹¤¿ØÆô¶¯Ê±£¬»ñÈ¡ËùÓĞÔÚ·şÎñÆ÷ÅäÖÃµÄÓ²¼şÉè±¸
+		//å·¥æ§å¯åŠ¨æ—¶ï¼Œè·å–æ‰€æœ‰åœ¨æœåŠ¡å™¨é…ç½®çš„ç¡¬ä»¶è®¾å¤‡
 		case MessageType::CLIENT_GET_DEV_INFO:
 		{
 			if (!m_logintoken.empty())
@@ -668,10 +668,10 @@ HttpMsgBase WSClientMgrImpl::CreateHttpMessage(MessageType type, const std::stri
 			}
 			break;
 		}
-		//¹¤¿ØÆô¶¯Ê±£¬»ñÈ¡·şÎñÆ÷ÖĞ´¦ÓÚÔËĞĞÖĞµÄÓ²¼şÉè±¸
+		//å·¥æ§å¯åŠ¨æ—¶ï¼Œè·å–æœåŠ¡å™¨ä¸­å¤„äºè¿è¡Œä¸­çš„ç¡¬ä»¶è®¾å¤‡
 		case MessageType::CLIENT_GET_REG_RUN_DEV_INFO:
 		{
-			//// ¹¹½¨ÇëÇóJSON
+			//// æ„å»ºè¯·æ±‚JSON
 			//nlohmann::json reqBody;
 			//nlohmann::json devArr = nlohmann::json::array();
 			//for (const auto& dev : devVec) 
@@ -707,13 +707,13 @@ void WSClientMgrImpl::OnWebSocketOpen()
 	//     connection_status_callback_(true);
 	// }
 	m_wsStatus = NetworkStatus::CONNECTED;
-	m_httpStatus = NetworkStatus::CONNECTED; // HTTPÒ²±ê¼ÇÎªÒÑÁ¬½Ó
+	m_httpStatus = NetworkStatus::CONNECTED; // HTTPä¹Ÿæ ‡è®°ä¸ºå·²è¿æ¥
 	LOG_INFO(QString("WebSocket connected to %1").arg(m_wsSerUrl.c_str()));
 
-	emit m_wsSignals.SigNetworkStatusChanged(ConnectionType::WEBSOCKET, NetworkStatus::CONNECTED, u8"WebSocketÁ¬½Ó³É¹¦");
-	emit m_wsSignals.SigNetworkStatusChanged(ConnectionType::HTTP, NetworkStatus::CONNECTED, u8"HTTPÁ¬½Ó×¼±¸¾ÍĞ÷");
+	emit m_wsSignals.SigNetworkStatusChanged(ConnectionType::WEBSOCKET, NetworkStatus::CONNECTED, u8"WebSocketè¿æ¥æˆåŠŸ");
+	emit m_wsSignals.SigNetworkStatusChanged(ConnectionType::HTTP, NetworkStatus::CONNECTED, u8"HTTPè¿æ¥å‡†å¤‡å°±ç»ª");
 
-	//WebSocketÁ¬½Ó³É¹¦ºó´¦Àí»º´æÏûÏ¢
+	//WebSocketè¿æ¥æˆåŠŸåå¤„ç†ç¼“å­˜æ¶ˆæ¯
 	ProcessCachedMessages();
 }
 
@@ -728,22 +728,22 @@ void WSClientMgrImpl::OnWebSocketMessage(const std::string& msg)
 		// if (it != message_callbacks_.end()) {
 		//     it->second(wsMsg);
 		// }
-		//WS_ĞÄÌø±¨ÎÄ_rep
+		//WS_å¿ƒè·³æŠ¥æ–‡_rep
 		if ( wsMsg.msgType == "heartbeat" || wsMsg.type == MessageType::CLIENT_HEARTBEAT)
 		{
 			auto str = wsMsg.payload.dump();
-			//Todo: ½âÎöpayload
+			//Todo: è§£æpayload
 			emit m_wsSignals.SigHeartBeatAckReceived();
 		}
-		//WS_½ø³ÌÈÎÎñÏÂ·¢_req
+		//WS_è¿›ç¨‹ä»»åŠ¡ä¸‹å‘_req
 		else if(wsMsg.msgType == "device_task_op" && wsMsg.type == MessageType::SER_DISPATCH_TASK)
 		{
-			//Todo: ½âÎöpayload
+			//Todo: è§£æpayload
 			auto str = wsMsg.payload.dump();
 			LOG_INFO(QString("lrz_dev_task_recv_data = %1").arg(QString::fromStdString(str).data()));
 			emit m_wsSignals.SigMsgRecevied(QString::number(static_cast<int>(wsMsg.type)), wsMsg);
 		}
-		//WS_Éè±¸×´Ì¬Í¬²½_req
+		//WS_è®¾å¤‡çŠ¶æ€åŒæ­¥_req
 		else if(wsMsg.msgType == "sync_device" || wsMsg.type == MessageType::CLIENT_SYNC_DEV_STATUS)
 		{
 			//Todo: task_dispatch
@@ -751,7 +751,7 @@ void WSClientMgrImpl::OnWebSocketMessage(const std::string& msg)
 			auto str = wsMsg.payload.dump();
 			emit m_wsSignals.SigMsgRecevied(QString::number(static_cast<int>(wsMsg.type)), wsMsg);
 		}
-		//WS_½ø³Ì×´Ì¬Í¬²½±¨ÎÄ_rep
+		//WS_è¿›ç¨‹çŠ¶æ€åŒæ­¥æŠ¥æ–‡_rep
 		else if(wsMsg.msgType == "sync_process" || wsMsg.type == MessageType::CLIENT_SYNC_TASK_STATUS)
 		{
 			//Todo: task_dispatch
@@ -787,16 +787,16 @@ void WSClientMgrImpl::OnWebSocketClose()
 	// {
 	//     connection_status_callback_(false);
 	// }
-	emit m_wsSignals.SigNetworkStatusChanged(ConnectionType::WEBSOCKET, NetworkStatus::DISCONNECTED, u8"WebSocketÁ¬½Ó¶Ï¿ª");
+	emit m_wsSignals.SigNetworkStatusChanged(ConnectionType::WEBSOCKET, NetworkStatus::DISCONNECTED, u8"WebSocketè¿æ¥æ–­å¼€");
 
-	// ´¥·¢WebSocket¶ÏÁ¬´¦ÀíÂß¼­
+	// è§¦å‘WebSocketæ–­è¿å¤„ç†é€»è¾‘
 	if (ShouldAutoReconnect())
 	{
 		HandleWSDisconnection();
 	}
 	else
 	{
-		LOG_INFO(u8"WebSocket¶ÏÁ¬£¬µ«ÒòÓÃ»§ÊÖ¶¯¹Ø±ÕÍøÂç»òÆäËûÔ­Òò£¬Ìø¹ı×Ô¶¯ÖØÁ¬");
+		LOG_INFO(u8"WebSocketæ–­è¿ï¼Œä½†å› ç”¨æˆ·æ‰‹åŠ¨å…³é—­ç½‘ç»œæˆ–å…¶ä»–åŸå› ï¼Œè·³è¿‡è‡ªåŠ¨é‡è¿");
 	}
 
 }
@@ -809,16 +809,16 @@ void WSClientMgrImpl::OnWebSocketError(int err, const std::string& msg)
 	// if (connection_status_callback_) {
 	//     connection_status_callback_(false);
 	// }
-	emit m_wsSignals.SigNetworkStatusChanged(ConnectionType::WEBSOCKET, NetworkStatus::FAILED, QString(u8"WebSocket´íÎó: %1").arg(msg.c_str()));
+	emit m_wsSignals.SigNetworkStatusChanged(ConnectionType::WEBSOCKET, NetworkStatus::FAILED, QString(u8"WebSocketé”™è¯¯: %1").arg(msg.c_str()));
 
-	// ´¥·¢WebSocket¶ÏÁ¬´¦ÀíÂß¼­
+	// è§¦å‘WebSocketæ–­è¿å¤„ç†é€»è¾‘
 	if (ShouldAutoReconnect())
 	{
 		HandleWSDisconnection();
 	}
 	else
 	{
-		LOG_INFO(QString(u8"WebSocket´íÎó(%1)£¬µ«ÒòÓÃ»§ÊÖ¶¯¹Ø±ÕÍøÂç»òÆäËûÔ­Òò£¬Ìø¹ı×Ô¶¯ÖØÁ¬").arg(err));
+		LOG_INFO(QString(u8"WebSocketé”™è¯¯(%1)ï¼Œä½†å› ç”¨æˆ·æ‰‹åŠ¨å…³é—­ç½‘ç»œæˆ–å…¶ä»–åŸå› ï¼Œè·³è¿‡è‡ªåŠ¨é‡è¿").arg(err));
 
 	}
 }
@@ -826,11 +826,11 @@ void WSClientMgrImpl::OnWebSocketError(int err, const std::string& msg)
 void WSClientMgrImpl::OnHttpError(int err, const std::string& msg)
 {
 	LOG_INFO(QString(u8"HTTP client error: %1, %2").arg(err).arg(msg.c_str()));
-	// HTTP´íÎó²»Ó°ÏìWebSocketÁ¬½Ó×´Ì¬£¬µ«¿ÉÒÔÍ¨¹ıĞÅºÅÍ¨ÖªUI
-	// ¿ÉÒÔ¿¼ÂÇÌí¼Ó×¨ÃÅµÄHTTP´íÎóĞÅºÅ
+	// HTTPé”™è¯¯ä¸å½±å“WebSocketè¿æ¥çŠ¶æ€ï¼Œä½†å¯ä»¥é€šè¿‡ä¿¡å·é€šçŸ¥UI
+	// å¯ä»¥è€ƒè™‘æ·»åŠ ä¸“é—¨çš„HTTPé”™è¯¯ä¿¡å·
 
 	m_httpStatus = NetworkStatus::FAILED;
-	emit m_wsSignals.SigNetworkStatusChanged(ConnectionType::HTTP, NetworkStatus::FAILED, QString(u8"HTTP´íÎó: %1").arg(msg.c_str()));
+	emit m_wsSignals.SigNetworkStatusChanged(ConnectionType::HTTP, NetworkStatus::FAILED, QString(u8"HTTPé”™è¯¯: %1").arg(msg.c_str()));
 }
 
 void WSClientMgrImpl::StopWSReconnect()
@@ -840,7 +840,7 @@ void WSClientMgrImpl::StopWSReconnect()
 	{
 		m_wsReconnectThd.join();
 	}
-	// ÖØÖÃÏß³Ì¶ÔÏóÎªÄ¬ÈÏ×´Ì¬
+	// é‡ç½®çº¿ç¨‹å¯¹è±¡ä¸ºé»˜è®¤çŠ¶æ€
 	m_wsReconnectThd = std::thread();
 }
 
@@ -850,12 +850,12 @@ void WSClientMgrImpl::AttemptWSReconnect()
 	m_wsReconnectCount++;
 	emit m_wsSignals.SigReconnectAttempt(ConnectionType::WEBSOCKET, m_wsReconnectCount, MAX_WS_RECONNECT_ATTEMPTS);
 
-	LOG_INFO(QString(u8"³¢ÊÔWebSocketÖØÁ¬, µÚ %1/%2 ´Î").arg(m_wsReconnectCount).arg(MAX_WS_RECONNECT_ATTEMPTS));
+	LOG_INFO(QString(u8"å°è¯•WebSocketé‡è¿, ç¬¬ %1/%2 æ¬¡").arg(m_wsReconnectCount).arg(MAX_WS_RECONNECT_ATTEMPTS));
 
 	try
 	{
 		m_wsClientWrap->Connect(m_wsSerUrl);
-		// µÈ´ıÁ¬½Ó½á¹û (¼òµ¥µÄÑÓÊ±¼ì²é)
+		// ç­‰å¾…è¿æ¥ç»“æœ (ç®€å•çš„å»¶æ—¶æ£€æŸ¥)
 		std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 		if (m_wsClientWrap->IsConnected())
 		{
@@ -864,71 +864,71 @@ void WSClientMgrImpl::AttemptWSReconnect()
 	}
 	catch (const std::exception& e)
 	{
-		LOG_INFO(QString(u8"WebSocketÖØÁ¬Ê§°Ü: %1").arg(e.what()));
+		LOG_INFO(QString(u8"WebSocketé‡è¿å¤±è´¥: %1").arg(e.what()));
 	}
 }
 
 void WSClientMgrImpl::OnWSReconnectSuccess()
 {
-	LOG_INFO(u8"WebSocketÖØÁ¬³É¹¦");
+	LOG_INFO(u8"WebSocketé‡è¿æˆåŠŸ");
 
 	m_bConnect = true;
 	m_wsStatus = NetworkStatus::CONNECTED;
-	emit m_wsSignals.SigNetworkStatusChanged(ConnectionType::WEBSOCKET, NetworkStatus::CONNECTED, u8"WebSocketÖØÁ¬³É¹¦");
+	emit m_wsSignals.SigNetworkStatusChanged(ConnectionType::WEBSOCKET, NetworkStatus::CONNECTED, u8"WebSocketé‡è¿æˆåŠŸ");
 
-	// ÉèÖÃÖØÁ¬Í£Ö¹±êÖ¾£¬ÈÃÖØÁ¬Ïß³Ì×ÔÈ»½áÊø
+	// è®¾ç½®é‡è¿åœæ­¢æ ‡å¿—ï¼Œè®©é‡è¿çº¿ç¨‹è‡ªç„¶ç»“æŸ
 	m_wsReconnectRunning = false;
 
-	// WebSocketÖØÁ¬³É¹¦ºó£¬ÖØĞÂÁ¬½ÓHTTP
+	// WebSocketé‡è¿æˆåŠŸåï¼Œé‡æ–°è¿æ¥HTTP
 	if (m_needHttpReconnect)
 	{
 		m_httpClientWrap->SetBaseUrl(m_httpBaseUrl);
 		m_httpClientWrap->SetTimeout(5000);
 		m_httpClientWrap->AddHeader("Content-Type", "application/json");
 
-		// Í¨¹ıping½Ó¿Ú²âÊÔHTTPÁ¬½ÓÊÇ·ñÕı³£
+		// é€šè¿‡pingæ¥å£æµ‹è¯•HTTPè¿æ¥æ˜¯å¦æ­£å¸¸
 		if (TestHTTPConnectionWithPing())
 		{
 			m_bHttpCfg = true;
 			m_httpStatus = NetworkStatus::CONNECTED;
 			m_needHttpReconnect = false;
-			emit m_wsSignals.SigNetworkStatusChanged(ConnectionType::HTTP, NetworkStatus::CONNECTED, u8"HTTPÖØÁ¬³É¹¦");
+			emit m_wsSignals.SigNetworkStatusChanged(ConnectionType::HTTP, NetworkStatus::CONNECTED, u8"HTTPé‡è¿æˆåŠŸ");
 		}
-		//Çå¿ÕwsÖØÁ¬´ÎÊı
+		//æ¸…ç©ºwsé‡è¿æ¬¡æ•°
 		m_wsReconnectCount = 0;
 	}
-	//´¦ÀíwsµÄÖØÁ¬Âß¼­
+	//å¤„ç†wsçš„é‡è¿é€»è¾‘
 	//StopWSReconnect();
 }
 
 
 void WSClientMgrImpl::HandleWSDisconnection()
 {
-	LOG_INFO(QString(u8"´¦ÀíWebSocket¶ÏÁ¬"));
+	LOG_INFO(QString(u8"å¤„ç†WebSocketæ–­è¿"));
 
-	// ·ÀÖ¹ÖØ¸´ÖØÁ¬
+	// é˜²æ­¢é‡å¤é‡è¿
 	if (m_wsReconnectRunning) 
 	{
-		LOG_INFO(QString(u8"WebSocketÖØÁ¬ÒÑÔÚ½øĞĞÖĞ£¬Ìø¹ıÖØ¸´´¦Àí"));
+		LOG_INFO(QString(u8"WebSocketé‡è¿å·²åœ¨è¿›è¡Œä¸­ï¼Œè·³è¿‡é‡å¤å¤„ç†"));
 		return;
 	}
 
-	// 1. ÅĞ¶ÏHTTPÁ¬½Ó×´Ì¬£¨¼ò»¯¼ì²é£¬±ÜÃâÍøÂçÇëÇó£©
+	// 1. åˆ¤æ–­HTTPè¿æ¥çŠ¶æ€ï¼ˆç®€åŒ–æ£€æŸ¥ï¼Œé¿å…ç½‘ç»œè¯·æ±‚ï¼‰
 	bool httpConnected = m_bHttpCfg && (m_httpStatus == NetworkStatus::CONNECTED);
-	LOG_INFO(QString(u8"WebSocket¶ÏÁ¬Ê±HTTPÁ¬½Ó×´Ì¬: %1").arg(httpConnected ? u8"Á¬½ÓÕı³£" : u8"Á¬½Ó¶Ï¿ª"));
+	LOG_INFO(QString(u8"WebSocketæ–­è¿æ—¶HTTPè¿æ¥çŠ¶æ€: %1").arg(httpConnected ? u8"è¿æ¥æ­£å¸¸" : u8"è¿æ¥æ–­å¼€"));
 
-	// 2. ´¦ÀíHTTPÁ¬½Ó
+	// 2. å¤„ç†HTTPè¿æ¥
 	if (httpConnected) 
 	{
-		// HTTPÈÔ´¦ÓÚÁ¬½Ó×´Ì¬£¬ÏÈ¶Ï¿ªHTTPÁ¬½Ó
-		LOG_INFO(QString(u8"HTTPÁ¬½ÓÕı³££¬Ö÷¶¯¶Ï¿ªHTTPÁ¬½Ó"));
+		// HTTPä»å¤„äºè¿æ¥çŠ¶æ€ï¼Œå…ˆæ–­å¼€HTTPè¿æ¥
+		LOG_INFO(QString(u8"HTTPè¿æ¥æ­£å¸¸ï¼Œä¸»åŠ¨æ–­å¼€HTTPè¿æ¥"));
 		m_bHttpCfg = false;
 		m_httpStatus = NetworkStatus::DISCONNECTED;
-		emit m_wsSignals.SigNetworkStatusChanged(ConnectionType::HTTP, NetworkStatus::DISCONNECTED, u8"ÒòWebSocket¶ÏÁ¬¶øÖ÷¶¯¶Ï¿ªHTTP");
+		emit m_wsSignals.SigNetworkStatusChanged(ConnectionType::HTTP, NetworkStatus::DISCONNECTED, u8"å› WebSocketæ–­è¿è€Œä¸»åŠ¨æ–­å¼€HTTP");
 	}
 
-	// 3. ÔİÍ£¶¨Ê±Æ÷--ÔÚ¶ÏÍøÏûÏ¢¶Ï¿ª×¢²áÉè±¸ĞÅÏ¢£¬ÔÚÍê³Éongoing_server½Ó¿ÚºóÖØÆô¶¨Ê±Æ÷
-	// 4. ±ê¼ÇHTTPĞèÒªÖØÁ¬²¢Æô¶¯WebSocketÖØÁ¬
+	// 3. æš‚åœå®šæ—¶å™¨--åœ¨æ–­ç½‘æ¶ˆæ¯æ–­å¼€æ³¨å†Œè®¾å¤‡ä¿¡æ¯ï¼Œåœ¨å®Œæˆongoing_serveræ¥å£åé‡å¯å®šæ—¶å™¨
+	// 4. æ ‡è®°HTTPéœ€è¦é‡è¿å¹¶å¯åŠ¨WebSocketé‡è¿
 	m_needHttpReconnect = true;
 	StartWSReconnectInternal();
 
@@ -937,9 +937,9 @@ void WSClientMgrImpl::HandleWSDisconnection()
 
 void WSClientMgrImpl::StartWSReconnectInternal()
 {
-	LOG_INFO(QString("Æô¶¯WebSocketÄÚ²¿ÖØÁ¬£¨Ìø¹ı×´Ì¬¼ì²é£©"));
+	LOG_INFO(QString("å¯åŠ¨WebSocketå†…éƒ¨é‡è¿ï¼ˆè·³è¿‡çŠ¶æ€æ£€æŸ¥ï¼‰"));
 
-	// Í£Ö¹ÈÎºÎÕıÔÚ½øĞĞµÄÖØÁ¬Ïß³Ì
+	// åœæ­¢ä»»ä½•æ­£åœ¨è¿›è¡Œçš„é‡è¿çº¿ç¨‹
 	if (m_wsReconnectRunning || m_wsReconnectThd.joinable())
 	{
 		StopWSReconnect();
@@ -948,10 +948,10 @@ void WSClientMgrImpl::StartWSReconnectInternal()
 	m_wsReconnectCount = 0;
 	m_wsReconnectRunning = true;
 	m_wsStatus = NetworkStatus::RECONNECTING;
-	//ÉèÖÃÍøÂçÖØÁ¬×´Ì¬ÎªÕæ£¬Ä¬ÈÏÎª¼Ù
+	//è®¾ç½®ç½‘ç»œé‡è¿çŠ¶æ€ä¸ºçœŸï¼Œé»˜è®¤ä¸ºå‡
 	g_netReconnectStatus = true;
 
-	emit m_wsSignals.SigNetworkStatusChanged(ConnectionType::WEBSOCKET, NetworkStatus::RECONNECTING, u8"¿ªÊ¼WebSocketÖØÁ¬");
+	emit m_wsSignals.SigNetworkStatusChanged(ConnectionType::WEBSOCKET, NetworkStatus::RECONNECTING, u8"å¼€å§‹WebSocketé‡è¿");
 
 	m_wsReconnectThd = std::thread([this]()
 	{
@@ -968,8 +968,8 @@ void WSClientMgrImpl::StartWSReconnectInternal()
 		if (m_wsReconnectCount >= MAX_WS_RECONNECT_ATTEMPTS)
 		{
 			m_wsStatus = NetworkStatus::FAILED;
-			emit m_wsSignals.SigReconnectFailed(ConnectionType::WEBSOCKET, u8"³¬¹ı×î´óÖØÁ¬´ÎÊı");
-			emit m_wsSignals.SigNetworkStatusChanged(ConnectionType::WEBSOCKET, NetworkStatus::FAILED, u8"WebSocketÖØÁ¬Ê§°Ü");
+			emit m_wsSignals.SigReconnectFailed(ConnectionType::WEBSOCKET, u8"è¶…è¿‡æœ€å¤§é‡è¿æ¬¡æ•°");
+			emit m_wsSignals.SigNetworkStatusChanged(ConnectionType::WEBSOCKET, NetworkStatus::FAILED, u8"WebSocketé‡è¿å¤±è´¥");
 		}
 
 		m_wsReconnectRunning = false;
@@ -980,66 +980,66 @@ bool WSClientMgrImpl::TestHTTPConnectionWithPing()
 {
 	try 
 	{
-		LOG_INFO(QString(u8"¿ªÊ¼HTTP pingÁ¬½Ó²âÊÔ"));
+		LOG_INFO(QString(u8"å¼€å§‹HTTP pingè¿æ¥æµ‹è¯•"));
 
-		// ·¢ËÍGETÇëÇóµ½ping½Ó¿Ú
+		// å‘é€GETè¯·æ±‚åˆ°pingæ¥å£
 		HttpRep response = m_httpClientWrap->Get("/ping");
 
-		LOG_INFO(QString(u8"HTTP pingÏìÓ¦×´Ì¬Âë: %1").arg(response.statusCode));
-		LOG_INFO(QString(u8"HTTP pingÏìÓ¦ÄÚÈİ: %1").arg(response.body.c_str()));
+		LOG_INFO(QString(u8"HTTP pingå“åº”çŠ¶æ€ç : %1").arg(response.statusCode));
+		LOG_INFO(QString(u8"HTTP pingå“åº”å†…å®¹: %1").arg(response.body.c_str()));
 
-		// ¼ì²é×´Ì¬Âë
+		// æ£€æŸ¥çŠ¶æ€ç 
 		if (response.statusCode < 200 || response.statusCode >= 300) 
 		{
-			LOG_INFO(QString(u8"HTTP pingÊ§°Ü£¬×´Ì¬Âë: %1").arg(response.statusCode));
+			LOG_INFO(QString(u8"HTTP pingå¤±è´¥ï¼ŒçŠ¶æ€ç : %1").arg(response.statusCode));
 			return false;
 		}
 
-		// ½âÎöÏìÓ¦JSON
+		// è§£æå“åº”JSON
 		if (!response.body.empty() && response.statusCode == 200)
 		{
-			LOG_INFO(QString(u8"HTTP ping²âÊÔ³É¹¦£¬·µ»ØÕıÈ·µÄpongÏìÓ¦"));
+			LOG_INFO(QString(u8"HTTP pingæµ‹è¯•æˆåŠŸï¼Œè¿”å›æ­£ç¡®çš„pongå“åº”"));
 			return true;
 		}
 		else
 		{
-			LOG_INFO(QString(u8"HTTP pingÏìÓ¦Îª¿Õ"));
+			LOG_INFO(QString(u8"HTTP pingå“åº”ä¸ºç©º"));
 			return false;
 		}
 
-		//// ½âÎöÏìÓ¦JSON
+		//// è§£æå“åº”JSON
 		//if (!response.body.empty())
 		//{
 		//	try 
 		//	{
 		//		nlohmann::json jsonResponse = nlohmann::json::parse(response.body);
-		//		// ¼ì²éÊÇ·ñ°üº¬message×Ö¶ÎÇÒÖµÎª"pong"
+		//		// æ£€æŸ¥æ˜¯å¦åŒ…å«messageå­—æ®µä¸”å€¼ä¸º"pong"
 		//		if (jsonResponse.contains("message") && jsonResponse["message"] == "pong") 
 		//		{
-		//			LOG_INFO("HTTP ping²âÊÔ³É¹¦£¬·µ»ØÕıÈ·µÄpongÏìÓ¦");
+		//			LOG_INFO("HTTP pingæµ‹è¯•æˆåŠŸï¼Œè¿”å›æ­£ç¡®çš„pongå“åº”");
 		//			return true;
 		//		}
 		//		else 
 		//		{
-		//			LOG_INFO(QString("HTTP pingÏìÓ¦¸ñÊ½²»ÕıÈ·£¬ÆÚÍû{\"message\":\"pong\"}£¬Êµ¼Ê: %1").arg(response.body.c_str()));
+		//			LOG_INFO(QString("HTTP pingå“åº”æ ¼å¼ä¸æ­£ç¡®ï¼ŒæœŸæœ›{\"message\":\"pong\"}ï¼Œå®é™…: %1").arg(response.body.c_str()));
 		//			return false;
 		//		}
 		//	}
 		//	catch (const nlohmann::json::exception& e) 
 		//	{
-		//		LOG_INFO(QString("HTTP pingÏìÓ¦JSON½âÎöÊ§°Ü: %1, ÏìÓ¦ÄÚÈİ: %2").arg(e.what()).arg(response.body.c_str()));
+		//		LOG_INFO(QString("HTTP pingå“åº”JSONè§£æå¤±è´¥: %1, å“åº”å†…å®¹: %2").arg(e.what()).arg(response.body.c_str()));
 		//		return false;
 		//	}
 		//}
 		//else 
 		//{
-		//	LOG_INFO("HTTP pingÏìÓ¦Îª¿Õ");
+		//	LOG_INFO("HTTP pingå“åº”ä¸ºç©º");
 		//	return false;
 		//}
 	}
 	catch (const std::exception& e) 
 	{
-		LOG_INFO(QString(u8"HTTP pingÁ¬½Ó²âÊÔÒì³£: %1").arg(e.what()));
+		LOG_INFO(QString(u8"HTTP pingè¿æ¥æµ‹è¯•å¼‚å¸¸: %1").arg(e.what()));
 		return false;
 	}
 }
@@ -1048,23 +1048,23 @@ bool WSClientMgrImpl::CheckWebSocketConnection()
 {
 	try 
 	{
-		LOG_INFO("¼ì²éWebSocketÁ¬½Ó×´Ì¬");
+		LOG_INFO("æ£€æŸ¥WebSocketè¿æ¥çŠ¶æ€");
 
-		// ¼ì²é»ù±¾Á¬½Ó×´Ì¬
+		// æ£€æŸ¥åŸºæœ¬è¿æ¥çŠ¶æ€
 		if (!m_bConnect || !m_wsClientWrap->IsConnected()) 
 		{
-			LOG_INFO("WebSocket»ù±¾×´Ì¬¼ì²é£ºÎ´Á¬½Ó");
+			LOG_INFO("WebSocketåŸºæœ¬çŠ¶æ€æ£€æŸ¥ï¼šæœªè¿æ¥");
 			return false;
 		}
 
-		// ¿ÉÒÔ·¢ËÍÒ»¸ö²âÊÔÏûÏ¢À´ÑéÖ¤Á¬½ÓÊÇ·ñÕı³£
-		// ÕâÀïÎÒÃÇÏÈ¼òµ¥¼ì²éÁ¬½Ó×´Ì¬
-		LOG_INFO("WebSocketÁ¬½Ó×´Ì¬¼ì²é£ºÕı³£");
+		// å¯ä»¥å‘é€ä¸€ä¸ªæµ‹è¯•æ¶ˆæ¯æ¥éªŒè¯è¿æ¥æ˜¯å¦æ­£å¸¸
+		// è¿™é‡Œæˆ‘ä»¬å…ˆç®€å•æ£€æŸ¥è¿æ¥çŠ¶æ€
+		LOG_INFO("WebSocketè¿æ¥çŠ¶æ€æ£€æŸ¥ï¼šæ­£å¸¸");
 		return true;
 	}
 	catch (const std::exception& e) 
 	{
-		LOG_INFO(QString("WebSocketÁ¬½Ó×´Ì¬¼ì²éÒì³£: %1").arg(e.what()));
+		LOG_INFO(QString("WebSocketè¿æ¥çŠ¶æ€æ£€æŸ¥å¼‚å¸¸: %1").arg(e.what()));
 		return false;
 	}
 }
@@ -1072,84 +1072,84 @@ bool WSClientMgrImpl::CheckWebSocketConnection()
 bool WSClientMgrImpl::CheckHTTPConnection()
 {
 	try {
-		LOG_INFO("¼ì²éHTTPÁ¬½Ó×´Ì¬");
+		LOG_INFO("æ£€æŸ¥HTTPè¿æ¥çŠ¶æ€");
 
-		// ¼ì²é»ù±¾ÅäÖÃ×´Ì¬
+		// æ£€æŸ¥åŸºæœ¬é…ç½®çŠ¶æ€
 		if (!m_bHttpCfg) {
-			LOG_INFO("HTTP»ù±¾×´Ì¬¼ì²é£ºÎ´ÅäÖÃ");
+			LOG_INFO("HTTPåŸºæœ¬çŠ¶æ€æ£€æŸ¥ï¼šæœªé…ç½®");
 			return false;
 		}
 
-		// Í¨¹ıping½Ó¿Ú²âÊÔHTTPÁ¬½Ó
+		// é€šè¿‡pingæ¥å£æµ‹è¯•HTTPè¿æ¥
 		return TestHTTPConnectionWithPing();
 	}
 	catch (const std::exception& e) {
-		LOG_INFO(QString("HTTPÁ¬½Ó×´Ì¬¼ì²éÒì³£: %1").arg(e.what()));
+		LOG_INFO(QString("HTTPè¿æ¥çŠ¶æ€æ£€æŸ¥å¼‚å¸¸: %1").arg(e.what()));
 		return false;
 	}
 }
 
 void WSClientMgrImpl::DisconnectAllConnections()
 {
-	LOG_INFO(QString(u8"Ö÷¶¯¶Ï¿ªËùÓĞÍøÂçÁ¬½Ó"));
+	LOG_INFO(QString(u8"ä¸»åŠ¨æ–­å¼€æ‰€æœ‰ç½‘ç»œè¿æ¥"));
 
 	try 
 	{
-		// ¶Ï¿ªWebSocketÁ¬½Ó
+		// æ–­å¼€WebSocketè¿æ¥
 		if (m_bConnect && m_wsClientWrap->IsConnected()) 
 		{
-			LOG_INFO(QString(u8"Ö÷¶¯¶Ï¿ªWebSocketÁ¬½Ó"));
+			LOG_INFO(QString(u8"ä¸»åŠ¨æ–­å¼€WebSocketè¿æ¥"));
 			m_wsClientWrap->Disconnect();
 			m_bConnect = false;
 			m_wsStatus = NetworkStatus::DISCONNECTED;
-			emit m_wsSignals.SigNetworkStatusChanged(ConnectionType::WEBSOCKET, NetworkStatus::DISCONNECTED, u8"Ö÷¶¯¶Ï¿ªWebSocketÁ¬½Ó");
+			emit m_wsSignals.SigNetworkStatusChanged(ConnectionType::WEBSOCKET, NetworkStatus::DISCONNECTED, u8"ä¸»åŠ¨æ–­å¼€WebSocketè¿æ¥");
 		}
 
-		//// ¶Ï¿ªHTTPÁ¬½Ó
+		//// æ–­å¼€HTTPè¿æ¥
 		//if (m_bHttpCfg) {
-		//	LOG_INFO("Ö÷¶¯¶Ï¿ªHTTPÁ¬½Ó");
+		//	LOG_INFO("ä¸»åŠ¨æ–­å¼€HTTPè¿æ¥");
 		//	m_bHttpCfg = false;
 		//	m_httpStatus = NetworkStatus::DISCONNECTED;
-		//	emit m_wsSignals.SigNetworkStatusChanged(ConnectionType::HTTP, NetworkStatus::DISCONNECTED, "Ö÷¶¯¶Ï¿ªHTTPÁ¬½Ó");
+		//	emit m_wsSignals.SigNetworkStatusChanged(ConnectionType::HTTP, NetworkStatus::DISCONNECTED, "ä¸»åŠ¨æ–­å¼€HTTPè¿æ¥");
 		//}
 
-		// ¶ÌÔİµÈ´ı£¬È·±£¶Ï¿ª²Ù×÷Íê³É
+		// çŸ­æš‚ç­‰å¾…ï¼Œç¡®ä¿æ–­å¼€æ“ä½œå®Œæˆ
 		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
-		LOG_INFO(QString(u8"ËùÓĞÍøÂçÁ¬½ÓÒÑ¶Ï¿ª"));
+		LOG_INFO(QString(u8"æ‰€æœ‰ç½‘ç»œè¿æ¥å·²æ–­å¼€"));
 	}
 	catch (const std::exception& e) 
 	{
-		LOG_INFO(QString(u8"¶Ï¿ªÍøÂçÁ¬½ÓÒì³£: %1").arg(e.what()));
+		LOG_INFO(QString(u8"æ–­å¼€ç½‘ç»œè¿æ¥å¼‚å¸¸: %1").arg(e.what()));
 	}
 }
 
 bool WSClientMgrImpl::ShouldAutoReconnect()
 {
-	// 1. ¼ì²éÓÃ»§ÊÇ·ñÊÖ¶¯¹Ø±ÕÁËÍøÂç°´Å¥
+	// 1. æ£€æŸ¥ç”¨æˆ·æ˜¯å¦æ‰‹åŠ¨å…³é—­äº†ç½‘ç»œæŒ‰é’®
 	if (GetIsCloseNetBtnStatus()) 
 	{
-		LOG_INFO(QString(u8"ÓÃ»§ÊÖ¶¯¹Ø±ÕÁËÍøÂç°´Å¥£¬Ìø¹ı×Ô¶¯ÖØÁ¬"));
+		LOG_INFO(QString(u8"ç”¨æˆ·æ‰‹åŠ¨å…³é—­äº†ç½‘ç»œæŒ‰é’®ï¼Œè·³è¿‡è‡ªåŠ¨é‡è¿"));
 		return false;
 	}
 
-	// 2. ¼ì²éµ±Ç°ÊÇ·ñÒÑ¾­ÔÚÖØÁ¬ÖĞ
+	// 2. æ£€æŸ¥å½“å‰æ˜¯å¦å·²ç»åœ¨é‡è¿ä¸­
 	if (m_wsReconnectRunning) 
 	{
-		LOG_INFO(QString(u8"WebSocketÖØÁ¬ÒÑÔÚ½øĞĞÖĞ£¬Ìø¹ıÖØ¸´ÖØÁ¬"));
+		LOG_INFO(QString(u8"WebSocketé‡è¿å·²åœ¨è¿›è¡Œä¸­ï¼Œè·³è¿‡é‡å¤é‡è¿"));
 		return false;
 	}
 
-	// 3. ¼ì²éÊÇ·ñÓĞÒµÎñÏß³ÌÔÚ¹¤×÷£¨ÕâÀï¿ÉÒÔ¸ù¾İ¾ßÌåÒµÎñĞèÇóÀ©Õ¹£©
-	// ÀıÈç£º¼ì²é·¢ËÍ¶ÓÁĞ¡¢ĞÄÌø×´Ì¬µÈ
+	// 3. æ£€æŸ¥æ˜¯å¦æœ‰ä¸šåŠ¡çº¿ç¨‹åœ¨å·¥ä½œï¼ˆè¿™é‡Œå¯ä»¥æ ¹æ®å…·ä½“ä¸šåŠ¡éœ€æ±‚æ‰©å±•ï¼‰
+	// ä¾‹å¦‚ï¼šæ£€æŸ¥å‘é€é˜Ÿåˆ—ã€å¿ƒè·³çŠ¶æ€ç­‰
 	if (m_sendThdRunning || m_heartbeatThdRunning) 
 	{
-		LOG_INFO(QString(u8"¼ì²âµ½ÒµÎñÏß³ÌÕıÔÚ¹¤×÷£¬ÔÊĞí×Ô¶¯ÖØÁ¬"));
+		LOG_INFO(QString(u8"æ£€æµ‹åˆ°ä¸šåŠ¡çº¿ç¨‹æ­£åœ¨å·¥ä½œï¼Œå…è®¸è‡ªåŠ¨é‡è¿"));
 		return true;
 	}
 
-	// 4. Ä¬ÈÏÇé¿öÏÂÔÊĞíÖØÁ¬
-	LOG_INFO(QString(u8"Âú×ãÖØÁ¬Ìõ¼ş£¬ÔÊĞí×Ô¶¯ÖØÁ¬"));
+	// 4. é»˜è®¤æƒ…å†µä¸‹å…è®¸é‡è¿
+	LOG_INFO(QString(u8"æ»¡è¶³é‡è¿æ¡ä»¶ï¼Œå…è®¸è‡ªåŠ¨é‡è¿"));
 	return true;
 }
 
@@ -1157,21 +1157,57 @@ void WSClientMgrImpl::CacheMessage(const UnifiedMessage& msg)
 {
 	std::lock_guard<std::mutex> lock(m_cacheMtx);
 
-	// ¼ì²é»º´æ¶ÓÁĞÊÇ·ñÒÑÂú
-	if (m_cacheQue.size() >= MAX_CACHED_MESSAGES)
+	if (m_dbService)
 	{
-		// ÒÆ³ı×îÔçµÄÏûÏ¢
-		m_cacheQue.pop();
-		LOG_INFO(QString(u8"»º´æ¶ÓÁĞÒÑÂú£¬ÒÆ³ı×îÔçµÄÏûÏ¢"));
-	}
+		nlohmann::json j;
+		j["method"] = static_cast<int>(msg.method);
+		if (msg.method == ConnectionType::WEBSOCKET)
+		{
+			j["wsMsg"] = nlohmann::json::parse(msg.wsMsg.toJson());
+		}
+		else if (msg.method == ConnectionType::HTTP)
+		{
+			nlohmann::json httpJ;
+			httpJ["strUrl"] = msg.httpMsg.strUrl;
+			httpJ["bAppendix"] = msg.httpMsg.bAppendix;
+			httpJ["bSerialBody"] = msg.httpMsg.bSerialBody;
+			
+			nlohmann::json headersJ = nlohmann::json::object();
+			for (const auto& pair : msg.httpMsg.headerInfo)
+			{
+				headersJ[pair.first] = pair.second;
+			}
+			httpJ["headerInfo"] = headersJ;
+			
+			nlohmann::json bodyJ = nlohmann::json::object();
+			for (const auto& pair : msg.httpMsg.bodyInfo)
+			{
+				bodyJ[pair.first] = pair.second;
+			}
+			httpJ["bodyInfo"] = bodyJ;
+			
+			nlohmann::json urlDataJ = nlohmann::json::object();
+			for (const auto& pair : msg.httpMsg.urlData)
+			{
+				urlDataJ[std::to_string(static_cast<int>(pair.first))] = pair.second;
+			}
+			httpJ["urlData"] = urlDataJ;
+			
+			j["httpMsg"] = httpJ;
+		}
 
-	// Ìí¼ÓĞÂÏûÏ¢µ½»º´æ¶ÓÁĞ
-	m_cacheQue.push(msg);
-	emit m_wsSignals.SigSyncCacheFinishTask(msg);
-	LOG_INFO(QString(u8"ÏûÏ¢ÒÑ»º´æ£¬¶ÓÁĞ´óĞ¡: %1/%2£¬ÏûÏ¢ÀàĞÍ: %3")
-		.arg(m_cacheQue.size())
-		.arg(MAX_CACHED_MESSAGES)
-		.arg(static_cast<int>(msg.method)));
+		m_dbService->EnqueueOfflineMessage("unified_message", j.dump());
+		LOG_INFO(QString(u8"æ¶ˆæ¯å·²ç¼“å­˜è‡³æœ¬åœ°æ•°æ®åº“ SQLite, æ¶ˆæ¯ç±»å‹: %1").arg(static_cast<int>(msg.method)));
+	}
+	else
+	{
+		if (m_cacheQue.size() >= MAX_CACHED_MESSAGES)
+		{
+			m_cacheQue.pop();
+			LOG_INFO(QString(u8"å†…å­˜ç¼“å­˜é˜Ÿåˆ—æ»¡ï¼Œç§»é™¤æœ€è€çš„æ¶ˆæ¯"));
+		}
+		m_cacheQue.push(msg);
+	}
 }
 
 
@@ -1179,50 +1215,192 @@ void WSClientMgrImpl::ProcessCachedMessages()
 {
 	std::lock_guard<std::mutex> lock(m_cacheMtx);
 
-	if (m_cacheQue.empty())
+	if (m_dbService)
 	{
-		return;
-	}
-
-	LOG_INFO(QString(u8"¿ªÊ¼´¦Àí»º´æÏûÏ¢£¬¶ÓÁĞ´óĞ¡: %1").arg(m_cacheQue.size()));
-
-	while (!m_cacheQue.empty())
-	{
-		UnifiedMessage cacheMsg = m_cacheQue.front();
-		m_cacheQue.pop();
-		
-		//½«»º´æÏûÏ¢ÖØĞÂ¼ÙÈçµ½·¢ËÍ¶ÓÁĞ
+		auto list = m_dbService->DequeueOfflineMessages(50);
+		if (list.empty())
 		{
-			std::lock_guard<std::mutex> sendLock(m_sendMtx);
-			m_sendQue.push(cacheMsg);
+			return;
 		}
-		//Í¨Öª·¢ËÍÏß³Ì
-		m_sendCV.notify_one();
-		LOG_INFO(QString(u8"»º´æÏûÏ¢ÒÑÖØĞÂ¼ÓÈë·¢ËÍ¶ÓÁĞ£¬ÀàĞÍ: %1").arg(static_cast<int>(cacheMsg.method)));
+
+		LOG_INFO(QString(u8"å¼€å§‹å¤„ç†æœ¬åœ°æ•°æ®åº“ç¦»çº¿ç¼“å­˜æ¶ˆæ¯ï¼Œæ¡æ•°: %1").arg(list.size()));
+
+		for (const auto& item : list)
+		{
+			int queueId = std::get<0>(item);
+			std::string payloadType = std::get<1>(item);
+			std::string payloadData = std::get<2>(item);
+
+			if (payloadType == "unified_message")
+			{
+				try
+				{
+					auto j = nlohmann::json::parse(payloadData);
+					UnifiedMessage msg;
+					msg.method = static_cast<ConnectionType>(j["method"].get<int>());
+
+					if (msg.method == ConnectionType::WEBSOCKET)
+					{
+						WSMsgBase wsMsg;
+						auto wsJ = j["wsMsg"];
+						wsMsg.msgId = wsJ.value("msgId", "");
+						wsMsg.msgType = wsJ.value("msgType", "");
+						wsMsg.type = static_cast<MessageType>(wsJ.value("type", 0));
+						wsMsg.payload = wsJ.value("payload", nlohmann::json::object());
+						msg.wsMsg = wsMsg;
+					}
+					else if (msg.method == ConnectionType::HTTP)
+					{
+						HttpMsgBase httpMsg;
+						auto httpJ = j["httpMsg"];
+						httpMsg.strUrl = httpJ.value("strUrl", "");
+						httpMsg.bAppendix = httpJ.value("bAppendix", false);
+						httpMsg.bSerialBody = httpJ.value("bSerialBody", false);
+
+						auto headersJ = httpJ["headerInfo"];
+						for (auto it = headersJ.begin(); it != headersJ.end(); ++it)
+						{
+							httpMsg.headerInfo[it.key()] = it.value().get<std::string>();
+						}
+
+						auto bodyJ = httpJ["bodyInfo"];
+						for (auto it = bodyJ.begin(); it != bodyJ.end(); ++it)
+						{
+							httpMsg.bodyInfo[it.key()] = it.value().get<std::string>();
+						}
+
+						auto urlDataJ = httpJ["urlData"];
+						for (auto it = urlDataJ.begin(); it != urlDataJ.end(); ++it)
+						{
+							int urlTypeInt = std::stoi(it.key());
+							httpMsg.urlData[static_cast<EURLType>(urlTypeInt)] = it.value().get<std::string>();
+						}
+
+						msg.httpMsg = httpMsg;
+					}
+
+					{
+						std::lock_guard<std::mutex> sendLock(m_sendMtx);
+						m_sendQue.push(msg);
+					}
+					m_sendCV.notify_one();
+
+					m_dbService->DeleteOfflineMessage(queueId);
+					LOG_INFO(QString(u8"ä»æœ¬åœ°æ•°æ®åº“è¯»å–å¹¶è¡¥å‘æ¶ˆæ¯ï¼ŒID: %1").arg(queueId));
+				}
+				catch (const std::exception& e)
+				{
+					LOG_INFO(QString(u8"è§£æç¦»çº¿ç¼“å­˜æ•°æ®å¤±è´¥ï¼Œåˆ é™¤è¯¥æ¡è®°å½•. ID: %1, Error: %2")
+						.arg(queueId)
+						.arg(e.what()));
+					m_dbService->DeleteOfflineMessage(queueId);
+				}
+			}
+		}
 	}
-	LOG_INFO(QString(u8"ËùÓĞ»º´æÏûÏ¢ÒÑÖØĞÂ·¢ËÍ"));
+	else
+	{
+		while (!m_cacheQue.empty())
+		{
+			UnifiedMessage cacheMsg = m_cacheQue.front();
+			m_cacheQue.pop();
+			{
+				std::lock_guard<std::mutex> sendLock(m_sendMtx);
+				m_sendQue.push(cacheMsg);
+			}
+			m_sendCV.notify_one();
+		}
+	}
 }
 
 void WSClientMgrImpl::ClearCacheMessages()
 {
 	std::lock_guard<std::mutex> lock(m_cacheMtx);
-	size_t cnt = m_cacheQue.size();
-
-	// Çå¿Õ»º´æ¶ÓÁĞ
+	if (m_dbService)
+	{
+		auto list = m_dbService->DequeueOfflineMessages(1000);
+		for (const auto& item : list)
+		{
+			m_dbService->DeleteOfflineMessage(std::get<0>(item));
+		}
+	}
 	std::queue<UnifiedMessage> emptyQue;
 	m_cacheQue.swap(emptyQue);
-	LOG_INFO(QString(u8"ÒÑÇå¿Õ»º´æÏûÏ¢¶ÓÁĞ£¬Çå³ıÏûÏ¢Êı: %1").arg(cnt));
 }
 
 size_t WSClientMgrImpl::GetCachedMessagesSize()
 {
 	std::lock_guard<std::mutex> lock(m_cacheMtx);
+	if (m_dbService)
+	{
+		auto list = m_dbService->DequeueOfflineMessages(1000);
+		return list.size();
+	}
 	return m_cacheQue.size();
 }
 
 std::queue<UnifiedMessage> WSClientMgrImpl::GetCachedMessages()
 {
 	std::lock_guard<std::mutex> lock(m_cacheMtx);
-	auto data = m_cacheQue;
-	return data;
+	if (m_dbService)
+	{
+		std::queue<UnifiedMessage> retQue;
+		auto list = m_dbService->DequeueOfflineMessages(1000);
+		for (const auto& item : list)
+		{
+			std::string payloadData = std::get<2>(item);
+			try
+			{
+				auto j = nlohmann::json::parse(payloadData);
+				UnifiedMessage msg;
+				msg.method = static_cast<ConnectionType>(j["method"].get<int>());
+
+				if (msg.method == ConnectionType::WEBSOCKET)
+				{
+					WSMsgBase wsMsg;
+					auto wsJ = j["wsMsg"];
+					wsMsg.msgId = wsJ.value("msgId", "");
+					wsMsg.msgType = wsJ.value("msgType", "");
+					wsMsg.type = static_cast<MessageType>(wsJ.value("type", 0));
+					wsMsg.payload = wsJ.value("payload", nlohmann::json::object());
+					msg.wsMsg = wsMsg;
+				}
+				else if (msg.method == ConnectionType::HTTP)
+				{
+					HttpMsgBase httpMsg;
+					auto httpJ = j["httpMsg"];
+					httpMsg.strUrl = httpJ.value("strUrl", "");
+					httpMsg.bAppendix = httpJ.value("bAppendix", false);
+					httpMsg.bSerialBody = httpJ.value("bSerialBody", false);
+
+					auto headersJ = httpJ["headerInfo"];
+					for (auto it = headersJ.begin(); it != headersJ.end(); ++it)
+					{
+						httpMsg.headerInfo[it.key()] = it.value().get<std::string>();
+					}
+
+					auto bodyJ = httpJ["bodyInfo"];
+					for (auto it = bodyJ.begin(); it != bodyJ.end(); ++it)
+					{
+						httpMsg.bodyInfo[it.key()] = it.value().get<std::string>();
+					}
+
+					auto urlDataJ = httpJ["urlData"];
+					for (auto it = urlDataJ.begin(); it != urlDataJ.end(); ++it)
+					{
+						int urlTypeInt = std::stoi(it.key());
+						httpMsg.urlData[static_cast<EURLType>(urlTypeInt)] = it.value().get<std::string>();
+					}
+
+					msg.httpMsg = httpMsg;
+				}
+				retQue.push(msg);
+			}
+			catch (...)
+			{
+			}
+		}
+		return retQue;
+	}
+	return m_cacheQue;
 }
