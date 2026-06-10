@@ -1,4 +1,4 @@
-﻿#include "hard2Ser_2_0.h"
+#include "ui/hard2Ser_2_0.h"
 #include <QtWidgets/QApplication>
 #include "CLogManager.h"
 
