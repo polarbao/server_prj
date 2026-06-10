@@ -1,0 +1,183 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\comm\CommFun.cpp" />
+    <ClCompile Include="..\..\src\comm\CLogManager.cpp" />
+    <ClCompile Include="..\..\src\comm\CLogThread.cpp" />
+    <ClCompile Include="..\..\src\comm\global.cpp" />
+    <ClCompile Include="..\..\src\comm\MessageDefine.cpp" />
+    <ClCompile Include="..\..\src\comm\SingleOSSToken.cpp" />
+    <ClCompile Include="..\..\src\hard2Ser_2_0.cpp" />
+    <ClCompile Include="..\..\src\ipc\CameraTcpMgr.cpp" />
+    <ClCompile Include="..\..\src\ipc\HttpClientWrapper.cpp" />
+    <ClCompile Include="..\..\src\ipc\HttpRepParser.cpp" />
+    <ClCompile Include="..\..\src\ipc\TcpServerWrapper.cpp" />
+    <ClCompile Include="..\..\src\ipc\UdpServerWrapper.cpp" />
+    <ClCompile Include="..\..\src\ipc\WSClientMgr.cpp" />
+    <ClCompile Include="..\..\src\ipc\WSClientSig.cpp" />
+    <ClCompile Include="..\..\src\ipc\WSClientWrapper.cpp" />
+    <ClCompile Include="..\..\src\main.cpp" />
+    <ClCompile Include="..\..\src\ui\manuUI.cpp" />
+    <ClCompile Include="..\..\src\ui\scanUI.cpp" />
+    <ClCompile Include="..\..\src\ui\stickUI.cpp" />
+    <ClCompile Include="..\..\src\ui\storeLoginUI.cpp" />
+    <ClCompile Include="..\..\src\work\deviceManu.cpp" />
+    <ClCompile Include="..\..\src\work\deviceScan.cpp" />
+    <ClCompile Include="..\..\src\work\deviceBase.cpp" />
+    <ClCompile Include="..\..\src\work\deviceStick.cpp" />
+    <ClCompile Include="..\..\src\work\manuWork.cpp" />
+    <ClCompile Include="..\..\src\work\scanWork.cpp" />
+    <ClCompile Include="..\..\src\work\stickWork.cpp" />
+    <ClCompile Include="..\..\src\work\workBase.cpp" />
+    <ClCompile Include="..\..\src\work\workThdMgr.cpp" />
+    <ClCompile Include="..\..\src\work\workThdSig.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="..\..\src\hard2Ser_2_0.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="..\..\src\hard2Ser_2_0.qrc" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="..\..\src\hard2Ser_2_0.ui" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="..\..\src\comm\CommFun.h" />
+    <ClInclude Include="..\..\src\comm\MessageDefine.h" />
+    <QtMoc Include="..\..\src\ipc\CameraTcpMgr.h" />
+    <ClInclude Include="..\..\src\comm\SingleOSSToken.h" />
+    <ClInclude Include="..\..\src\ipc\HttpClientWrapper.h" />
+    <ClInclude Include="..\..\src\ipc\HttpRepParser.h" />
+    <ClInclude Include="..\..\src\ipc\iHttpClientWrapper.h" />
+    <ClInclude Include="..\..\src\ipc\iTcpServerWrapper.h" />
+    <ClInclude Include="..\..\src\ipc\iUdpServerWrapper.h" />
+    <ClInclude Include="..\..\src\ipc\iWSClientMgr.h" />
+    <QtMoc Include="..\..\src\ui\scanUI.h" />
+    <QtMoc Include="..\..\src\ui\storeLoginUI.h" />
+    <QtMoc Include="..\..\src\ui\manuUI.h" />
+    <QtMoc Include="..\..\src\ui\stickUI.h" />
+    <ClInclude Include="..\..\src\ipc\TcpServerWrapper.h" />
+    <ClInclude Include="..\..\src\ipc\UdpServerWrapper.h" />
+    <ClInclude Include="..\..\src\work\iDeviceBase.h" />
+    <QtMoc Include="..\..\src\work\iWorkBase.h" />
+    <ClInclude Include="..\..\src\work\workThdMgr.h" />
+    <QtMoc Include="..\..\src\work\iWorkMgr.h" />
+    <ClInclude Include="..\..\src\work\manuWork.h" />
+    <ClInclude Include="..\..\src\work\scanWork.h" />
+    <ClInclude Include="..\..\src\work\stickWork.h" />
+    <ClInclude Include="..\..\src\work\workBase.h" />
+    <QtMoc Include="..\..\src\work\workThdSig.h" />
+    <QtMoc Include="..\..\src\ipc\WSClientSig.h" />
+    <ClInclude Include="..\..\src\ipc\WSClientMgr.h" />
+    <ClInclude Include="..\..\src\ipc\iWSClientWrapper.h" />
+    <ClInclude Include="..\..\src\ipc\WSClientWrapper.h" />
+    <ClInclude Include="..\..\src\work\deviceManu.h" />
+    <ClInclude Include="..\..\src\work\deviceScan.h" />
+    <ClInclude Include="..\..\src\work\deviceBase.h" />
+    <ClInclude Include="..\..\src\work\deviceStick.h" />
+    <QtMoc Include="..\..\src\comm\CLogManager.h" />
+    <QtMoc Include="..\..\src\comm\CLogThread.h" />
+    <ClInclude Include="..\..\src\comm\CSingleton.h" />
+    <ClInclude Include="..\..\src\comm\global.h" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{A803EF94-C2D2-4AB4-9855-D6A7A3AD2FCF}</ProjectGuid>
+    <Keyword>QtVS_v304</Keyword>
+    <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">10.0.26100.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">10.0.26100.0</WindowsTargetPlatformVersion>
+    <QtMsBuild Condition="'$(QtMsBuild)'=='' OR !Exists('$(QtMsBuild)\qt.targets')">$(MSBuildProjectDirectory)\QtMsBuild</QtMsBuild>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Condition="Exists('$(QtMsBuild)\qt_defaults.props')">
+    <Import Project="$(QtMsBuild)\qt_defaults.props" />
+  </ImportGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
+    <QtInstall>msvc2017_64</QtInstall>
+    <QtModules>core;gui;widgets</QtModules>
+    <QtBuildConfig>debug</QtBuildConfig>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
+    <QtInstall>msvc2017_64</QtInstall>
+    <QtModules>core;gui;widgets;network</QtModules>
+    <QtBuildConfig>release</QtBuildConfig>
+  </PropertyGroup>
+  <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
+    <Message Importance="High" Text="QtMsBuild: could not locate qt.targets, qt.props; project may not build correctly." />
+  </Target>
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="Shared" />
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(QtMsBuild)\Qt.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(QtMsBuild)\Qt.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutDir>$(SolutionDir)..\bin\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)..\build\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Link>
+      <AdditionalLibraryDirectories>$(QTDIR)\lib;$(SolutionDir)..\3rdParty\networkKit\lib\;$(SolutionDir)..\src;$(SolutionDir)..\3rdParty\aliCloudOss\lib\alibabacloud\oss</AdditionalLibraryDirectories>
+      <AdditionalDependencies>hv.lib;alibabacloud-oss-cpp-sdk.lib;libcurl.lib;libeay32.lib;ssleay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\src;$(SolutionDir)..\src\comm;$(SolutionDir)..\src\ipc;$(SolutionDir)..\src\ui;$(SolutionDir)..\src\work;$(SolutionDir)..\3rdParty\aliCloudOss\inc\alibabacloud;$(SolutionDir)..\3rdParty\aliCloudOss\inc\;$(SolutionDir)..\3rdParty\;$(SolutionDir)..\3rdParty\networkKit;$(SolutionDir)..\3rdParty\networkKit\include;$(SolutionDir)..\3rdParty\networkKit\include\hv;$(SolutionDir)..\3rdParty\networkKit\include\hv\nlohmann;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
+    <ClCompile>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="Configuration">
+    <ClCompile>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
+    <Import Project="$(QtMsBuild)\qt.targets" />
+  </ImportGroup>
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

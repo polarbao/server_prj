@@ -1,0 +1,596 @@
+#include "scanUI.h"
+
+#include "global.h"
+
+#include <QGridLayout>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QGroupBox>
+#include <QUuid>
+#include <QMap>
+
+//#include "hv\WebSocketClient.h"
+//using namespace hv;
+
+
+ScanUI::ScanUI(QWidget *parent)
+    : QWidget(parent)
+	, m_btnGroup(new QButtonGroup())
+{
+	Init();
+}
+
+ScanUI::~ScanUI()
+{
+
+}
+
+void ScanUI::Init()
+{
+	InitUI();
+	InitConnect();
+
+
+	m_devRegTimer = new QTimer(this);
+	//connect(m_devRegTimer, &QTimer::timeout, this, &ScanUI::OnSendDevReg);
+	m_devRegTimer->setSingleShot(false);
+	//每10秒发送一次设备注册信息
+	m_devRegTimer->start(10000);
+
+	//获取当前设备状态
+	//添加设备
+
+
+}
+
+void ScanUI::InitConnect()
+{
+	connect(m_btnGroup, QOverload<QAbstractButton*>::of(&QButtonGroup::buttonClicked), this, &ScanUI::OnConnBtnClicked);
+	//connect(m_printBtnGroup, QOverload<int>::of(&QButtonGroup::buttonClicked), this, &PrintDeviceUI::OnPrintFunClicked);
+}
+
+
+void ScanUI::ClearDevStatus(int idx)
+{
+	QString slotKey = QString("slot_%1").arg(idx);
+
+	// 清空设备ID显示
+	if (m_LabMap.contains(slotKey))
+	{
+		QLabel* devIdLabel = m_devIdLabMap[slotKey];
+		devIdLabel->setText("未连接");
+		devIdLabel->setToolTip("");
+	}
+
+	// 清空设备状态显示
+	if (m_devStatusLabMap.contains(slotKey))
+	{
+		QLabel* statusLabel = m_devStatusLabMap[slotKey];
+		statusLabel->setText("离线");
+		statusLabel->setStyleSheet("QLabel { color: gray; font-weight: bold; }");
+	}
+
+	// 清空槽位映射
+	m_devMap.remove(idx);
+}
+
+void ScanUI::GetDevStatusInfo(const DeviceStatus status, QString& devStatus, QColor& devStatusColor)
+{
+	switch (status)
+	{
+	case DeviceStatus::IDLE:
+	{
+		devStatusColor = Qt::green;
+		devStatus = QString::fromLocal8Bit("空闲");
+		break;
+	}
+	case DeviceStatus::BUSY:
+	{
+		devStatusColor = QColor(255, 165, 0);
+		devStatus = QString::fromLocal8Bit("忙碌");
+		break;
+	}
+	case DeviceStatus::ERR:
+	{
+		devStatusColor = Qt::red;
+		devStatus = QString::fromLocal8Bit("错误");
+		break;
+	}
+	case DeviceStatus::OFFLINE:
+	{
+		devStatusColor = Qt::gray;
+		devStatus = QString::fromLocal8Bit("离线");
+		break;
+	}
+	default:
+	{
+		devStatusColor = Qt::black;
+		devStatus = QString::fromLocal8Bit("未知");
+		break;
+	}
+
+	}
+}
+
+void ScanUI::InitUI()
+{
+	//main_layout
+	QVBoxLayout* pv_main = new QVBoxLayout(this);
+	this->setLayout(pv_main);
+
+	//m_connStatusLab = new QLabel("Disconn", this);
+	//m_connStatusLab->setStyleSheet("QLabel { color : red; font-weight: bold; }");
+	//pv_main->addWidget(m_connStatusLab);
+
+
+	QVBoxLayout* pv_work = new QVBoxLayout();
+	{
+		QGroupBox* workGroup = new QGroupBox(u8"扫描模块");
+		{
+			QVBoxLayout* ph_v = new QVBoxLayout(workGroup);
+			{
+				QHBoxLayout* ph_lab = new QHBoxLayout();
+				{
+					QLabel* workLab = new QLabel(u8"扫描线程");
+					QLabel* workStatus = new QLabel(u8"线程状态");
+					ph_lab->addWidget(workLab, 1);
+					ph_lab->addWidget(workStatus, 1);
+
+				}
+				ph_v->addLayout(ph_lab);
+
+				QHBoxLayout* ph_btn = new QHBoxLayout();
+				{
+
+					QPushButton* startBtn = new QPushButton(u8"开始线程", this);
+					QPushButton* stopBtn = new QPushButton(u8"停止线程", this);
+					QPushButton* addBtn = new QPushButton(u8"增加设备", this);
+					ph_btn->addWidget(startBtn, 1);
+					ph_btn->addWidget(stopBtn, 1);
+					ph_btn->addWidget(addBtn, 1);
+
+					//TODO: 禁用线程管理按钮
+					startBtn->setEnabled(false);
+					stopBtn->setEnabled(false);
+					addBtn->setEnabled(false);
+				}
+				ph_v->addLayout(ph_btn);
+				QGroupBox* devGroup1 = new QGroupBox(u8"设备1");
+				{
+					//ph进行封装
+					QHBoxLayout* pv_devUnit = new QHBoxLayout(devGroup1);
+					{
+						//devID devStatus
+
+						//title
+						QVBoxLayout* pv_devID = new QVBoxLayout();
+						{
+							QLabel* devLab = new QLabel();
+							devLab->setText(u8"设备ID");
+
+							QLabel* devID = new QLabel();
+							devID->setText("00");
+							devID->setObjectName("devID_0");
+							m_devIdLabMap["slot_0"] = devID;
+							m_LabMap[devID->text()] = devID;
+
+							pv_devID->addWidget(devLab);
+							pv_devID->addWidget(devID);
+
+						}
+						pv_devUnit->addLayout(pv_devID, 1);
+
+						//dev_status
+						QVBoxLayout* pv_devStatus = new QVBoxLayout();
+						{
+							QLabel* titleLab = new QLabel();
+							titleLab->setText(u8"设备状态");
+
+							QLabel* statusLab = new QLabel();
+							statusLab->setText("offline");
+							statusLab->setObjectName("devStatus_0");
+							m_devStatusLabMap["slot_0"] = statusLab;
+
+							pv_devStatus->addWidget(titleLab);
+							pv_devStatus->addWidget(statusLab);
+
+						}
+						pv_devUnit->addLayout(pv_devStatus, 1);
+
+						//btn_oper
+						QVBoxLayout* pv_btnOper = new QVBoxLayout();
+						{
+							QHBoxLayout* ph_title = new QHBoxLayout();
+							{
+
+								QLabel* titleLab = new QLabel();
+								titleLab->setText(u8"设备操作");
+								ph_title->addWidget(titleLab);
+							}
+							pv_btnOper->addLayout(ph_title);
+
+							QHBoxLayout* ph_btn = new QHBoxLayout();
+							{
+								QPushButton* btn1 = new QPushButton(u8"分发");
+								QPushButton* btn2 = new QPushButton(u8"故障");
+								QPushButton* btn3 = new QPushButton(u8"取消");
+								QPushButton* btn4 = new QPushButton(u8"完成");
+
+								btn1->setProperty("layout", QVariant::fromValue(pv_devID));
+								btn2->setProperty("layout", QVariant::fromValue(pv_devID));
+								btn3->setProperty("layout", QVariant::fromValue(pv_devID));
+								btn4->setProperty("layout", QVariant::fromValue(pv_devID));
+
+
+								m_btnGroup->addButton(btn1, EUI::EDOT_Dispatch);
+								m_btnGroup->addButton(btn2, EUI::EDOT_Stoppage);
+								m_btnGroup->addButton(btn3, EUI::EDOT_Cancel);
+								m_btnGroup->addButton(btn4, EUI::EDOT_Complete);
+
+								ph_btn->addWidget(btn1);
+								ph_btn->addWidget(btn2);
+								ph_btn->addWidget(btn3);
+								ph_btn->addWidget(btn4);
+							}
+							pv_btnOper->addLayout(ph_btn);
+						}
+						pv_devUnit->addLayout(pv_btnOper, 4);
+
+
+						//std::function<void()> = []() {};
+					}
+					devGroup1->setLayout(pv_devUnit);
+				}
+
+				QGroupBox* devGroup2 = new QGroupBox(u8"设备2");
+				{
+					//ph进行封装
+					QHBoxLayout* pv_devUnit = new QHBoxLayout(devGroup2);
+					{
+						//devID devStatus
+
+						//title
+						QVBoxLayout* pv_devID = new QVBoxLayout();
+						{
+							QLabel* devLab = new QLabel();
+							devLab->setText(u8"设备ID");
+
+							QLabel* devID = new QLabel();
+							devID->setText("01");
+							m_LabMap[devID->text()] = devID;
+							m_devIdLabMap["slot_1"] = devID;
+
+							pv_devID->addWidget(devLab);
+							pv_devID->addWidget(devID);
+
+						}
+						pv_devUnit->addLayout(pv_devID, 1);
+
+						//dev_status
+						QVBoxLayout* pv_devStatus = new QVBoxLayout();
+						{
+							QLabel* titleLab = new QLabel();
+							titleLab->setText(u8"设备状态");
+
+							QLabel* statusLab = new QLabel();
+							statusLab->setText("offline");
+							statusLab->setObjectName("devStatus_1");
+							m_devStatusLabMap["slot_1"] = statusLab;
+
+
+							pv_devStatus->addWidget(titleLab);
+							pv_devStatus->addWidget(statusLab);
+
+						}
+						pv_devUnit->addLayout(pv_devStatus, 1);
+
+						//btn_oper
+						QVBoxLayout* pv_btnOper = new QVBoxLayout();
+						{
+							QHBoxLayout* ph_title = new QHBoxLayout();
+							{
+
+								QLabel* titleLab = new QLabel();
+								titleLab->setText(u8"设备操作");
+								ph_title->addWidget(titleLab);
+							}
+							pv_btnOper->addLayout(ph_title);
+
+							QHBoxLayout* ph_btn = new QHBoxLayout();
+							{
+								QPushButton* btn1 = new QPushButton(u8"分发");
+								QPushButton* btn2 = new QPushButton(u8"故障");
+								QPushButton* btn3 = new QPushButton(u8"取消");
+								QPushButton* btn4 = new QPushButton(u8"完成");
+
+								btn1->setProperty("layout", QVariant::fromValue(pv_devID));
+								btn2->setProperty("layout", QVariant::fromValue(pv_devID));
+								btn3->setProperty("layout", QVariant::fromValue(pv_devID));
+								btn4->setProperty("layout", QVariant::fromValue(pv_devID));
+
+
+								m_btnGroup->addButton(btn1, EUI::EDOT_Dispatch);
+								m_btnGroup->addButton(btn2, EUI::EDOT_Stoppage);
+								m_btnGroup->addButton(btn3, EUI::EDOT_Cancel);
+								m_btnGroup->addButton(btn4, EUI::EDOT_Complete);
+
+
+								ph_btn->addWidget(btn1);
+								ph_btn->addWidget(btn2);
+								ph_btn->addWidget(btn3);
+								ph_btn->addWidget(btn4);
+							}
+							pv_btnOper->addLayout(ph_btn);
+						}
+						pv_devUnit->addLayout(pv_btnOper, 4);
+
+
+						//std::function<void()> = []() {};
+					}
+					devGroup2->setLayout(pv_devUnit);
+				}
+
+				QGroupBox* devGroup3 = new QGroupBox(u8"设备3");
+				{
+					//ph进行封装
+					QHBoxLayout* pv_devUnit = new QHBoxLayout(devGroup3);
+					{
+						//devID devStatus
+
+						//title
+						QVBoxLayout* pv_devID = new QVBoxLayout();
+						{
+							QLabel* devLab = new QLabel();
+							devLab->setText(u8"设备ID");
+
+							QLabel* devID = new QLabel();
+							devID->setText("02");
+							m_LabMap[devID->text()] = devID;
+							m_devIdLabMap["slot_2"] = devID;
+
+
+							pv_devID->addWidget(devLab);
+							pv_devID->addWidget(devID);
+
+						}
+						pv_devUnit->addLayout(pv_devID, 1);
+
+						//dev_status
+						QVBoxLayout* pv_devStatus = new QVBoxLayout();
+						{
+							QLabel* titleLab = new QLabel();
+							titleLab->setText(u8"设备状态");
+
+							QLabel* statusLab = new QLabel();
+							statusLab->setText("offline");
+							statusLab->setObjectName("devStatus_2");
+							m_devStatusLabMap["slot_2"] = statusLab;
+
+							pv_devStatus->addWidget(titleLab);
+							pv_devStatus->addWidget(statusLab);
+
+						}
+						pv_devUnit->addLayout(pv_devStatus, 1);
+
+						//btn_oper
+						QVBoxLayout* pv_btnOper = new QVBoxLayout();
+						{
+							QHBoxLayout* ph_title = new QHBoxLayout();
+							{
+
+								QLabel* titleLab = new QLabel();
+								titleLab->setText(u8"设备操作");
+								ph_title->addWidget(titleLab);
+							}
+							pv_btnOper->addLayout(ph_title);
+
+							QHBoxLayout* ph_btn = new QHBoxLayout();
+							{
+								QPushButton* btn1 = new QPushButton(u8"分发");
+								QPushButton* btn2 = new QPushButton(u8"故障");
+								QPushButton* btn3 = new QPushButton(u8"取消");
+								QPushButton* btn4 = new QPushButton(u8"完成");
+
+								btn1->setProperty("layout", QVariant::fromValue(pv_devID));
+								btn2->setProperty("layout", QVariant::fromValue(pv_devID));
+								btn3->setProperty("layout", QVariant::fromValue(pv_devID));
+								btn4->setProperty("layout", QVariant::fromValue(pv_devID));
+
+
+								m_btnGroup->addButton(btn1, EUI::EDOT_Dispatch);
+								m_btnGroup->addButton(btn2, EUI::EDOT_Stoppage);
+								m_btnGroup->addButton(btn3, EUI::EDOT_Cancel);
+								m_btnGroup->addButton(btn4, EUI::EDOT_Complete);
+
+
+								ph_btn->addWidget(btn1);
+								ph_btn->addWidget(btn2);
+								ph_btn->addWidget(btn3);
+								ph_btn->addWidget(btn4);
+							}
+							pv_btnOper->addLayout(ph_btn);
+						}
+						pv_devUnit->addLayout(pv_btnOper, 4);
+
+
+						//std::function<void()> = []() {};
+					}
+					devGroup3->setLayout(pv_devUnit);
+				}
+
+				ph_v->addWidget(devGroup1);
+				ph_v->addWidget(devGroup2);
+				ph_v->addWidget(devGroup3);
+
+
+			}
+		}
+		pv_work->addWidget(workGroup);
+		pv_work->addStretch();
+	}
+	pv_main->addLayout(pv_work);
+
+
+	//禁用除故障外的所有按钮
+	for (const auto& it : m_btnGroup->buttons())
+	{
+
+		if (m_btnGroup->id(it) != EUI::EDOT_Stoppage)
+		{
+			it->setEnabled(false);
+		}
+	}
+}
+
+
+void ScanUI::PrintLogInfo(const QString& msg)
+{
+	LOG_INFO(QString(msg));
+	std::cout << msg.toStdString().c_str() << std::endl;
+	m_logDisplayEdit->append(msg);
+	//todo: log_ouptu
+	//PrintLogInfo(QString("Connection status: %1").arg(status_text));
+}
+
+void ScanUI::SyncRegDevStatus(const std::vector<DeviceInfo>& data)
+{
+	//Note: 同步设备状态，任务状态
+	//clear_dev_info
+	int slotIdx = 0;
+	for (const auto& it : data)
+	{
+		if (it.devType != 1)
+		{
+			continue;
+		}
+		UpdateDevInfo(slotIdx, it);
+		auto devId = QString::fromStdString(it.devId);
+		m_devMap[slotIdx] = QString::fromStdString(it.devId);
+		slotIdx++;
+	}
+
+}
+
+void ScanUI::SyncWorkDevStatus(const DeviceInfo& data)
+{
+	//判断设备所处于的slot
+	int slotIdx = 0;
+	auto valList = m_devMap.values();
+	for (auto i = m_devMap.begin(); i != m_devMap.end(); ++i)
+	{
+
+		if (i.value() == QString::fromStdString(data.devId))
+		{
+			slotIdx = i.key();
+		}
+	}
+	UpdateDevInfo(slotIdx, data);
+}
+
+void ScanUI::UpdateDevInfo(int idx, const DeviceInfo& devInfo)
+{
+	QString slotKey = QString("slot_%1").arg(idx);
+	QString	devId = QString::fromStdString(devInfo.devId);
+
+	//更新ID显示
+	if (m_devIdLabMap.contains(slotKey))
+	{
+		QLabel* devIdLab = m_devIdLabMap[slotKey];
+		devIdLab->setText(devId);
+		devIdLab->setToolTip(QString("设备类型: %1").arg(devInfo.devType));
+
+		m_devIdLabMap[devId] = devIdLab;
+	}
+
+	//更新设备状态显示
+	if (m_devStatusLabMap.contains(slotKey))
+	{
+		QLabel* devStatusLab = m_devStatusLabMap[slotKey];
+		UpdateDevStatusInfo(devStatusLab, devInfo.devStatus);
+		m_devStatusLabMap[devId] = devStatusLab;
+	}
+}
+
+void ScanUI::UpdateDevStatusInfo(QLabel* lab, const DeviceStatus& data)
+{
+	if (!lab)
+	{
+		return;
+	}
+
+	QString statusStr;
+	QColor statusColor;
+	GetDevStatusInfo(data, statusStr, statusColor);
+	lab->setText(statusStr);
+	lab->setStyleSheet(QString("QLabel { color: %1; font-weight: bold; }").arg(statusColor.name()));
+}
+
+void ScanUI::OnConnBtnClicked(QAbstractButton* btn)
+{
+	//获取按钮触发对应的Btn状态
+	auto a1 = btn->text();
+	auto a2 = m_btnGroup->id(btn);
+
+	QVariant layoutVar = btn->property("layout");
+	if (!layoutVar.canConvert<QVBoxLayout*>())
+	{
+		LOG_INFO(QString::fromLocal8Bit("无法获取当前布局信息"));
+		return;
+	}
+
+	//获取当前设备ID
+	QVBoxLayout* layout = layoutVar.value<QVBoxLayout*>();
+	QLayoutItem* devItem = layout->itemAt(1);
+	if (!devItem)
+	{
+		LOG_INFO(QString::fromLocal8Bit("当前布局中无QLabel控件，无法获取Dev信息"));
+		return;
+	}
+	QLabel* devLab = qobject_cast<QLabel*>(devItem->widget());
+	if (devLab && static_cast<EUI::EDOT>(m_btnGroup->id(btn)) == EUI::EDOT_Stoppage)
+	{
+		auto devId = devLab->text();
+		for (const auto& devIt : m_devMap)
+		{
+			if (devIt == devId)
+			{
+				DeviceInfo dev;
+				dev.devId = devId.toStdString();
+				dev.devType = 1;
+				dev.devStatus = DeviceStatus::ERR;
+				emit SigDevDestory(true, dev);
+				break;
+			}
+		}
+	}
+	else
+	{
+		LOG_INFO(QString::fromLocal8Bit("11111111111111111111"));
+	}
+}
+
+//void ScanUI::OnDisconnBtnClicked()
+//{
+//	PrintLogInfo(QString::fromLocal8Bit("尝试进行服务器连接"));
+//}
+//
+//
+//
+//void ScanUI::OnUpdateConnStatus(bool bConn)
+//{
+//	QString statusStr = bConn ? "Connect" : "Disconnect";
+//	QColor statusColor = bConn ? Qt::darkGreen : Qt::red;
+//	m_connStatusLab->setText(statusStr);
+//	m_connStatusLab->setStyleSheet(QString("QLabel { color : %1; font-weight: bold; }").arg(statusColor.name()));
+//	PrintLogInfo(QString("Connection status: %1").arg(statusStr));
+//
+//	m_connBtn->setEnabled(!bConn);
+//	m_disconnBtn->setEnabled(bConn); 
+//	// 连接成功后发送设备注册信息
+//	if (bConn)
+//	{
+//		SendAllDeviceReg();
+//	}
+//}
+//
+//

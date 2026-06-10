@@ -1,0 +1,314 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>qml;cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>qrc;rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Form Files">
+      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
+      <Extensions>ui</Extensions>
+    </Filter>
+    <Filter Include="Translation Files">
+      <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
+      <Extensions>ts</Extensions>
+    </Filter>
+    <Filter Include="Source Files\IPC">
+      <UniqueIdentifier>{153cc4a5-c0f4-45cd-8c28-b6d6beae9660}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Comm">
+      <UniqueIdentifier>{6909a071-aa24-416e-b3c8-02fc772f1d63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Comm">
+      <UniqueIdentifier>{5c0817a2-de76-4373-a510-dd001c144b6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\IPC">
+      <UniqueIdentifier>{4c862983-a0c4-40c6-86b2-d214cbf5357d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Worker">
+      <UniqueIdentifier>{59494d58-7617-4036-8323-c8afa4412e6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Worker">
+      <UniqueIdentifier>{18b6a2be-2263-426b-a9ad-547c77238dc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Worker\Devices">
+      <UniqueIdentifier>{c9433c6f-2c69-4026-b955-78fbbd5b19f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Worker\Devices">
+      <UniqueIdentifier>{776ad4aa-e593-4480-a6f3-04149a3e2075}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\UI">
+      <UniqueIdentifier>{6d06c6f8-9b8e-41c9-b01a-1e27c2296a06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UI">
+      <UniqueIdentifier>{16e34562-f7f6-4b61-a533-9493c703066d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UI\workUI">
+      <UniqueIdentifier>{51a0408e-2625-4d03-8015-3d87d999a1b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\UI\workUI">
+      <UniqueIdentifier>{6520adc5-7a14-47dd-bcfd-80d00ec523fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Interface">
+      <UniqueIdentifier>{7d0446b8-1dac-4a92-a9fc-ef702193663b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Worker\ScanMoudle">
+      <UniqueIdentifier>{41bbe3c5-7573-474c-a836-ea3be8bea4a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Worker\ScanMoudle">
+      <UniqueIdentifier>{85f0333c-68da-47db-83f1-04fa449e2185}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Worker\ManuMoudle">
+      <UniqueIdentifier>{a3e38e8b-e072-435f-a650-ea3554eb493b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Worker\ManuMoudle">
+      <UniqueIdentifier>{743ef72d-8682-4a49-938a-ce4029bda511}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\IPC\workNet">
+      <UniqueIdentifier>{665ad94c-50cb-4166-9986-d94a2222cae5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\IPC\serNet">
+      <UniqueIdentifier>{5e66f8ed-fedd-4930-896b-78e516cd10cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\IPC\baseNet">
+      <UniqueIdentifier>{3ea2987a-fd78-45d3-b0b8-3dadf1b07571}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\IPC\baseNet">
+      <UniqueIdentifier>{bd827e43-ee4c-4f35-b9fa-77f945ef798d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\IPC\serNet">
+      <UniqueIdentifier>{17e570a9-9acb-4066-979d-a1577fc4b5bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\IPC\workNet">
+      <UniqueIdentifier>{ef89142c-02fb-4c23-8848-1f98c64c8b6e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\comm\global.cpp">
+      <Filter>Source Files\Comm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\comm\CLogManager.cpp">
+      <Filter>Source Files\Comm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\comm\CLogThread.cpp">
+      <Filter>Source Files\Comm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\work\deviceBase.cpp">
+      <Filter>Source Files\Worker\Devices</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\work\deviceScan.cpp">
+      <Filter>Source Files\Worker\Devices</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\work\deviceManu.cpp">
+      <Filter>Source Files\Worker\Devices</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\work\deviceStick.cpp">
+      <Filter>Source Files\Worker\Devices</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\work\workBase.cpp">
+      <Filter>Source Files\Worker</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\work\scanWork.cpp">
+      <Filter>Source Files\Worker</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\work\manuWork.cpp">
+      <Filter>Source Files\Worker</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\work\stickWork.cpp">
+      <Filter>Source Files\Worker</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\work\workThdSig.cpp">
+      <Filter>Source Files\Worker</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\work\workThdMgr.cpp">
+      <Filter>Source Files\Worker</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\hard2Ser_2_0.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\comm\MessageDefine.cpp">
+      <Filter>Source Files\Comm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ui\storeLoginUI.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ui\scanUI.cpp">
+      <Filter>Source Files\UI\workUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ui\stickUI.cpp">
+      <Filter>Source Files\UI\workUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ui\manuUI.cpp">
+      <Filter>Source Files\UI\workUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ipc\WSClientSig.cpp">
+      <Filter>Source Files\IPC\serNet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ipc\WSClientMgr.cpp">
+      <Filter>Source Files\IPC\serNet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ipc\HttpRepParser.cpp">
+      <Filter>Source Files\IPC\serNet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ipc\HttpClientWrapper.cpp">
+      <Filter>Source Files\IPC\baseNet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ipc\UdpServerWrapper.cpp">
+      <Filter>Source Files\IPC\baseNet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ipc\TcpServerWrapper.cpp">
+      <Filter>Source Files\IPC\baseNet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ipc\WSClientWrapper.cpp">
+      <Filter>Source Files\IPC\baseNet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ipc\CameraTcpMgr.cpp">
+      <Filter>Source Files\IPC\workNet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\comm\CommFun.cpp">
+      <Filter>Header Files\Comm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\comm\SingleOSSToken.cpp">
+      <Filter>Source Files\Comm</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="..\..\src\hard2Ser_2_0.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="..\..\src\hard2Ser_2_0.qrc">
+      <Filter>Resource Files</Filter>
+    </QtRcc>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="..\..\src\hard2Ser_2_0.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="..\..\src\comm\CLogManager.h">
+      <Filter>Header Files\Comm</Filter>
+    </QtMoc>
+    <QtMoc Include="..\..\src\comm\CLogThread.h">
+      <Filter>Header Files\Comm</Filter>
+    </QtMoc>
+    <QtMoc Include="..\..\src\work\workThdSig.h">
+      <Filter>Header Files\Worker</Filter>
+    </QtMoc>
+    <QtMoc Include="..\..\src\work\iWorkMgr.h">
+      <Filter>Header Files\Worker</Filter>
+    </QtMoc>
+    <QtMoc Include="..\..\src\ui\storeLoginUI.h">
+      <Filter>Header Files\UI</Filter>
+    </QtMoc>
+    <QtMoc Include="..\..\src\ui\scanUI.h">
+      <Filter>Header Files\UI\workUI</Filter>
+    </QtMoc>
+    <QtMoc Include="..\..\src\ui\manuUI.h">
+      <Filter>Header Files\UI\workUI</Filter>
+    </QtMoc>
+    <QtMoc Include="..\..\src\ui\stickUI.h">
+      <Filter>Header Files\UI\workUI</Filter>
+    </QtMoc>
+    <QtMoc Include="..\..\src\ipc\WSClientSig.h">
+      <Filter>Header Files\IPC\serNet</Filter>
+    </QtMoc>
+    <QtMoc Include="..\..\src\ipc\CameraTcpMgr.h">
+      <Filter>Header Files\IPC\workNet</Filter>
+    </QtMoc>
+    <QtMoc Include="..\..\src\comm\CommFun.h">
+      <Filter>Header Files\Comm</Filter>
+    </QtMoc>
+    <QtMoc Include="..\..\src\work\iWorkBase.h">
+      <Filter>Header Files\Worker</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\comm\CSingleton.h">
+      <Filter>Header Files\Comm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\comm\global.h">
+      <Filter>Header Files\Comm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\work\deviceBase.h">
+      <Filter>Header Files\Worker\Devices</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\work\deviceScan.h">
+      <Filter>Header Files\Worker\Devices</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\work\deviceManu.h">
+      <Filter>Header Files\Worker\Devices</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\work\deviceStick.h">
+      <Filter>Header Files\Worker\Devices</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\work\iDeviceBase.h">
+      <Filter>Header Files\Worker\Devices</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\work\stickWork.h">
+      <Filter>Header Files\Worker</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\work\workThdMgr.h">
+      <Filter>Header Files\Worker</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\comm\MessageDefine.h">
+      <Filter>Header Files\Comm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ipc\WSClientMgr.h">
+      <Filter>Header Files\IPC\serNet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ipc\HttpRepParser.h">
+      <Filter>Header Files\IPC\serNet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ipc\HttpClientWrapper.h">
+      <Filter>Header Files\IPC\baseNet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ipc\iHttpClientWrapper.h">
+      <Filter>Header Files\IPC\baseNet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ipc\iWSClientMgr.h">
+      <Filter>Header Files\IPC\serNet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ipc\iUdpServerWrapper.h">
+      <Filter>Header Files\IPC\baseNet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ipc\UdpServerWrapper.h">
+      <Filter>Header Files\IPC\baseNet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ipc\iWSClientWrapper.h">
+      <Filter>Header Files\IPC\baseNet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ipc\WSClientWrapper.h">
+      <Filter>Header Files\IPC\baseNet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ipc\iTcpServerWrapper.h">
+      <Filter>Header Files\IPC\baseNet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ipc\TcpServerWrapper.h">
+      <Filter>Header Files\IPC\baseNet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\comm\SingleOSSToken.h">
+      <Filter>Header Files\Comm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\work\workBase.h">
+      <Filter>Header Files\Worker</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\work\scanWork.h">
+      <Filter>Header Files\Worker\ScanMoudle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\work\manuWork.h">
+      <Filter>Header Files\Worker</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

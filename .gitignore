@@ -1,0 +1,66 @@
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Visual Studio files
+.vs/
+Debug/
+Release/
+x64/
+x86/
+build/
+bin/
+*.user
+*.suo
+*.db
+*.ipch
+*.sdf
+*.opensdf
+*.VC.db
+*.sln.docstates
+
+# CMake files
+CMakeCache.txt
+CMakeFiles/
+CMakeSettings.json
+cmake_install.cmake
+install/
+vcpkg_installed/
+
+# VS Code files
+.vscode/ipch/
+.vscode/compile_commands.json
+
+# Temporary files
+*.tmp
+*.log
+*.bak
