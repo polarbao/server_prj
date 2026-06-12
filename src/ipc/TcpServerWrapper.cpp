@@ -1,4 +1,4 @@
-﻿#include "TcpServerWrapper.h"
+#include "TcpServerWrapper.h"
 #include "hv/hlog.h"
 #include "CLogManager.h"
 #include <algorithm>
@@ -134,8 +134,9 @@ TcpServerWrapperImpl::TcpServerWrapperImpl()
 	, m_maxConnections(1000)
 	, m_keepAlive(true)
 	, m_timeout(60)
+	, m_asyncSendTimer(std::make_unique<StdTimer>())
 {
-
+	m_asyncSendTimer->setCallback([this]() { OnAsyncSendTimer(); });
 }
 
 TcpServerWrapperImpl::~TcpServerWrapperImpl()

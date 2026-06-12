@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "iTcpServerWrapper.h"
 #include "hv/TcpServer.h"
@@ -9,8 +9,7 @@
 #include <functional>
 #include <queue>
 #include <chrono>
-#include <QObject>
-#include <QTimer>
+#include "comm/StdTimer.h"
 
 
 
@@ -130,7 +129,7 @@ private:
 	void CreateConnectionInfo(const hv::SocketChannelPtr& channel, TcpConnection& conn);
 	int GenerateConnectionId();
 
-//private slots:
+private:
 	void OnAsyncSendTimer();
 
 private:
@@ -164,7 +163,7 @@ private:
 	std::atomic<int> m_asyncProcessInterval;
 	mutable std::mutex m_asyncSendMutex;
 	std::queue<AsyncSendItem> m_asyncSendQueue;
-	QTimer* m_asyncSendTimer;
+	std::unique_ptr<StdTimer> m_asyncSendTimer;
 	static constexpr int MAX_RETRY_COUNT = 3;
 	static constexpr long long MESSAGE_TIMEOUT_MS = 300000;// 5分钟超时
 };

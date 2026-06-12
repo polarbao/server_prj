@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include <memory>
 #include <string>
@@ -6,7 +6,6 @@
 #include <map>
 
 #include <QObject>
-#include <QTimer>
 
 #include "MessageDefine.h"
 

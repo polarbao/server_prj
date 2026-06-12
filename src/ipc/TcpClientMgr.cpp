@@ -1,6 +1,6 @@
-﻿#include "TcpClientMgr.h"
+#include "TcpClientMgr.h"
 #include "global.h"
-#include <QTimer>
+
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <algorithm>
@@ -37,7 +37,7 @@ TcpClientManager::TcpClientManager(QObject* parent /*= nullptr*/)
 	, m_cleanupInterval(60)       // 60��������
 	, m_messageIdCounter(0)
 	, m_totalMessages(0)
-	, m_cleanupTimer(new QTimer(this))
+	, m_cleanupTimer(std::make_unique<StdTimer>())
 {
 	// ����TCP�������ص�
 	m_tcpServer->SetOnConnectionCallback([this](const TcpConnection& conn) 
@@ -68,13 +68,10 @@ TcpClientManager::TcpClientManager(QObject* parent /*= nullptr*/)
 		OnTcpError(errorCode, errorMsg);
 	});
 
-	// �����Զ������ʱ��
-	connect(m_cleanupTimer, &QTimer::timeout, this, [this]() 
-{
-		CleanupTimeoutClients();
-	});
+	// Զʱ	// Զʱ
+	m_cleanupTimer->setCallback([this]() { CleanupTimeoutClients(); });
 
-	LOG_INFO("TCP�ͻ��˹�������ʼ�����");
+	LOG_INFO("TCPͻ˹ʼ");
 }
 
 

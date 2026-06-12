@@ -1,6 +1,6 @@
-﻿#include "CameraTcpMgr.h"
+#include "CameraTcpMgr.h"
 #include "global.h"
-#include <QTimer>
+
 #include <algorithm>
 
 
@@ -16,8 +16,8 @@ CameraTcpManager::CameraTcpManager(QObject* parent)
 	, m_cacheEnabled(true)
 	, m_heartbeatTimeout(600)          // 60秒心跳超时
 	, m_maxRetryCount(3)              // 最大重试3次
-	, m_cleanupTimer(new QTimer(this))
-	, m_cacheRetryTimer(new QTimer(this))
+	, m_cleanupTimer(std::make_unique<StdTimer>())
+	, m_cacheRetryTimer(std::make_unique<StdTimer>())
 {
 	//qRegisterMetaType<TcpConnection>("TcpConnection");
 	//qRegisterMetaType<CameraTcpClientInfo>("CameraTcpClientInfo");
@@ -49,11 +49,11 @@ CameraTcpManager::CameraTcpManager(QObject* parent)
 	});
 
 	// 设置清理定时器 - 每60秒检查一次
-	connect(m_cleanupTimer, &QTimer::timeout, this, &CameraTcpManager::OnCleanupTimer);
+	m_cleanupTimer->setCallback([this]() { OnCleanupTimer(); });
 	m_cleanupTimer->start(60000);
 
 	// 设置缓存重试定时器 - 每10秒重试一次
-	connect(m_cacheRetryTimer, &QTimer::timeout, this, &CameraTcpManager::OnCacheRetryTimer);
+	m_cacheRetryTimer->setCallback([this]() { OnCacheRetryTimer(); });
 	m_cacheRetryTimer->start(10000);
 
 	LOG_INFO(u8"相机软件TCP客户端管理器初始化完成");

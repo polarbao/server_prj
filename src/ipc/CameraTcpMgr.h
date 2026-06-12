@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "TcpServerWrapper.h"
 #include "MessageDefine.h"
@@ -8,8 +8,7 @@
 #include <unordered_map>
 #include <queue>
 #include <chrono>
-#include <QObject>
-#include <QTimer>
+#include "comm/StdTimer.h"
 #include "comm/CSingleton.h"
 
 
@@ -158,89 +157,91 @@ public:
 
 	// �źŷ����������ּ����ԣ���ѡʹ�ã�
 	// �źŷ�����
+	// źŷּԣѡʹã
+	// źŷ
 	CameraTcpManagerSignals* GetSignals() { return &m_signals; }
 
 signals:
 	void SigTest(std::string data);
 	void SigTest2();
 
-private slots:
-	// TCP�������¼�����
+private:
+	// TCP¼
 	void OnTcpConnection(const TcpConnection& connection);
 	void OnTcpDisconnection(int socketId);
 	void OnTcpMessage(const OldTcpMessage& message);
 	void OnTcpError(int errorCode, const std::string& errorMessage);
 
-	// ��ʱ������
+	// ʱ
 	void OnCleanupTimer();
 	void OnCacheRetryTimer();
 
 private:
-	// ˽�й��캯��������ģʽ��
+	// ˽й캯ģʽ
 	explicit CameraTcpManager(QObject* parent = nullptr);
 
 
-	// ���ÿ�������͸�ֵ����
+	// ÿ͸ֵ
 	CameraTcpManager(const CameraTcpManager&) = delete;
 	CameraTcpManager& operator=(const CameraTcpManager&) = delete;
 
-	// ��Ϣ����
+	// Ϣ
 	void HandleCameraMessage(int socketId, const std::string& messageData);
 	void HandleDeviceStatusMessage(int socketId, const CameraJsonMessage& message);
 	void HandleTaskFinishMessage(int socketId, const CameraJsonMessage& message);
 	void HandleTaskErrorMessage(int socketId, const CameraJsonMessage& message);
-	void HandleTaskCancelAckMessage(int socketId, const CameraJsonMessage& message);  // ��������������ȡ��ȷ����Ϣ
-	void HandleTaskStartAckMessage(int socketId, const CameraJsonMessage& message);  // ��������������ȡ��ȷ����Ϣ
+	void HandleTaskCancelAckMessage(int socketId, const CameraJsonMessage& message);  // ȡȷϢ
+	void HandleTaskStartAckMessage(int socketId, const CameraJsonMessage& message);  // ȡȷϢ
 
 
-	// �ͻ��˹���
+	// ͻ˹
 	void RegisterCamera(int socketId, const std::string& deviceId);
 	void UnregisterCamera(int socketId);
 	void UpdateCameraHeartbeat(int socketId);
 	void UpdateCameraDeviceStatus(const std::string& deviceId, const std::string& status);
 
-	// �������
+	// 
 	void CacheMessage(const std::string& deviceId, const CameraJsonMessage& message);
 	void ProcessCachedMessages();
 	void ClearExpiredCache();
 
-	// ��������
+	// 
 	long long GetCurrentTimestamp();
 	void SendResponse(int socketId, const CameraJsonMessage& response);
 	bool IsValidDeviceId(const std::string& deviceId) const;
 
 private:
-	// �������
+	// 
 	static std::unique_ptr<CameraTcpManager> s_instance;
 	static std::mutex s_instanceMutex;
 
-	// TCP������ʵ��
+	// TCPʵ
 	std::unique_ptr<TcpServerWrapper> m_tcpServer;
 
-	// �ͻ��˹���
+	// ͻ˹
 	mutable std::mutex m_camerasMutex;
 	std::unordered_map<int, CameraTcpClientInfo> m_socketToCamera;        // socketId -> CameraTcpClientInfo
 	std::unordered_map<std::string, int> m_deviceToSocket;               // deviceId -> socketId
 
-	// ��Ϣ����
+	// Ϣ
 	mutable std::mutex m_cacheMutex;
-	std::queue<CachedMessage> m_messageCache;                            // ��Ϣ�������
-	std::atomic<bool> m_cacheEnabled;                                    // �Ƿ����û���
-	static constexpr size_t MAX_CACHE_SIZE = 1000;                      // ��󻺴��С
-	static constexpr int MAX_CACHE_AGE_MS = 300000;                     // ��󻺴�ʱ��(5����)
+	std::queue<CachedMessage> m_messageCache;                            // Ϣ
+	std::atomic<bool> m_cacheEnabled;                                    // Ƿû
+	static constexpr size_t MAX_CACHE_SIZE = 1000;                      // 󻺴С
+	static constexpr int MAX_CACHE_AGE_MS = 300000;                     // 󻺴ʱ(5)
 
-	// ���ò���
-	std::atomic<int> m_heartbeatTimeout;    // ������ʱʱ��(��)
-	std::atomic<int> m_maxRetryCount;       // ������Դ���
+	// ò
+	std::atomic<int> m_heartbeatTimeout;    // ʱʱ()
+	std::atomic<int> m_maxRetryCount;       // Դ
 
-	// ��ʱ��
-	QTimer* m_cleanupTimer;                 // �����ʱ��
-	QTimer* m_cacheRetryTimer;              // �������Զ�ʱ��
+	// ʱ
+	std::unique_ptr<StdTimer> m_cleanupTimer;                 // ʱ
+	std::unique_ptr<StdTimer> m_cacheRetryTimer;              // ԶʱԶʱ
 
-	// �źŶ���
+	// źŶ
 	CameraTcpManagerSignals m_signals;
 
-	// �� �ص������洢
+	//  ص洢
 	std::vector<CameraConnectedCallback> m_connectedCallbacks;
 	std::vector<CameraDisconnectedCallback> m_disconnectedCallbacks;
 	std::vector<CameraTaskFinishedCallback> m_taskFinishedCallbacks;

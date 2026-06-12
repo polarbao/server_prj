@@ -1,4 +1,4 @@
-﻿#include "TcpServerWrapper.h"
+#include "TcpServerWrapper.h"
 #include "MessageDefine.h"
 #include <memory>
 #include <atomic>
@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <chrono>
 #include <QObject>
+#include "comm/StdTimer.h"
 
 
 /**
@@ -138,26 +139,26 @@ private:
 	// TCP������ʵ��
 	std::unique_ptr<TcpServerWrapper> m_tcpServer;
 
-	// �ͻ��˹���
+	// ͻ˹
 	mutable std::mutex m_clientsMutex;
 	std::unordered_map<int, TcpClientInfo> m_socketToClient;        // socketId -> TcpClientInfo
 	std::unordered_map<std::string, int> m_deviceToSocket;          // deviceId -> socketId
 	std::unordered_map<std::string, int> m_clientIdToSocket;        // clientId -> socketId
 
-	// ���ò���
-	std::atomic<int> m_heartbeatTimeout;    // ������ʱʱ��(��)
-	std::atomic<int> m_maxClients;          // ���ͻ�����
-	std::atomic<bool> m_autoCleanup;        // �Ƿ������Զ�����
-	std::atomic<int> m_cleanupInterval;     // ������(��)
+	// ò
+	std::atomic<int> m_heartbeatTimeout;    // ʱʱ()
+	std::atomic<int> m_maxClients;          // ͻ
+	std::atomic<bool> m_autoCleanup;        // ǷԶ
+	std::atomic<int> m_cleanupInterval;     // ()
 
-	// ͳ����Ϣ
-	std::atomic<int> m_messageIdCounter;    // ��ϢID������
-	std::atomic<long long> m_totalMessages; // ����Ϣ��
+	// ͳϢ
+	std::atomic<int> m_messageIdCounter;    // ϢID
+	std::atomic<long long> m_totalMessages; // Ϣ
 
-	// ��ʱ��
-	QTimer* m_cleanupTimer;
+	// ʱ
+	std::unique_ptr<StdTimer> m_cleanupTimer;
 
-	// �źŶ���
+	// źŶ
 	TcpClientManagerSignals m_signals;
 };
 
