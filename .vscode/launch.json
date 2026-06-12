@@ -2,21 +2,74 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "CMake Target Debug",
+      "name": "Debug: Compile & Launch",
       "type": "cppvsdbg",
       "request": "launch",
-      "program": "${command:cmake.launchTargetPath}",
+      "program": "${workspaceFolder}/build/Debug/hard2Ser_3_0.exe",
       "args": [],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}/bin",
       "environment": [
         {
           "name": "PATH",
-          "value": "%PATH%;${workspaceFolder}/bin;${workspaceFolder}/3rdParty/networkKit/bin;${workspaceFolder}/3rdParty/aliCloudOss/bin"
+          "value": "%PATH%;${workspaceFolder}/3rdParty/networkKit/bin;${workspaceFolder}/3rdParty/aliCloudOss/bin"
         }
       ],
       "console": "integratedTerminal",
-      "visualizerFile": "c:\\Users\\admin\\AppData\\Roaming\\Code\\User\\workspaceStorage\\fc158870570fa89b3813b7d321a52c07\\tonka3000.qtvsctools\\qt.natvis.xml"
+      "preLaunchTask": "CMake: Build Debug",
+      "visualizerFile": "c:\\Users\\admin\\AppData\\Roaming\\Antigravity IDE\\User\\workspaceStorage\\fc158870570fa89b3813b7d321a52c07\\tonka3000.qtvsctools\\qt.natvis.xml"
+    },
+    {
+      "name": "Debug: Launch (Without Build)",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/Debug/hard2Ser_3_0.exe",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}/bin",
+      "environment": [
+        {
+          "name": "PATH",
+          "value": "%PATH%;${workspaceFolder}/3rdParty/networkKit/bin;${workspaceFolder}/3rdParty/aliCloudOss/bin"
+        }
+      ],
+      "console": "integratedTerminal",
+      "visualizerFile": "c:\\Users\\admin\\AppData\\Roaming\\Antigravity IDE\\User\\workspaceStorage\\fc158870570fa89b3813b7d321a52c07\\tonka3000.qtvsctools\\qt.natvis.xml"
+    },
+    {
+      "name": "Release: Compile & Launch",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/Release/hard2Ser_3_0.exe",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}/bin",
+      "environment": [
+        {
+          "name": "PATH",
+          "value": "%PATH%;${workspaceFolder}/3rdParty/networkKit/bin;${workspaceFolder}/3rdParty/aliCloudOss/bin"
+        }
+      ],
+      "console": "integratedTerminal",
+      "preLaunchTask": "CMake: Build Release",
+      "visualizerFile": "c:\\Users\\admin\\AppData\\Roaming\\Antigravity IDE\\User\\workspaceStorage\\fc158870570fa89b3813b7d321a52c07\\tonka3000.qtvsctools\\qt.natvis.xml"
+    },
+    {
+      "name": "Release: Launch (Without Build)",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/Release/hard2Ser_3_0.exe",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}/bin",
+      "environment": [
+        {
+          "name": "PATH",
+          "value": "%PATH%;${workspaceFolder}/3rdParty/networkKit/bin;${workspaceFolder}/3rdParty/aliCloudOss/bin"
+        }
+      ],
+      "console": "integratedTerminal",
+      "visualizerFile": "c:\\Users\\admin\\AppData\\Roaming\\Antigravity IDE\\User\\workspaceStorage\\fc158870570fa89b3813b7d321a52c07\\tonka3000.qtvsctools\\qt.natvis.xml"
     }
   ]
 }

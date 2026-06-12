@@ -35,6 +35,12 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/aliCloudOss/inc
 )
 
+# 设置库文件包含目录
+link_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/networkKit/lib
+    ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/aliCloudOss/lib/alibabacloud/oss
+)
+
 # 递归寻找所有源文件与头文件、UI文件、资源文件
 file(GLOB_RECURSE SRC_FILES
     "src/*.cpp"
@@ -44,22 +50,19 @@ file(GLOB_RECURSE SRC_FILES
     "src/*.qrc"
 )
 
-# 设置库文件包含目录
-link_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/networkKit/lib
-    ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/aliCloudOss/lib/alibabacloud/oss
-)
-
 # 生成可执行文件
 add_executable(${PROJECT_NAME} ${SRC_FILES})
 
-# 链接 Qt 模块与第三方库
+# 按照真实的物理目录结构，自动映射 IDE 中的树状分级 (Source Groups)
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/src PREFIX "Source Files" FILES ${SRC_FILES})
+
+# 链接 Qt 模块与第三方依赖库
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
     Qt5::Core
     Qt5::Gui
     Qt5::Widgets
-    hv                             # 链接 libhv 动态导入库 (原本为 hv_static)
+    hv                             # 链接 libhv 动态导入库
     alibabacloud-oss-cpp-sdk       # 阿里云 OSS SDK
     libcurl                        # Curl
     libeay32                       # OpenSSL Crypto
