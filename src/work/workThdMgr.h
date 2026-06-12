@@ -1,11 +1,6 @@
 #pragma once
 
-#include <QObject>
-#include <QThread>
 #include <QString>
-#include <QQueue>
-#include <QMutex>
-#include <QTimer>
 
 
 #include <memory>

@@ -1,12 +1,7 @@
-﻿#pragma once
+#pragma once
 #include "WSClient.h"
 
-#include <QObject>
-#include <QThread>
 #include <QString>
-#include <QQueue>
-#include <QMutex>
-#include <QTimer>
 
 #include <thread>
 #include <memory>
